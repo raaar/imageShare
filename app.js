@@ -19,8 +19,13 @@ bookRouter = require('./Routes/bookRoutes')(Book);
 
 app.use('/api/Books', bookRouter);
 
+app.set('view engine', 'ejs');
+
 app.get('/', function(req , res) {
-  res.send('Welcome to my api');
+  //res.send('Welcome to my api');
+  res.render('index', {
+    message: 'Welcome to my api'
+  });
 });
 
 app.listen(port, function(req, res){

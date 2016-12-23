@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "ejs": "^2.5.5",
     "express": "^4.14.0",
     "gulp-mocha": "^3.0.1",
     "mongoose": "^4.7.2",
