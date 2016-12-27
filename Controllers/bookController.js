@@ -4,9 +4,13 @@ var bookController = function(Book) {
   var post = function(req , res) {
     var book = new Book(req.body); // this works thanks to 'bodyParser';
 
-    if(!req.body.title) {
+    if(!req.body.title || !req.body.author) {
+      // res.send('Missing information');
       res.status(400);
-      res.send('Title is required');
+      res.render('index', {
+        message: 'Missing information'
+      });
+
     } else {
       book.save();
       res.status(201);
