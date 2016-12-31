@@ -1,3 +1,9 @@
+/*
+ Start project:
+ 1: sudo mongod
+ 2: gulp
+*/
+
 var express = require('express'),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser');

@@ -8,7 +8,7 @@ var routes = function(Book) {
     res.render('index', {
       message: 'Welcome to my api'
     });
-  });
+  }).post(userController.post);
 
   userRouter.route('/archive')
     .get(userController.get)

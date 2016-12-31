@@ -6,13 +6,15 @@
   </head>
   <body>
 
+    <% include partials/nav %>
+
     <h1><%= message %></h1>
     <br>
     <br>
     Submit book form:
     <br>
 
-    <form action="/api/Books/" method="get">
+    <form method="post">
       Title: <input type="text" name="title"><br>
       Author: <input type="text" name="author"><br>
       Genre: <input type="text" name="genere"><br>
