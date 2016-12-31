@@ -11,22 +11,24 @@ var express = require('express'),
 
 var db = mongoose.connect('mongodb://localhost/bookREST');
 
-var Book = require('./models/bookModel');
+var Book = require('./src/models/bookModel');
 
 var app = express();
 
 var port = process.env.PORT || 3000;
 
 // TODO: see what this middlewhare does
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({encoded: true}));
 app.use(bodyParser.json());
 
-bookRouter = require('./Routes/bookRoutes')(Book);
-userRouter = require('./Routes/userRoutes')(Book);
+bookRouter = require('./src/Routes/bookRoutes')(Book);
+userRouter = require('./src/Routes/userRoutes')(Book);
 
 app.use('/api/Books', bookRouter);
 app.use('/', userRouter);
 
+app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 // app.get('/', function(req , res) {
