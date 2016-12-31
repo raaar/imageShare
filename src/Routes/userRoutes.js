@@ -6,7 +6,8 @@ var routes = function(Book) {
 
   userRouter.route('/').get(function(req, res) {
     res.render('index', {
-      message: 'Welcome to my api'
+      message: 'Welcome to my api',
+      pageName: 'index'
     });
   }).post(userController.post);
 

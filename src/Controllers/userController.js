@@ -6,7 +6,8 @@ var userController = function(Book) {
         res.status(500).send(err);
       else
         res.render('archive', {
-          books: books
+          books: books,
+          pageName: 'archive'
         });
     });
   };
