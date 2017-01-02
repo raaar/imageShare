@@ -12,6 +12,7 @@ var express = require('express'),
 var db = mongoose.connect('mongodb://localhost/bookREST');
 
 var Book = require('./src/models/bookModel');
+var User = require('./src/models/userModel');
 
 var app = express();
 
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 
 var bookRouter = require('./src/Routes/bookRoutes')(Book);
 var userRouter = require('./src/Routes/userRoutes')(Book);
-var authRouter = require('./src/routes/authRoutes')();
+var authRouter = require('./src/routes/authRoutes')(User);
 
 app.use('/api/Books', bookRouter);
 app.use('/auth', authRouter);

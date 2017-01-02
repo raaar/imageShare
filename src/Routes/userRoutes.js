@@ -7,9 +7,10 @@ var routes = function(Book) {
   userRouter.route('/').get(function(req, res) {
 
     if(!req.user) {
-      res.render('register', {
-        message: 'Register to log in'
-      });
+      res.redirect('auth/register');
+      // res.render('register', {
+      //   message: 'Register to log in'
+      // });
     } else {
       console.log('Logged in');
 
