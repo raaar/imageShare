@@ -17,15 +17,16 @@ var app = express();
 
 var port = process.env.PORT || 3000;
 
-// TODO: see what this middlewhare does
-app.use(express.static('public'));
+app.use(express.static('public')); // define where all static (CSS, JS) files come from
 app.use(bodyParser.urlencoded({encoded: true}));
 app.use(bodyParser.json());
 
-bookRouter = require('./src/Routes/bookRoutes')(Book);
-userRouter = require('./src/Routes/userRoutes')(Book);
+var bookRouter = require('./src/Routes/bookRoutes')(Book);
+var userRouter = require('./src/Routes/userRoutes')(Book);
+var authRouter = require('./src/routes/authRoutes')();
 
 app.use('/api/Books', bookRouter);
+app.use('/auth', authRouter);
 app.use('/', userRouter);
 
 app.set('views', './src/views');

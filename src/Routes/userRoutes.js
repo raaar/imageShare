@@ -5,10 +5,21 @@ var routes = function(Book) {
   var userController = require('../Controllers/userController')(Book);
 
   userRouter.route('/').get(function(req, res) {
-    res.render('index', {
-      message: 'Welcome to my api',
-      pageName: 'index'
-    });
+
+    if(!req.user) {
+      res.render('register', {
+        message: 'Register to log in'
+      });
+    } else {
+      console.log('Logged in');
+
+      res.render('index', {
+        message: 'Welcome to my api',
+        pageName: 'index'
+      });
+    }
+
+
   }).post(userController.post);
 
   userRouter.route('/archive')
