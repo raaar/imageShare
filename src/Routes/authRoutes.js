@@ -1,37 +1,50 @@
 var express = require('express');
-var authRouter = express.Router();
 var mongodb = require('mongodb').MongoClient;
 var passport = require('passport');
 
 var router = function(User) {
+
+  var authRouter = express.Router();
+  var authController = require('../Controllers/authController')(User);
+
   authRouter.route('/register')
-    .get(function(req, res){
-      res.render('register', {
-        message: 'Register'
+    .get(authController.get)
+    .post(authController.post);
+
+
+  authRouter.route('/signIn')
+    // We specify to pasport to use the loal strategy we have defiend
+    // This could alternatively say 'google', or 'Facebook' auth
+    .post(passport.authenticate('local', {
+      failureRedirect: '/'
+    }), function(req, res) {
+      // Success
+      res.redirect('/auth/profile');
+    })
+    .get(function(req,res){
+      res.render('signIn', {
+        message: 'Sign In'
       });
     })
-    .post(function(req, res) {
-      var user = new User(req.body); // this works thanks to 'bodyParser';
 
-      if(!req.body.email || !req.body.password) {
-        res.status(400);
-        res.render('register', {
-          message: 'Missing information'
-        });
-      } else {
-        console.log('log in, redirecting');
-        console.log(user.email);
-        console.log(user.password);
-
-        //user.save();
-
-        //book.save();
-        //res.status(201);
-        //res.send(book);// 201: item created
-      }
-
-      // passport log in code
-    });
+  // authRouter.route('/signIn')
+  //   .get(function(req,res){
+  //     res.render('signIn', {
+  //       message: 'Sign In'
+  //     });
+  //   })
+  //   .post(function(req,res){
+  //     User.findOne({email: req.body.email, password: req.body.password}, function(err, user){
+  //       if(user != null) {
+  //         console.log(user);
+  //         //req.user = user;
+  //         // begin session
+  //       } else {
+  //         console.log('Wrong credentials');
+  //       }
+  //     });
+  //     console.log('sign in user ' + req.body.email);
+  //   });
 
   return authRouter;
 };

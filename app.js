@@ -22,9 +22,12 @@ app.use(express.static('public')); // define where all static (CSS, JS) files co
 app.use(bodyParser.urlencoded({encoded: true}));
 app.use(bodyParser.json());
 
+// by assing 'app', we can use 'app.use' in our passport config file
+require('./src/config/passport')(app);
+
 var bookRouter = require('./src/Routes/bookRoutes')(Book);
 var userRouter = require('./src/Routes/userRoutes')(Book);
-var authRouter = require('./src/routes/authRoutes')(User);
+var authRouter = require('./src/Routes/authRoutes')(User);
 
 app.use('/api/Books', bookRouter);
 app.use('/auth', authRouter);
