@@ -10,7 +10,6 @@ var bookController = function(Book) {
       res.render('index', {
         message: 'Missing information'
       });
-
     } else {
       book.save();
       res.status(201);

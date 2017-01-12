@@ -3,7 +3,7 @@
 
 <ul>
   <% for(var i=0; i < books.length; i++) { %>
-    <li><%= books[i].title %>
+    <li><a href="/archive/<%= books[i].id %>"><%= books[i].title %></a>
       <form method="post">
         <input type="text" name="id" value="<%= books[i].id %>">
         <input type="submit" value="X">

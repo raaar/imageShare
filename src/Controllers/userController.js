@@ -33,9 +33,7 @@ var userController = function(Book) {
           if(err)
             res.status(500).send(err);
           else
-            res.render('archive', {
-              books: books
-            });
+            res.redirect('archive');
         });
         //res.send(book);// 201: item created
       }
