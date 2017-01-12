@@ -37,7 +37,6 @@ var bookController = function(Book) {
     });
   };
   
-  
   return {
     get: get,
     post: post

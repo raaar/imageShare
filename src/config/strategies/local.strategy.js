@@ -10,23 +10,14 @@ var strategyFunction = function() {
     function(username, password, done) {
         var url = 'mongodb://localhost:27017/libraryApp';
 
-        console.info('UN:', username);
-
-        // Replace with mongoose call
         mongodb.connect(url, function (err, db) {
-          var collection = db.collection('users');
-          
-          console.info('UN2:', username);
-        
+            var collection = db.collection('users');
             
             collection.findOne({
-                    userName: username
+                    username: username
                 },
                 function (err, results) {
-                  
                   if(err) { return done(err); }
-  
-                  console.log(results);
 
                   if (null != results) {
                     if(results.password === password ) {
@@ -34,11 +25,9 @@ var strategyFunction = function() {
                       console.log('Password is correct');
                       done(null, user);
                     } else {
-                      console.log('Bad login details')
                       done(null, false, {message: 'Bad password'});
                     }
                   } else {
-                    console.log('Bad login details')
                     done(null, false, {message: 'User does not exist'});
                   }
                 }
