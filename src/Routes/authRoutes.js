@@ -31,7 +31,7 @@ var router = function() {
             if(err) { return err; }
             if (null !== results) {
               res.render('register', {
-                message: 'Username already taken!'
+                message: 'Invalid username!'
               });
             } else {
               addUser();
@@ -52,7 +52,6 @@ var router = function() {
       });
     });
 
-
   authRouter.route('/signIn')
     // We specify to pasport to use the loal strategy we have defiend
     // This could alternatively say 'google', or 'Facebook' auth
@@ -61,9 +60,14 @@ var router = function() {
     }), function(req, res) {
       // Success
       res.redirect('/');
-      // res.redirect('/auth/profile');
     });
-   
+
+  authRouter.route('/logout')
+    .post(function(req, res) {
+      req.session.destroy()
+      req.logout()
+      res.redirect('/')
+    })
 
   return authRouter;
 };
