@@ -1,4 +1,6 @@
 var express = require('express');
+var mongodb = require('mongodb').MongoClient;
+var objectId = require('mongodb').ObjectID;
 
 
 var routes = function(Book) {
@@ -64,6 +66,29 @@ var routes = function(Book) {
         else
           // status 204 means item removed
           res.status(204).send('Removed');
+      });
+    });
+
+  bookRouter.route('/:bookId/edit')
+    .get(function(req, res) {
+      var url = 'mongodb://localhost:27017/bookREST';
+      var id = new objectId(req.params.id);
+    });
+    
+  bookRouter.route('/:bookId/delete')
+    .post(function(req, res) {
+      var url = 'mongodb://localhost:27017/bookREST';
+      var id = new objectId(req.params.bookId);
+
+      mongodb.connect(url, function(err, db) {
+        var collection = db.collection('books');
+        collection.deleteOne(
+          {_id: objectId.createFromHexString(req.params.bookId)},
+          function(err, result) {
+            res.redirect('/archive');
+          }
+        );
+        
       });
     });
 

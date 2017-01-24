@@ -3,8 +3,14 @@
 
 <ul>
   <% for(var i=0; i < books.length; i++) { %>
-    <li><a href="/archive/<%= books[i].id %>"><%= books[i].title %></a>
-      <form method="post">
+    <li>
+      <a href="/archive/<%= books[i].id %>"><%= books[i].title %></a>
+      
+      <form action="api/Books/<%= books[i]._id %>/delete" method="POST">
+        <button id="button" name="delete_button" onclick="return confirm('Are you sure you want to delete the tweet?')">X</button>
+      </form>
+      
+      <form method="post" class="hide">
         <input type="text" name="id" value="<%= books[i].id %>">
         <input type="submit" value="X">
       </form>

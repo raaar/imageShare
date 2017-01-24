@@ -5,10 +5,15 @@ var userController = function(Book) {
       if(err)
         res.status(500).send(err);
       else
+      
+      if(!req.user) {
+        res.redirect('auth/register');
+      } else {
         res.render('archive', {
           books: books,
           pageName: 'archive'
         });
+      }
     });
   };
 
@@ -42,7 +47,8 @@ var userController = function(Book) {
 
   var removeItem = function(req, res) {
     // console.log('will delete this');
-    // console.log(req.body.id);
+    console.log(req.params.id);
+
 
     Book.findById(req.body.id, function(err, book) {
       if(err) {
