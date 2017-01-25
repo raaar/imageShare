@@ -11,15 +11,19 @@ var routes = function(Book) {
       } else {
         res.render('index', {
           message: 'Hi ' + req.user.username,
+          error: req.query.message,
           pageName: 'index'
         });
       }
-    })
-    .post(userController.post);
+      
+      //console.log(req.query.message);
+
+    });
+    // .post(userController.post);
 
   userRouter.route('/archive')
-    .get(userController.get)
-    .post(userController.removeItem);
+    .get(userController.get);
+    // .post(userController.removeItem);
 
   return userRouter;
 };

@@ -2,14 +2,15 @@
 <% include partials/nav %>
 
 <h1><%= message %></h1>
+<h3><%= error %></h3>
+
 <br>
 <br>
 Submit book form:
 <br>
 
-<form action="/" method="post">
+<form action="/api/Books/create" method="POST">
   Title: <input type="text" name="title"><br>
-  Author: <input type="text" name="author"><br>
   Genre: <input type="text" name="genere"><br>
   <input type="submit" value="Submit">
 </form>

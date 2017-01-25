@@ -59,6 +59,9 @@ var router = function() {
       failureRedirect: '/'
     }), function(req, res) {
       // Success
+      
+      res.cookie('user', req.user.username, {httpOnly: false}); // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
+
       res.redirect('/');
     });
 

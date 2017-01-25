@@ -4,22 +4,22 @@ var passport = require('passport'),
 
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
-      usernameField: 'userName', // corresponds to the name on our index.ejs template
-      passwordField: 'password'
+      usernameField: 'signInUserName', // corresponds to the name on our index.ejs template
+      passwordField: 'signInPassword'
     },
     function(username, password, done) {
-        var url = 'mongodb://localhost:27017/libraryApp';
+        var url = 'mongodb://localhost:27017/bookREST';
 
         mongodb.connect(url, function (err, db) {
             var collection = db.collection('users');
-            
+
             collection.findOne({
                     username: username
                 },
                 function (err, results) {
                   if(err) { return done(err); }
 
-                  if (null != results) {
+                  if (null !== results) {
                     if(results.password === password ) {
                       var user = results;
                       console.log('Password is correct');
