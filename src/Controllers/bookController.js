@@ -38,6 +38,8 @@ var bookController = function(Book) {
 
 
   var get = function(req, res){
+    var url = 'mongodb://localhost:27017/bookREST';
+    var id = new objectId(req.params.id);
     var query = {};
 
     if('title' in req.query) {
@@ -48,11 +50,16 @@ var bookController = function(Book) {
       query.genre = req.query.genre;
     }
 
-    Book.find(query, function(err, books) {
-      if(err)
+    mongodb.connect(url, function(err, db) {
+      if(err) {
         res.status(500).send(err);
-      else
+      } else {
+      }
+      var collection = db.collection('books');
+
+      collection.find(query).toArray(function(err, books) {
         res.json(books);
+      })
     });
   };
   
@@ -60,8 +67,6 @@ var bookController = function(Book) {
   var bookDelete = function(req, res) {
     var url = 'mongodb://localhost:27017/bookREST';
     var id = new objectId(req.params.id);
-
-    console.log(req.user.username);
 
     mongodb.connect(url, function(err, db) {
       if(err) {
