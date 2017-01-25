@@ -9,9 +9,9 @@
 Submit book form:
 <br>
 
-<form action="/api/Books/create" method="POST">
+<form action="/api/Books/create" method="POST" enctype="multipart/form-data">
   Title: <input type="text" name="title"><br>
-  Genre: <input type="text" name="genere"><br>
+  Image: <input type="file" name="image" /><br>
   <input type="submit" value="Submit">
 </form>
 

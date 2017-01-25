@@ -21,6 +21,7 @@ var routes = function(Book) {
     });
     // .post(userController.post);
 
+  // TODO: the archive/get path could be replaced by api/Books/
   userRouter.route('/archive')
     .get(userController.get);
     // .post(userController.removeItem);

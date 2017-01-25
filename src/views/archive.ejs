@@ -4,18 +4,18 @@
 <ul>
   <% for(var i=0; i < books.length; i++) { %>
     <li>
-      <a href="/api/Books/<%= books[i].id %>"><%= books[i].title %></a>
+      <img src="/uploads/<%= books[i].image.full %>" width="240" /><br>
+      <a href="/api/Books/<%= books[i]._id %>"><%= books[i].title %></a>
       <small><%= books[i].author %></small>
-      <form action="api/Books/<%= books[i]._id %>" method="POST">
-        
-        
-        <button id="button" name="delete_button" onclick="return confirm('Are you sure you want to delete the tweet?')">X</button>
-        
+      
+      <form action="api/Books/<%= books[i]._id %>/delete" method="POST">
         <a href="api/Books/<%= books[i]._id %>/edit">Edit</a>
       </form>
-
     </li>
+    
+    <br>
   <% } %>
+
 </ul>
 
 <% include partials/_foot %>

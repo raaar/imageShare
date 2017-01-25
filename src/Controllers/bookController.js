@@ -1,19 +1,35 @@
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
+var multer  = require('multer');
+var upload = multer({ dest: 'public/uploads/' });
 
 // Reveal model pattern
-var bookController = function(Book) {
+var bookController = function() {
 
   var post = function(req , res) {
-    if(!req.body.title) {
+    if(!req.body.title || !req.file) {
       res.status(400);
       res.redirect('/?message=Missing+information');
 
     } else {
+      /* Data object passed by uploader
+      fieldname: 'image',
+      originalname: 'beach.jpg',
+      encoding: '7bit',
+      mimetype: 'image/jpeg',
+      destination: 'public/uploads/',
+      filename: 'e018096c66c2f8f25809e7721dae43ad',
+      path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
+      size: 171938
+      */
       var book = {
         title: req.body.title,
         author: req.user.username,
-        genere: req.body.genere
+        image: {
+          full: req.file.filename,
+          originalname: req.file.originalname,
+          size: req.file.size
+        }
       };
       
       var url = 'mongodb://localhost:27017/bookREST';
@@ -46,8 +62,8 @@ var bookController = function(Book) {
       query.title = req.query.title;
     }
 
-    if ('genre' in req.query) {
-      query.genre = req.query.genre;
+    if ('author' in req.query) {
+      query.author = req.query.author;
     }
 
     mongodb.connect(url, function(err, db) {
@@ -76,13 +92,16 @@ var bookController = function(Book) {
         var collection = db.collection('books');
   
         collection.findOne({_id : id}, function(err, book) {
-          if(book.author === req.user.username) {
+          if(book.author /*=== req.user.username */) {
             
             collection.deleteOne(
             {_id: objectId.createFromHexString(req.params.id)},
             function(err, result) {
               res.redirect('/archive');
             });
+          } else {
+            console.log('can\'t delete' );
+            return
           }
         });
         
@@ -115,21 +134,42 @@ var bookController = function(Book) {
         var book = {
           title : req.body.title,
           body : req.body.author,
-          genere: req.body.genre,
           id: id
         };
         
-        collection.update({_id: objectId.createFromHexString(req.params.id)},
-          {$set: book }, function(err, updated) {
+        
+        var isDelete = req.body.delete_button !== undefined;
+        
+        if(isDelete) {
+          
+          // TODO: duplicate function in bookDelete();
+          collection.findOne({_id : id}, function(err, book) {
+            if(book.author /*=== req.user.username */) {
+              
+              collection.deleteOne(
+              {_id: objectId.createFromHexString(req.params.id)},
+              function(err, result) {
+                res.redirect('/archive');
+              });
+            } else {
+              console.log('can\'t delete' );
+              return
+            }
+          });
+        } else {
+          collection.update({_id: objectId.createFromHexString(req.params.id)},
+            {$set: book }, function(err, updated) {
+  
+            if (err) {
+              console.log(err);
+            }
+  
+            res.redirect('/archive');
+          });
+        }
 
-          if (err) {
-            console.log(err);
-          }
-
-          res.redirect('/archive');
-        });
       });
-    }
+    };
   
 
   return {

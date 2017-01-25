@@ -1,20 +1,43 @@
+var mongodb = require('mongodb').MongoClient;
+
 var userController = function(Book) {
 
   var get = function(req, res) {
-    Book.find('', function(err, books) {
-      if(err)
-        res.status(500).send(err);
-      else
-      
-      if(!req.user) {
-        res.redirect('auth/register');
-      } else {
-        res.render('archive', {
-          books: books,
-          pageName: 'archive'
-        });
-      }
+    var url = 'mongodb://localhost:27017/bookREST';
+
+    mongodb.connect(url, function(err, db) {
+      var collection = db.collection('books');
+      collection.find({}).toArray(function(err, results) {
+        if(err)
+          res.status(500).send(err);
+          
+        if(!req.user) {
+          res.redirect('auth/register');
+        } else {
+          res.render('archive', {
+            books: results,
+            pageName: 'archive'
+          });
+        }
+      });
     });
+    
+    
+    // Book.find('', function(err, books) {
+    //   if(err)
+    //     res.status(500).send(err);
+    //   else
+      
+    //   if(!req.user) {
+    //     res.redirect('auth/register');
+    //   } else {
+    //     res.render('archive', {
+    //       books: books,
+    //       pageName: 'archive'
+    //     });
+        
+    //   }
+    // });
   };
 
   // var post = function(req, res) {

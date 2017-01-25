@@ -1,7 +1,8 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-
+var multer  = require('multer');
+var upload = multer({ dest: 'public/uploads/' });
 
 var routes = function(Book) {
 
@@ -14,7 +15,7 @@ var routes = function(Book) {
 
 
   bookRouter.route('/create')
-    .post(bookController.post);
+    .post(upload.single('image'), bookController.post);
 
 
   bookRouter.route('/:id/edit')

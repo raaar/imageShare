@@ -1,6 +1,6 @@
 <form id="edit-book-form" action="/api/Books/<%= book._id %>/update" method="POST">
+  <img src="/uploads/<%= book.image.full %>" width="240" /><br>
   Title: <input type="text" name="title" value="<%= book.title %>"><br>
-  Author: <input type="text" name="author" value="<%= book.author %>"><br>
-  Genre: <input type="text" name="genere" value="<%= book.genre %>"><br>
   <button id="edit-book-form-update-btn" class="btn">Update</button>
+  <button id="button" name="delete_button" onclick="return confirm('Are you sure you want to delete the tweet?')">X</button>
 </form>
