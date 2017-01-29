@@ -29,8 +29,8 @@ var routes = function() {
     .post(imageController.update);
 
     
-  imageRouter.route('/:id/delete')
-    .post(imageController.remove);
+  // imageRouter.route('/:id/delete')
+  //   .post(imageController.remove);
 
   // Middleware making the request to mongodb
   imageRouter.use('/:id', imageController.middlewareFetchSingle);
