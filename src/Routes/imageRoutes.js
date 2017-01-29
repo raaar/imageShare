@@ -37,8 +37,8 @@ var routes = function() {
 
   imageRouter.route('/:id')
     .get(function(req, res){
-      res.json(req.book);
-    })
+      res.json(req.image);
+    });
     // .put(function(req, res) {
     //   req.book.title = req.body.title;
     //   req.book.author = req.body.author;

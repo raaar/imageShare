@@ -2,14 +2,14 @@
 <% include partials/nav %>
 
 <ul>
-  <% for(var i=0; i < books.length; i++) { %>
+  <% for(var i=0; i < items.length; i++) { %>
     <li>
-      <img src="/uploads/<%= books[i].image.full %>" width="240" /><br>
-      <a href="/api/Images/<%= books[i]._id %>"><%= books[i].title %></a>
-      <small><%= books[i].author %></small>
+      <img src="/uploads/<%= items[i].image.full %>" width="240" /><br>
+      <a href="/api/Images/<%= items[i]._id %>"><%= items[i].title %></a>
+      <small><%= items[i].author %></small>
       
-      <form action="api/Images/<%= books[i]._id %>/delete" method="POST">
-        <a href="api/Images/<%= books[i]._id %>/edit">Edit</a>
+      <form action="api/Images/<%= items[i]._id %>/delete" method="POST">
+        <a href="api/Images/<%= items[i]._id %>/edit">Edit</a>
       </form>
     </li>
     

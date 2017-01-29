@@ -29,12 +29,12 @@ var imageController = function() {
     mongodb.connect(url, function(err, db){
       var collection = db.collection('books');
 
-      collection.findOne({_id : id}, function(err, book) {
+        collection.findOne({_id : id}, function(err, image) {
         if(err) {
           res.status(500).send(err);
-        } else if(book) {
+        } else if(image) {
           req.collection = collection;
-          req.book = book;
+          req.image = image;
           next();
         } else {
           res.status(404).send('no book found');
@@ -59,7 +59,7 @@ var imageController = function() {
       path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
       size: 171938
       */
-      var book = {
+      var image = {
         title: req.body.title,
         author: req.user.username,
         image: {
@@ -73,7 +73,7 @@ var imageController = function() {
       mongodb.connect(url, function(err, db) {
         var collection = db.collection('books');
 
-        collection.insert(book, function(err, results) {
+        collection.insert(image, function(err, results) {
           
           if(err) {
             console.log(err);
@@ -110,8 +110,8 @@ var imageController = function() {
       }
       var collection = db.collection('books');
 
-      collection.find(query).toArray(function(err, books) {
-        res.json(books);
+      collection.find(query).toArray(function(err, images) {
+        res.json(images);
       })
     });
   };
@@ -128,8 +128,8 @@ var imageController = function() {
         
         var collection = db.collection('books');
   
-        collection.findOne({_id : id}, function(err, book) {
-          if(book.author /*=== req.user.username */) {
+        collection.findOne({_id : id}, function(err, image) {
+          if(image.author /*=== req.user.username */) {
             
             collection.deleteOne(
             {_id: objectId.createFromHexString(req.params.id)},
@@ -155,8 +155,8 @@ var imageController = function() {
       mongodb.connect(url, function(err, db){
         var collection = db.collection('books');
   
-        collection.findOne({_id : id}, function(err, book) {
-          res.render('partials/_editBookForm', { book : book });
+        collection.findOne({_id : id}, function(err, image) {
+          res.render('partials/_editImageForm', { image : image });
         });
       });
     };
@@ -168,7 +168,7 @@ var imageController = function() {
       
       mongodb.connect(url, function(err, db){
         var collection = db.collection('books');
-        var book = {
+        var image = {
           title : req.body.title,
           body : req.body.author,
           id: id
@@ -180,8 +180,8 @@ var imageController = function() {
         if(isDelete) {
           
           // TODO: duplicate function in bookDelete();
-          collection.findOne({_id : id}, function(err, book) {
-            if(book.author /*=== req.user.username */) {
+          collection.findOne({_id : id}, function(err, image) {
+            if(image.author /*=== req.user.username */) {
               
               collection.deleteOne(
               {_id: objectId.createFromHexString(req.params.id)},
@@ -195,7 +195,7 @@ var imageController = function() {
           });
         } else {
           collection.update({_id: objectId.createFromHexString(req.params.id)},
-            {$set: book }, function(err, updated) {
+            {$set: image }, function(err, updated) {
   
             if (err) {
               console.log(err);

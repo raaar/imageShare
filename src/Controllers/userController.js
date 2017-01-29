@@ -15,7 +15,7 @@ var userController = function(Book) {
           res.redirect('auth/register');
         } else {
           res.render('archive', {
-            books: results,
+            items: results,
             pageName: 'archive'
           });
         }
