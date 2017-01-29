@@ -1,3 +1,5 @@
+"use strict";
+
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
 var dbConfig = require('../config/db');
@@ -5,51 +7,15 @@ var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 
 
-function removeImage (req, res, collection, id) {
-  
-  // fetch and delete DB entry...
-  function destroyItem(next) {
-    collection.findOne({_id : id}, function(err, image) {
-      if(image.author /*=== req.user.username */) { // TODO: user should only be able to delete his own images
-        collection.deleteOne(
-        {_id: objectId.createFromHexString(req.params.id)},
-        function(err, result) {
-          next(image.image.id);
-        });
-      } else {
-        console.log('can\'t delete' );
-        return;
-      }
-    });
-  }
-  
-  // ...now we can delete residue files from the uploads folder
-  destroyItem(function(id) {
-    console.log('destroy item ' + id)
-    res.redirect('/archive');
-  });
-}
-
 // Reveal model pattern
 var imageController = function() {
 
   var middleware = function(req, res, next){
-    console.log('middleware going...')
+    console.log('middleware going...');
     next();
   };
   
   var middlewareFetchSingle = function(req, res, next) {
-    // Book.findById(req.params.id, function(err, book) {
-    //   if(err) {
-    //     res.status(500).send(err);
-    //   } else if(book) {
-    //     req.book = book;
-    //     next();
-    //   } else {
-    //     res.status(404).send('no book found');
-    //   }
-    // });
-    
     var url = dbConfig.url;
     var id = new objectId(req.params.id);
 
@@ -68,7 +34,7 @@ var imageController = function() {
         }
       });
     });
-  }
+  };
 
   var post = function(req , res) {
     if(!req.body.title || !req.file) {
@@ -140,7 +106,7 @@ var imageController = function() {
 
       collection.find(query).toArray(function(err, images) {
         res.json(images);
-      })
+      });
     });
   };
   
@@ -170,10 +136,10 @@ var imageController = function() {
               });
             } else {
               console.log('can\'t delete' );
-              return
+              return;
             }
           });
-        }
+        };
     
         deleteImage(function(res){
           console.log('clean up uploads folder...');
@@ -205,49 +171,75 @@ var imageController = function() {
    
 
   var update = function(req, res) {
-      var url = dbConfig.url;
-      var id = new objectId(req.params.id);
+    var url = dbConfig.url;
+    var id = new objectId(req.params.id);
+    
+    mongodb.connect(url, function(err, db){
+      var collection = db.collection('images');
+      var image = {
+        title : req.body.title,
+        body : req.body.author,
+        id: id
+      };
       
-      mongodb.connect(url, function(err, db){
-        var collection = db.collection('images');
-        var image = {
-          title : req.body.title,
-          body : req.body.author,
-          id: id
-        };
-        
-        
-        var isDelete = req.body.delete_button !== undefined;
-        
-        if(isDelete) {
-          removeImage(req, res, collection, id);
-        } else {
-          collection.update({_id: objectId.createFromHexString(req.params.id)},
-            {$set: image }, function(err, updated) {
+      
+      var isDelete = req.body.delete_button !== undefined;
+      
+      if(isDelete) {
+        removeImage(req, res, collection, id);
+      } else {
+        updateImage(req, res, collection, id, image);
+      }
+    });
+  };
   
-            if (err) {
-              console.log(err);
-            }
   
-            res.redirect('/archive');
-          });
-        }
+  function updateImage(req, res, collection, id, image) {
+    collection.update({_id: objectId.createFromHexString(req.params.id)},
+      {$set: image }, function(err, updated) {
 
-      });
-    };
-  
+      if (err) {
+        console.log(err);
+      }
 
+      res.redirect('/archive');
+    });
+  }
+  
+function removeImage (req, res, collection, id) {
+  
+  // fetch and delete DB entry...
+  function destroyItem(next) {
+    collection.findOne({_id : id}, function(err, image) {
+      if(image.author /*=== req.user.username */) { // TODO: user should only be able to delete his own images
+        collection.deleteOne(
+        {_id: objectId.createFromHexString(req.params.id)},
+        function(err, result) {
+          next(image.image.id);
+        });
+      } else {
+        console.log('can\'t delete' );
+        return;
+      }
+    });
+  }
+  
+  // ...now we can delete residue files from the uploads folder
+  destroyItem(function(id) {
+    console.log('destroy item ' + id);
+    res.redirect('/archive');
+  });
+}
 
   return {
     get: get,
     post: post,
-    remove: remove,
     edit: edit,
     update: update,
     middleware: middleware,
     middlewareFetchSingle: middlewareFetchSingle
-  };
-};
+  }
+}
 
 
 module.exports = imageController;
