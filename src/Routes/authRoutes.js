@@ -1,5 +1,6 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
+var dbConfig = require('../config/db');
 var passport = require('passport');
 
 var router = function() {
@@ -13,64 +14,18 @@ var router = function() {
         message: 'Register'
       });
     })
-    .post(function(req, res) {
-      var url = 'mongodb://localhost:27017/bookREST';
-
-      mongodb.connect(url, function(err, db) {
-        var collection = db.collection('users');
-        var user = {
-          username: req.body.userName,
-          password: req.body.password
-        };
-        
-        // Check if user already exists in DB ...
-        collection.findOne({
-            username: req.body.userName
-          },
-          function (err, results) {
-            if(err) { return err; }
-            if (null !== results) {
-              res.render('register', {
-                message: 'Invalid username!'
-              });
-            } else {
-              addUser();
-            }
-          }
-        );
-
-        // ... if unique, add user to DB
-        var addUser = function() {
-
-          collection.insert(user, function(err, results) {
-            console.log(results);
-            req.login(results.ops[0], function(){
-              res.redirect('/');
-            });
-          });
-        }
-      });
-    });
+    .post(authController.register);
 
   authRouter.route('/signIn')
-    // We specify to pasport to use the loal strategy we have defiend
+    // We specify to pasport to use the loal strategy we have defiend in config/strategies/local.strategy.js
     // This could alternatively say 'google', or 'Facebook' auth
     .post(passport.authenticate('local', {
       failureRedirect: '/'
-    }), function(req, res) {
-      // Success
-      
-      res.cookie('user', req.user._id, {httpOnly: true}); // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
-
-      res.redirect('/');
-    });
+    }),
+    authController.signIn);
 
   authRouter.route('/logout')
-    .post(function(req, res) {
-      req.session.destroy()
-      req.logout()
-      res.redirect('/')
-    })
+    .post(authController.logOut);
 
   return authRouter;
 };

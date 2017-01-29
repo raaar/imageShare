@@ -1,7 +1,9 @@
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
+var dbConfig = require('../config/db');
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
+
 
 // Reveal model pattern
 var imageController = function() {
@@ -23,11 +25,11 @@ var imageController = function() {
     //   }
     // });
     
-    var url = 'mongodb://localhost:27017/bookREST';
+    var url = dbConfig.url;
     var id = new objectId(req.params.id);
 
     mongodb.connect(url, function(err, db){
-      var collection = db.collection('books');
+      var collection = db.collection('images');
 
         collection.findOne({_id : id}, function(err, image) {
         if(err) {
@@ -69,9 +71,9 @@ var imageController = function() {
         }
       };
       
-      var url = 'mongodb://localhost:27017/bookREST';
+      var url = dbConfig.url;
       mongodb.connect(url, function(err, db) {
-        var collection = db.collection('books');
+        var collection = db.collection('images');
 
         collection.insert(image, function(err, results) {
           
@@ -91,7 +93,7 @@ var imageController = function() {
 
 
   var get = function(req, res){
-    var url = 'mongodb://localhost:27017/bookREST';
+    var url = dbConfig.url;
     var id = new objectId(req.params.id);
     var query = {};
 
@@ -108,7 +110,7 @@ var imageController = function() {
         res.status(500).send(err);
       } else {
       }
-      var collection = db.collection('books');
+      var collection = db.collection('images');
 
       collection.find(query).toArray(function(err, images) {
         res.json(images);
@@ -118,7 +120,7 @@ var imageController = function() {
   
   
   var remove = function(req, res) {
-    var url = 'mongodb://localhost:27017/bookREST';
+    var url = dbConfig.url;
     var id = new objectId(req.params.id);
 
     mongodb.connect(url, function(err, db) {
@@ -126,7 +128,7 @@ var imageController = function() {
         res.status(500).send(err);
       } else {
         
-        var collection = db.collection('books');
+        var collection = db.collection('images');
   
         collection.findOne({_id : id}, function(err, image) {
           if(image.author /*=== req.user.username */) {
@@ -149,11 +151,11 @@ var imageController = function() {
   
   
   var edit = function(req, res) {
-      var url = 'mongodb://localhost:27017/bookREST';
+      var url = dbConfig.url;
       var id = new objectId(req.params.id);
       
       mongodb.connect(url, function(err, db){
-        var collection = db.collection('books');
+        var collection = db.collection('images');
   
         collection.findOne({_id : id}, function(err, image) {
           res.render('partials/_editImageForm', { image : image });
@@ -163,11 +165,11 @@ var imageController = function() {
    
     
   var update = function(req, res) {
-      var url = 'mongodb://localhost:27017/bookREST';
+      var url = dbConfig.url;
       var id = new objectId(req.params.id);
       
       mongodb.connect(url, function(err, db){
-        var collection = db.collection('books');
+        var collection = db.collection('images');
         var image = {
           title : req.body.title,
           body : req.body.author,

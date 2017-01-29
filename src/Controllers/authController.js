@@ -1,37 +1,64 @@
-var authController = function(User) {
-  var get = function(req, res){
-    res.render('register', {
-      message: 'Register'
-    })
+var express = require('express');
+var mongodb = require('mongodb').MongoClient;
+var dbConfig = require('../config/db');
+
+var authController = function() {
+  var logOut = function(req, res) {
+    req.session.destroy();
+    req.logout();
+    res.redirect('/');
   };
   
-  var post = function(req, res) {
-      var user = new User(req.body); // this works thanks to 'bodyParser';
+  var signIn =  function(req, res) {
+    // Success
+    res.cookie('user', req.user._id, {httpOnly: true}); // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
+    res.redirect('/');
+  };
+  
+  var register = function(req, res) {
+    var url = dbConfig.url;
 
-      if(!req.body.userName || !req.body.password) {
-        res.status(400);
-        res.render('register', {
-          message: 'Missing information'
-        });
-      } else {
-        
-        console.log('Registration succesfull, redirecting');
-        console.info(user.email + " " + user.password);
-        user.save();
-        res.status(201);
-        //res.send(user); // Some form of redirect
-        res.render('signIn', {
-          message: 'Registration successful, now log in'
+    mongodb.connect(url, function(err, db) {
+      var collection = db.collection('users');
+      var user = {
+        username: req.body.userName,
+        password: req.body.password
+      };
+      
+      // Check if user already exists in DB ...
+      collection.findOne({
+          username: req.body.userName
+        },
+        function (err, results) {
+          if(err) { return err; }
+          if (null !== results) {
+            res.render('register', {
+              message: 'Invalid username!'
+            });
+          } else {
+            addUser();
+          }
+        }
+      );
+
+      // ... if unique, add user to DB
+      var addUser = function() {
+
+        collection.insert(user, function(err, results) {
+          //console.log(results);
+          req.login(results.ops[0], function(){
+            res.redirect('/');
+          });
         });
       }
-      // passport log in code
-    }
-    
-    
-  return {
-    get:get,
-    post:post
+    });
   }
-}
+  
+  return {
+    register: register,
+    logOut: logOut,
+    signIn: signIn
+  }
+};
 
 module.exports = authController;

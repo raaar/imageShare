@@ -1,12 +1,13 @@
 var mongodb = require('mongodb').MongoClient;
+var dbConfig = require('../config/db');
 
 var userController = function(Book) {
 
   var get = function(req, res) {
-    var url = 'mongodb://localhost:27017/bookREST';
+    var url = dbConfig.url;
 
     mongodb.connect(url, function(err, db) {
-      var collection = db.collection('books');
+      var collection = db.collection('images');
       collection.find({}).toArray(function(err, results) {
         if(err)
           res.status(500).send(err);
