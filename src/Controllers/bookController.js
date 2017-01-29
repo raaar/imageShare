@@ -6,6 +6,11 @@ var upload = multer({ dest: 'public/uploads/' });
 // Reveal model pattern
 var bookController = function() {
 
+  var middleware = function(req, res, next){
+    console.log('middleware going...')
+    next();
+  };
+
   var post = function(req , res) {
     if(!req.body.title || !req.file) {
       res.status(400);
@@ -177,7 +182,8 @@ var bookController = function() {
     post: post,
     bookDelete: bookDelete,
     bookEdit: bookEdit,
-    bookUpdate: bookUpdate
+    bookUpdate: bookUpdate,
+    middleware: middleware
   };
 };
 
