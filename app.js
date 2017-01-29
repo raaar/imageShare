@@ -27,17 +27,17 @@ app.use(cookieParser());
 app.use(session({secret: 'library'}));
 
 // by assing 'app', we can use 'app.use' in our passport config file
-require('./src/config/passport')(app);
+require('./src/server/config/passport')(app);
 
-var imageRouter = require('./src/Routes/imageRoutes')();
-var userRouter = require('./src/Routes/userRoutes')();
-var authRouter = require('./src/Routes/authRoutes')();
+var imageRouter = require('./src/server/Routes/imageRoutes')();
+var userRouter = require('./src/server/Routes/userRoutes')();
+var authRouter = require('./src/server/Routes/authRoutes')();
 
 app.use('/api/Images', imageRouter);
 app.use('/auth', authRouter);
 app.use('/', userRouter);
 
-app.set('views', './src/views');
+app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
 
 
