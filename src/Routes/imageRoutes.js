@@ -4,35 +4,36 @@ var objectId = require('mongodb').ObjectID;
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 
-var routes = function(Book) {
+var routes = function() {
 
-  var bookRouter = express.Router();
-  var bookController = require('../Controllers/bookController')();
+  var imageRouter = express.Router();
+  var imageController = require('../Controllers/imageController')();
 
-  bookRouter.use(bookController.middleware);
-
-  bookRouter.route('/')
-    .get(bookController.get)
-    .post(bookController.post);
+  imageRouter.use(imageController.middleware);
 
 
-  bookRouter.route('/create')
-    .post(upload.single('image'), bookController.post);
+  imageRouter.route('/')
+    .get(imageController.get)
+    .post(imageController.post);
 
 
-  bookRouter.route('/:id/edit')
-    .get(bookController.bookEdit);
+  imageRouter.route('/create')
+    .post(upload.single('image'), imageController.post);
 
-    
-  bookRouter.route('/:id/update')
-    .post(bookController.bookUpdate);
+
+  imageRouter.route('/:id/edit')
+    .get(imageController.bookEdit);
 
     
-  bookRouter.route('/:id/delete')
-    .post(bookController.bookDelete);
+  imageRouter.route('/:id/update')
+    .post(imageController.bookUpdate);
+
+    
+  imageRouter.route('/:id/delete')
+    .post(imageController.bookDelete);
 
   // Middleware making the request to mongodb
-  bookRouter.use('/:id', function(req, res, next) {
+  imageRouter.use('/:id', function(req, res, next) {
     // Book.findById(req.params.id, function(err, book) {
     //   if(err) {
     //     res.status(500).send(err);
@@ -64,7 +65,7 @@ var routes = function(Book) {
     });
   });
 
-  bookRouter.route('/:id')
+  imageRouter.route('/:id')
     .get(function(req, res){
       res.json(req.book);
     })
@@ -110,7 +111,7 @@ var routes = function(Book) {
   
 
 
-  return bookRouter;
+  return imageRouter;
 };
 
 module.exports = routes;

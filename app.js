@@ -15,8 +15,8 @@ var session = require('express-session');
 
 var db = mongoose.connect('mongodb://localhost/bookREST');
 
-var Book = require('./src/models/bookModel');
-var User = require('./src/models/userModel');
+// var Book = require('./src/models/bookModel'); // Old model once used for Mongooe
+// var User = require('./src/models/userModel'); // old model once used for mongoose
 
 var app = express();
 
@@ -31,11 +31,11 @@ app.use(session({secret: 'library'}));
 // by assing 'app', we can use 'app.use' in our passport config file
 require('./src/config/passport')(app);
 
-var bookRouter = require('./src/Routes/bookRoutes')(Book);
-var userRouter = require('./src/Routes/userRoutes')(Book);
+var imageRouter = require('./src/Routes/imageRoutes')();
+var userRouter = require('./src/Routes/userRoutes')();
 var authRouter = require('./src/Routes/authRoutes')();
 
-app.use('/api/Books', bookRouter);
+app.use('/api/Books', imageRouter);
 app.use('/auth', authRouter);
 app.use('/', userRouter);
 
