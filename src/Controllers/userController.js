@@ -17,7 +17,8 @@ var userController = function(Book) {
         } else {
           res.render('archive', {
             items: results,
-            pageName: 'archive'
+            pageName: 'archive',
+            message: ''
           });
         }
       });

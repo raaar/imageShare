@@ -211,14 +211,15 @@ function removeImage (req, res, collection, id) {
   // fetch and delete DB entry...
   function destroyItem(next) {
     collection.findOne({_id : id}, function(err, image) {
-      if(image.author /*=== req.user.username */) { // TODO: user should only be able to delete his own images
+      if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
         collection.deleteOne(
         {_id: objectId.createFromHexString(req.params.id)},
         function(err, result) {
           next(image.image.id);
         });
       } else {
-        console.log('can\'t delete' );
+        console.log('You don\'t have permission to delete this file' );
+        res.redirect('/archive');
         return;
       }
     });
