@@ -22,48 +22,18 @@ var routes = function() {
 
 
   imageRouter.route('/:id/edit')
-    .get(imageController.bookEdit);
+    .get(imageController.edit);
 
     
   imageRouter.route('/:id/update')
-    .post(imageController.bookUpdate);
+    .post(imageController.update);
 
     
   imageRouter.route('/:id/delete')
-    .post(imageController.bookDelete);
+    .post(imageController.remove);
 
   // Middleware making the request to mongodb
-  imageRouter.use('/:id', function(req, res, next) {
-    // Book.findById(req.params.id, function(err, book) {
-    //   if(err) {
-    //     res.status(500).send(err);
-    //   } else if(book) {
-    //     req.book = book;
-    //     next();
-    //   } else {
-    //     res.status(404).send('no book found');
-    //   }
-    // });
-    
-    var url = 'mongodb://localhost:27017/bookREST';
-    var id = new objectId(req.params.id);
-
-    mongodb.connect(url, function(err, db){
-      var collection = db.collection('books');
-
-      collection.findOne({_id : id}, function(err, book) {
-        if(err) {
-          res.status(500).send(err);
-        } else if(book) {
-          req.collection = collection;
-          req.book = book;
-          next();
-        } else {
-          res.status(404).send('no book found');
-        }
-      });
-    });
-  });
+  imageRouter.use('/:id', imageController.middlewareFetchSingle);
 
   imageRouter.route('/:id')
     .get(function(req, res){

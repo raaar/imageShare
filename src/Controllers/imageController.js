@@ -4,12 +4,44 @@ var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 
 // Reveal model pattern
-var bookController = function() {
+var imageController = function() {
 
   var middleware = function(req, res, next){
     console.log('middleware going...')
     next();
   };
+  
+  var middlewareFetchSingle = function(req, res, next) {
+    // Book.findById(req.params.id, function(err, book) {
+    //   if(err) {
+    //     res.status(500).send(err);
+    //   } else if(book) {
+    //     req.book = book;
+    //     next();
+    //   } else {
+    //     res.status(404).send('no book found');
+    //   }
+    // });
+    
+    var url = 'mongodb://localhost:27017/bookREST';
+    var id = new objectId(req.params.id);
+
+    mongodb.connect(url, function(err, db){
+      var collection = db.collection('books');
+
+      collection.findOne({_id : id}, function(err, book) {
+        if(err) {
+          res.status(500).send(err);
+        } else if(book) {
+          req.collection = collection;
+          req.book = book;
+          next();
+        } else {
+          res.status(404).send('no book found');
+        }
+      });
+    });
+  }
 
   var post = function(req , res) {
     if(!req.body.title || !req.file) {
@@ -85,7 +117,7 @@ var bookController = function() {
   };
   
   
-  var bookDelete = function(req, res) {
+  var remove = function(req, res) {
     var url = 'mongodb://localhost:27017/bookREST';
     var id = new objectId(req.params.id);
 
@@ -116,7 +148,7 @@ var bookController = function() {
   }
   
   
-  var bookEdit = function(req, res) {
+  var edit = function(req, res) {
       var url = 'mongodb://localhost:27017/bookREST';
       var id = new objectId(req.params.id);
       
@@ -130,7 +162,7 @@ var bookController = function() {
     };
    
     
-  var bookUpdate = function(req, res) {
+  var update = function(req, res) {
       var url = 'mongodb://localhost:27017/bookREST';
       var id = new objectId(req.params.id);
       
@@ -180,12 +212,13 @@ var bookController = function() {
   return {
     get: get,
     post: post,
-    bookDelete: bookDelete,
-    bookEdit: bookEdit,
-    bookUpdate: bookUpdate,
-    middleware: middleware
+    remove: remove,
+    edit: edit,
+    update: update,
+    middleware: middleware,
+    middlewareFetchSingle: middlewareFetchSingle
   };
 };
 
 
-module.exports = bookController;
+module.exports = imageController;

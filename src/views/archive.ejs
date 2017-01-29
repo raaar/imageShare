@@ -5,11 +5,11 @@
   <% for(var i=0; i < books.length; i++) { %>
     <li>
       <img src="/uploads/<%= books[i].image.full %>" width="240" /><br>
-      <a href="/api/Books/<%= books[i]._id %>"><%= books[i].title %></a>
+      <a href="/api/Images/<%= books[i]._id %>"><%= books[i].title %></a>
       <small><%= books[i].author %></small>
       
-      <form action="api/Books/<%= books[i]._id %>/delete" method="POST">
-        <a href="api/Books/<%= books[i]._id %>/edit">Edit</a>
+      <form action="api/Images/<%= books[i]._id %>/delete" method="POST">
+        <a href="api/Images/<%= books[i]._id %>/edit">Edit</a>
       </form>
     </li>
     

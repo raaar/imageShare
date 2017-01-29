@@ -35,7 +35,7 @@ var imageRouter = require('./src/Routes/imageRoutes')();
 var userRouter = require('./src/Routes/userRoutes')();
 var authRouter = require('./src/Routes/authRoutes')();
 
-app.use('/api/Books', imageRouter);
+app.use('/api/Images', imageRouter);
 app.use('/auth', authRouter);
 app.use('/', userRouter);
 
