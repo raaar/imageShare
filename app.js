@@ -29,9 +29,9 @@ app.use(session({secret: 'library'}));
 // by assing 'app', we can use 'app.use' in our passport config file
 require('./src/server/config/passport')(app);
 
-var imageRouter = require('./src/server/Routes/imageRoutes')();
-var userRouter = require('./src/server/Routes/userRoutes')();
-var authRouter = require('./src/server/Routes/authRoutes')();
+var imageRouter = require('./src/server/routes/imageRoutes')();
+var userRouter = require('./src/server/routes/userRoutes')();
+var authRouter = require('./src/server/routes/authRoutes')();
 
 app.use('/api/Images', imageRouter);
 app.use('/auth', authRouter);
