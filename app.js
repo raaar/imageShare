@@ -35,15 +35,12 @@ app.use('/', userRouter);
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
 
-
-
 // app.get('/', function(req , res) {
 //   //res.send('Welcome to my api');
 //   res.render('index', {
 //     message: 'Welcome to my api'
 //   });
 // });
-
 
 // app.get('/archive', function(req, res) {
 //   res.render('archive', {
