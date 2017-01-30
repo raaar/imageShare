@@ -11,11 +11,6 @@ var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 
-
-// var db = mongoose.connect('mongodb://localhost/bookREST');
-// var Book = require('./src/models/bookModel'); // Old model once used for Mongooe
-// var User = require('./src/models/userModel'); // old model once used for mongoose
-
 var app = express();
 
 var port = process.env.PORT || 3000;
