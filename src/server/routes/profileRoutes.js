@@ -17,14 +17,24 @@ var routes = function() {
           if(err) {
             res.status(500).send(err);
           } else if(result) {
-            res.json(result.username);
+            // res.json(result.username);
+            
+            res.render('profile', {
+              user: result,
+              pageName: 'progile',
+              message: 'hello profile'
+            });
           } else {
             res.status(404).send('no user found');
           }
         });
       });
     
+    })
+    .post(function(req,res) {
+      console.log('post avatar');
     });
+    
     
   return profileRouter;
 };

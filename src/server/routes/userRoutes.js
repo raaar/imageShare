@@ -6,18 +6,11 @@ var routes = function(Book) {
 
   userRouter.route('/')
     .get(function(req, res) {
-      if(!req.user) {
-        res.redirect('auth/register');
-      } else {
-        res.render('index', {
-          message: 'Hi ' + req.user.username,
-          error: req.query.message,
-          pageName: 'index'
-        });
-      }
-      
-      //console.log(req.query.message);
-
+      res.render('index', {
+        message: 'Hi ' + req.user.username,
+        error: req.query.message,
+        pageName: 'index'
+      });
     });
     // .post(userController.post);
 

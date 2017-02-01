@@ -11,14 +11,14 @@ var userController = function(Book) {
       collection.find({}).toArray(function(err, results) {
         if(err)
           res.status(500).send(err);
-          
         if(!req.user) {
           res.redirect('auth/register');
         } else {
           res.render('archive', {
             items: results,
             pageName: 'archive',
-            message: ''
+            message: '',
+            user: req.user.username
           });
         }
       });

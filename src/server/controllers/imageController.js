@@ -21,7 +21,7 @@ var imageController = function() {
     mongodb.connect(url, function(err, db){
       var collection = db.collection('images');
 
-        collection.findOne({_id : id}, function(err, image) {
+      collection.findOne({_id : id}, function(err, image) {
         if(err) {
           res.status(500).send(err);
         } else if(image) {
