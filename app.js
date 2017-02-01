@@ -27,10 +27,30 @@ require('./src/server/config/passport')(app);
 var imageRouter = require('./src/server/routes/imageRoutes')();
 var userRouter = require('./src/server/routes/userRoutes')();
 var authRouter = require('./src/server/routes/authRoutes')();
+var profileRouter = require('./src/server/routes/profileRoutes')();
+
 
 app.use('/api/Images', imageRouter);
 app.use('/auth', authRouter);
+
+app.use('/', function(req, res, next) {
+  if(req.user) {
+    console.log('user is logged in');
+    next();
+  } else {
+    console.log('user is logged out');
+    res.redirect('/auth/register');
+  }
+});
+
 app.use('/', userRouter);
+app.use('/api/profile', profileRouter);
+
+
+
+
+
+
 
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
@@ -51,3 +71,13 @@ app.set('view engine', 'ejs');
 app.listen(port, function(req, res){
   console.log('server running on port ' + port);
 });
+
+
+
+/*
+  TODO:
+  
+  remember me
+  profile
+  comments on images
+*/

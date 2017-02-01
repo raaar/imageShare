@@ -7,7 +7,7 @@
     <li>
       <img src="/uploads/<%= items[i].image.thumb %>" width="240" /><br>
       <a href="/api/Images/<%= items[i]._id %>"><%= items[i].title %></a>
-      <small><%= items[i].author %></small>
+      <small><a href="/api/profile/<%= items[i].author %>"><%= items[i].author %></a></small>
       
       <form action="api/Images/<%= items[i]._id %>/delete" method="POST">
         <a href="api/Images/<%= items[i]._id %>/edit">Edit</a>
