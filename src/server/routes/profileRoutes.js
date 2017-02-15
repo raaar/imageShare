@@ -20,9 +20,10 @@ var routes = function() {
             // res.json(result.username);
             
             res.render('profile', {
-              user: result,
-              pageName: 'progile',
-              message: 'hello profile'
+              user: result.username,
+              pageName: 'profile',
+              message: 'hello profile',
+              
             });
           } else {
             res.status(404).send('no user found');

@@ -9,7 +9,8 @@ var routes = function(Book) {
       res.render('index', {
         message: 'Hi ' + req.user.username,
         error: req.query.message,
-        pageName: 'index'
+        pageName: 'index',
+        user: req.user.username
       });
     });
     // .post(userController.post);

@@ -1,7 +1,7 @@
 <% include partials/_head %>
 <% include partials/nav %>
 
-<h1><%= user.username %></h1>
+<h1><%= user %></h1>
 
 <form action="/api/profile/:author" method="POST" enctype="multipart/form-data">
   Avatar: <input type="file" name="image" /><br>
