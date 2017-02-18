@@ -1,15 +1,11 @@
 "use strict";
 
 var React = require('react/addons');
+var Router = require('react-router');
+var routes = require('./routes');
 
-var Home = React.createClass({
-  render: function() {
-      return (
-        <div>
-            -- Hello! This is a React component      
-        </div>
-      );
-  }
-})
 
-React.render(<Home />,app)
+Router.run(routes, Router.HistoryLocation, function(Handler) {
+  React.render(<Handler />, document.getElementById('app'));
+});
+
