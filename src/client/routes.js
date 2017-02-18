@@ -10,6 +10,8 @@ var Redirect = Router.Redirect;
 var routes = (
   <Route name="app" path="/" handler={require('./components/app')} >
     <DefaultRoute handler={require('./components/homePage')} />
+    <Route name="profile" path="profile" handler={require('./components/profile/profilePage')} />
+    <NotFoundRoute handler={require('./components/pageNotFound')} />
   </Route>
 );
 
