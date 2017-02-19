@@ -13,9 +13,6 @@ var Home = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-  },
-
   componentDidMount: function() {
     if(this.isMounted()) {
       // this.setState({ authors: AuthorApi.getAllAuthors() });
@@ -26,10 +23,24 @@ var Home = React.createClass({
     }
   },
 
+	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
+	componentWillMount: function() {
+		ImageStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		ImageStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+		this.setState({images: ImageStore.getAllImages() });
+    console.info('on change ', this.state.images );
+	},
+
   render: function() {
     return (
       <div className="jumbotron">
-        <h1>Pluralsight administration</h1>
+        <h1>administration</h1>
         <p>We are using React & Flux</p>
         ---
         {this.state.images}
