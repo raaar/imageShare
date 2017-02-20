@@ -54049,6 +54049,7 @@ var InitializeActions = {
       console.log(error);
     });
     */
+          
    $.ajax({  
       url:'api/images',
       dataType:"json",
@@ -54069,7 +54070,7 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":250,"../constants/actionTypes":256,"../dispatcher/appDispatcher":257,"../stores/imageStore":260,"axios":1,"jquery":32}],250:[function(require,module,exports){
+},{"../api/imagesApi":250,"../constants/actionTypes":257,"../dispatcher/appDispatcher":258,"../stores/imageStore":261,"axios":1,"jquery":32}],250:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 var axios = require('axios');
@@ -54162,6 +54163,7 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var ImageStore = require('../stores/imageStore');
+var ImageGrid = require('./image/imageGrid');
 
 var Home = React.createClass({displayName: "Home",
   
@@ -54201,7 +54203,9 @@ var Home = React.createClass({displayName: "Home",
         React.createElement("h1", null, "administration"), 
         React.createElement("p", null, "We are using React & Flux"), 
         "---", 
-        this.state.images
+
+        React.createElement(ImageGrid, {images: this.state.images})
+
       )
       );
   }
@@ -54209,7 +54213,44 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"../stores/imageStore":260,"react":248,"react-router":60}],254:[function(require,module,exports){
+},{"../stores/imageStore":261,"./image/imageGrid":254,"react":248,"react-router":60}],254:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var ImageGrid = React.createClass({displayName: "ImageGrid",
+  
+  propTypes: {
+    images: React.PropTypes.array.isRequired
+  },
+
+  render: function() {
+
+    var createImageTile = function(image) {
+      //console.log(image);
+      
+      var url = "uploads/" + image.image.thumb;
+      console.log(url);
+
+      return (
+        React.createElement("div", {key: image._id}, 
+          React.createElement("img", {src: url})
+        )
+      );
+    }
+
+    return (
+      React.createElement("div", null, 
+	  		this.props.images.map(createImageTile, this)
+      )
+    );
+  }
+});
+
+
+module.exports = ImageGrid;
+
+},{"react":248}],255:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -54233,7 +54274,7 @@ var NotFoundPage = React.createClass({displayName: "NotFoundPage",
 
 module.exports = NotFoundPage;
 
-},{"react":248,"react-router":60}],255:[function(require,module,exports){
+},{"react":248,"react-router":60}],256:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -54261,7 +54302,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"react":248}],256:[function(require,module,exports){
+},{"react":248}],257:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -54274,12 +54315,12 @@ module.exports = keyMirror({
 	DELETE_AUTHOR: null,
 });
 
-},{"react/lib/keyMirror":232}],257:[function(require,module,exports){
+},{"react/lib/keyMirror":232}],258:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":29}],258:[function(require,module,exports){
+},{"flux":29}],259:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -54293,7 +54334,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":249,"./routes":259,"react-router":60,"react/addons":76}],259:[function(require,module,exports){
+},{"./actions/initializeActions":249,"./routes":260,"react-router":60,"react/addons":76}],260:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -54329,7 +54370,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":251,"./components/homePage":253,"./components/pageNotFound":254,"./components/profile/profilePage":255,"react":248,"react-router":60}],260:[function(require,module,exports){
+},{"./components/app":251,"./components/homePage":253,"./components/pageNotFound":255,"./components/profile/profilePage":256,"react":248,"react-router":60}],261:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -54378,4 +54419,4 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":256,"../dispatcher/appDispatcher":257,"events":27,"lodash":33,"object-assign":34}]},{},[258]);
+},{"../constants/actionTypes":257,"../dispatcher/appDispatcher":258,"events":27,"lodash":33,"object-assign":34}]},{},[259]);

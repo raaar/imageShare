@@ -26,6 +26,7 @@ var InitializeActions = {
       console.log(error);
     });
     */
+          
    $.ajax({  
       url:'api/images',
       dataType:"json",

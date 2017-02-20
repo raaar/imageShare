@@ -4,6 +4,7 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var ImageStore = require('../stores/imageStore');
+var ImageGrid = require('./image/imageGrid');
 
 var Home = React.createClass({
   
@@ -40,10 +41,7 @@ var Home = React.createClass({
   render: function() {
     return (
       <div className="jumbotron">
-        <h1>administration</h1>
-        <p>We are using React & Flux</p>
-        ---
-        {this.state.images}
+        <ImageGrid images={this.state.images} />
       </div>
       );
   }
