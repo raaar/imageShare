@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var ImageGrid = React.createClass({
   
@@ -11,14 +13,14 @@ var ImageGrid = React.createClass({
   render: function() {
 
     var createImageTile = function(image) {
-      //console.log(image);
-      
-      var url = "uploads/" + image.image.thumb;
-      console.log(url);
+
+      var src = "uploads/" + image.image.thumb;
 
       return (
         <div key={image._id}>
-          <img src={url} />
+          <Link to="image" params={{id: image._id}} >
+            <img className="tile" src={src} />
+          </Link>
         </div>
       );
     }

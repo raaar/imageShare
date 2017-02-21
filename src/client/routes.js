@@ -10,7 +10,11 @@ var Redirect = Router.Redirect;
 var routes = (
   <Route name="app" path="/" handler={require('./components/app')} >
     <DefaultRoute handler={require('./components/homePage')} />
-    <Route name="profile" path="profile" handler={require('./components/profile/profilePage')} />
+    
+    <Route name="image" path="image/:id" handler={require('./components/image/imageSingle')} />
+
+    // TODO: replace hord coded profile ID with dynamic user data
+    <Route name="profile" path="profile/5@5.com" handler={require('./components/profile/profilePage')} />
     <NotFoundRoute handler={require('./components/pageNotFound')} />
   </Route>
 );

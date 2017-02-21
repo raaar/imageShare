@@ -31,6 +31,7 @@ var InitializeActions = {
       url:'api/images',
       dataType:"json",
       success: function(data) {
+        console.log('images ajax success');
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
           initialData: {
@@ -41,7 +42,28 @@ var InitializeActions = {
       error: function() {
       
       }
+    });
+   
+
+    // TODO: incorrect
+    $.ajax({  
+      url:'api/profile/',
+      dataType:"json",
+      success: function(data) {
+        console.info('initialize profile: ', data );
+
+        Dispatcher.dispatch({
+          actionType: ActionTypes.INITIALIZE_PROFILE,
+          initialData: {
+            profile: data
+          }
+        });
+      },
+      error: function() {
+        console.log('ajax profile fail') 
+      }
     })
+
 	}
 };
 

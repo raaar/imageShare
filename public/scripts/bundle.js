@@ -54054,6 +54054,7 @@ var InitializeActions = {
       url:'api/images',
       dataType:"json",
       success: function(data) {
+        console.log('images ajax success');
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
           initialData: {
@@ -54064,14 +54065,38 @@ var InitializeActions = {
       error: function() {
       
       }
+    });
+   
+
+    // TODO: incorrect
+    $.ajax({  
+      url:'api/profile/',
+      dataType:"json",
+      success: function(data) {
+        console.info('initialize profile: ', data );
+
+        Dispatcher.dispatch({
+          actionType: ActionTypes.INITIALIZE_PROFILE,
+          initialData: {
+            profile: data
+          }
+        });
+      },
+      error: function() {
+        console.log('ajax profile fail') 
+      }
     })
+
 	}
 };
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":250,"../constants/actionTypes":257,"../dispatcher/appDispatcher":258,"../stores/imageStore":261,"axios":1,"jquery":32}],250:[function(require,module,exports){
+},{"../api/imagesApi":250,"../constants/actionTypes":258,"../dispatcher/appDispatcher":259,"../stores/imageStore":262,"axios":1,"jquery":32}],250:[function(require,module,exports){
+// NOT USED! 
+//
 //"use strict";
+//
 var $ = require('jquery');
 var axios = require('axios');
 
@@ -54199,24 +54224,19 @@ var Home = React.createClass({displayName: "Home",
 
   render: function() {
     return (
-      React.createElement("div", {className: "jumbotron"}, 
-        React.createElement("h1", null, "administration"), 
-        React.createElement("p", null, "We are using React & Flux"), 
-        "---", 
-
         React.createElement(ImageGrid, {images: this.state.images})
-
-      )
       );
   }
 });
 
 module.exports = Home;
 
-},{"../stores/imageStore":261,"./image/imageGrid":254,"react":248,"react-router":60}],254:[function(require,module,exports){
+},{"../stores/imageStore":262,"./image/imageGrid":254,"react":248,"react-router":60}],254:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var ImageGrid = React.createClass({displayName: "ImageGrid",
   
@@ -54227,14 +54247,14 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
   render: function() {
 
     var createImageTile = function(image) {
-      //console.log(image);
-      
-      var url = "uploads/" + image.image.thumb;
-      console.log(url);
+
+      var src = "uploads/" + image.image.thumb;
 
       return (
         React.createElement("div", {key: image._id}, 
-          React.createElement("img", {src: url})
+          React.createElement(Link, {to: "image", params: {id: image._id}}, 
+            React.createElement("img", {className: "tile", src: src})
+          )
         )
       );
     }
@@ -54250,7 +54270,62 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
 
 module.exports = ImageGrid;
 
-},{"react":248}],255:[function(require,module,exports){
+},{"react":248,"react-router":60}],255:[function(require,module,exports){
+var React = require('react');
+var ImageStore = require('../../stores/imageStore');
+
+var ImageSingle = React.createClass({displayName: "ImageSingle",
+
+  getInitialState: function() {
+    return {
+     image: []
+    };
+  },
+
+  componentWillMount: function() {
+    var imageId = this.props.params.id;
+
+    console.info('image single: ', imageId);
+  },
+  
+  componentDidMount: function() {
+    if(this.isMounted()) {
+      // this.setState({ authors: AuthorApi.getAllAuthors() });
+			//console.info('authorPage comp did mount: ', ImageStore );
+      //this.setState({images: ImageStore.getAllImages() });
+
+      //console.info('homepage images data: ', this.state.images);
+    }
+  },
+
+	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
+	componentWillMount: function() {
+		//ImageStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		//ImageStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+		//this.setState({images: ImageStore.getAllImages() });
+    //console.info('on change ', this.state.images );
+	},
+
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        "Single Image" + ' ' +      
+        "-----", 
+        this.props.params.id
+      )
+    )
+  }
+});
+
+module.exports = ImageSingle;
+
+},{"../../stores/imageStore":262,"react":248}],256:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -54274,12 +54349,42 @@ var NotFoundPage = React.createClass({displayName: "NotFoundPage",
 
 module.exports = NotFoundPage;
 
-},{"react":248,"react-router":60}],256:[function(require,module,exports){
+},{"react":248,"react-router":60}],257:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 
 var Profile = React.createClass({displayName: "Profile",
+
+  getInitialState: function() {
+    return {
+     profile: []
+    };
+  },
+
+  componentDidMount: function() {
+    if(this.isMounted()) {
+      // this.setState({ authors: AuthorApi.getAllAuthors() });
+			//console.info('authorPage comp did mount: ', ImageStore );
+      //this.setState({images: ImageStore.getAllImages() });
+
+      console.info('homepage images data: ', this.state.images);
+    }
+  },
+
+	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
+	componentWillMount: function() {
+		ImageStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		ImageStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+		// this.setState({images: ImageStore.getAllImages() });
+    // console.info('on change ', this.state.images );
+	},
   render: function() {
     return (
         React.createElement("div", null, 
@@ -54302,7 +54407,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"react":248}],257:[function(require,module,exports){
+},{"react":248}],258:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -54310,17 +54415,18 @@ var keyMirror = require('react/lib/keyMirror');
 // KeyMirror copys the value on the left, and places it on the right, so that we don't have to type the INITIALIZE property twice 
 module.exports = keyMirror({
 	INITIALIZE: null,
+  INITIALIZE_PROFILE: null,
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
 	DELETE_AUTHOR: null,
 });
 
-},{"react/lib/keyMirror":232}],258:[function(require,module,exports){
+},{"react/lib/keyMirror":232}],259:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":29}],259:[function(require,module,exports){
+},{"flux":29}],260:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -54334,7 +54440,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":249,"./routes":260,"react-router":60,"react/addons":76}],260:[function(require,module,exports){
+},{"./actions/initializeActions":249,"./routes":261,"react-router":60,"react/addons":76}],261:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -54347,7 +54453,11 @@ var Redirect = Router.Redirect;
 var routes = (
   React.createElement(Route, {name: "app", path: "/", handler: require('./components/app')}, 
     React.createElement(DefaultRoute, {handler: require('./components/homePage')}), 
-    React.createElement(Route, {name: "profile", path: "profile", handler: require('./components/profile/profilePage')}), 
+    
+    React.createElement(Route, {name: "image", path: "image/:id", handler: require('./components/image/imageSingle')}), 
+
+    "// TODO: replace hord coded profile ID with dynamic user data", 
+    React.createElement(Route, {name: "profile", path: "profile/5@5.com", handler: require('./components/profile/profilePage')}), 
     React.createElement(NotFoundRoute, {handler: require('./components/pageNotFound')})
   )
 );
@@ -54370,7 +54480,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":251,"./components/homePage":253,"./components/pageNotFound":255,"./components/profile/profilePage":256,"react":248,"react-router":60}],261:[function(require,module,exports){
+},{"./components/app":251,"./components/homePage":253,"./components/image/imageSingle":255,"./components/pageNotFound":256,"./components/profile/profilePage":257,"react":248,"react-router":60}],262:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -54396,6 +54506,10 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 		this.emit(CHANGE_EVENT);
 	},
 
+	getImageById: function(id) {
+		return _.find(_images, {_id: id});
+	},
+
 	getAllImages: function() {
 		console.info('image store get all images: ', _images);
 		return _images;
@@ -54419,4 +54533,4 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":257,"../dispatcher/appDispatcher":258,"events":27,"lodash":33,"object-assign":34}]},{},[259]);
+},{"../constants/actionTypes":258,"../dispatcher/appDispatcher":259,"events":27,"lodash":33,"object-assign":34}]},{},[260]);

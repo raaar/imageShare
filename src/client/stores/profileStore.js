@@ -2,14 +2,14 @@
 
 var _ = require('lodash');
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ActionTypes = require('../constants/actionTypes');
+var ActionTypes = reuire('../constants/actionTypes');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
-var _images = [];
+var _profile = [];
 
-var ImageStore = assign({}, EventEmitter.prototype, {
+var ProfileStore = assign({}, EventEmitter.prototype, {
 
 	addChangeListener: function(callback) {
 		this.on(CHANGE_EVENT, callback);
@@ -23,23 +23,20 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 		this.emit(CHANGE_EVENT);
 	},
 
-	getImageById: function(id) {
-		return _.find(_images, {_id: id});
-	},
-
-	getAllImages: function() {
-		console.info('image store get all images: ', _images);
-		return _images;
-	},
+  getProfile: function() {
+    return _profile;
+  }
 
 });
 
+
+
 Dispatcher.register(function(action){
 	switch(action.actionType) {
-		case ActionTypes.INITIALIZE:
-			_images = action.initialData.images;
-      console.info('imageStore INITIALIZE: ', _images);
-			ImageStore.emitChange();
+		case ActionTypes.INITIALIZE_PROFILE:
+			_profile = action.initialData.profile;
+      console.info('profileStore INITIALIZE: ', _profile);
+			ProfileStore.emitChange();
 			break;
 
 		default:
@@ -47,5 +44,4 @@ Dispatcher.register(function(action){
 	}
 });
 
-
-module.exports = ImageStore;
+module.exports = ProfileStore;
