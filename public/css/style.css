@@ -2,3 +2,8 @@
   display: inline-block;
   float: left;
 }
+
+.image {
+  width: 800px;
+  height: auto;
+}

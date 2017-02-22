@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ActionTypes = reuire('../constants/actionTypes');
+var ActionTypes = require('../constants/actionTypes');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
@@ -23,12 +23,12 @@ var ProfileStore = assign({}, EventEmitter.prototype, {
 		this.emit(CHANGE_EVENT);
 	},
 
-  getProfile: function() {
-    return _profile;
+  getProfile: function(author) {
+    console.log(author);
+    return author;
   }
 
 });
-
 
 
 Dispatcher.register(function(action){

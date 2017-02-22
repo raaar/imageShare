@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var ProfileStore = require('../../stores/profileStore');
 
 var Profile = React.createClass({
 
@@ -11,43 +12,35 @@ var Profile = React.createClass({
   },
 
   componentDidMount: function() {
+    var author = this.props.params.author;
     if(this.isMounted()) {
-      // this.setState({ authors: AuthorApi.getAllAuthors() });
+      this.setState({profile: ProfileStore.getProfile(author) });
 			//console.info('authorPage comp did mount: ', ImageStore );
       //this.setState({images: ImageStore.getAllImages() });
 
-      console.info('homepage images data: ', this.state.images);
+//      console.info('homepage images data: ', this.state.images);
     }
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
-		ImageStore.addChangeListener(this._onChange);
+		ProfileStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
-		ImageStore.removeChangeListener(this._onChange);
+		ProfileStore.removeChangeListener(this._onChange);
 	},
 
 	_onChange: function() {
-		// this.setState({images: ImageStore.getAllImages() });
+    this.setState({profile: ProfileStore.getProfile(author) });
     // console.info('on change ', this.state.images );
 	},
+
   render: function() {
     return (
         <div>
-          <h1>Profile</h1>
-          
-          <p>
-            <ul>
-              <li>App</li>
-              <li>App</li>
-              <li>App</li>
-              <li>App</li>
-              <li>App</li>
-              <li>App</li>
-            </ul>
-          </p>
+          <h1>Hi {this.state.profile}</h1>
+          <p>Profile info</p>  
         </div>
       );
   }

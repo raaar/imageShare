@@ -5,46 +5,50 @@ var ImageSingle = React.createClass({
 
   getInitialState: function() {
     return {
-     image: []
+     image: {
+       image: {
+         thumb: "",
+         full: ""
+       }
+     } 
     };
   },
 
   componentWillMount: function() {
     var imageId = this.props.params.id;
-
-    console.info('image single: ', imageId);
+    
+    if(imageId) {
+      this.setState({image: ImageStore.getImageById(imageId)});
+    }
   },
   
   componentDidMount: function() {
     if(this.isMounted()) {
-      // this.setState({ authors: AuthorApi.getAllAuthors() });
-			//console.info('authorPage comp did mount: ', ImageStore );
-      //this.setState({images: ImageStore.getAllImages() });
-
-      //console.info('homepage images data: ', this.state.images);
+      var imageId = this.props.params.id;
+      this.setState({image: ImageStore.getImageById(imageId)});
     }
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
-		//ImageStore.addChangeListener(this._onChange);
+		ImageStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
-		//ImageStore.removeChangeListener(this._onChange);
+		ImageStore.removeChangeListener(this._onChange);
 	},
 
 	_onChange: function() {
-		//this.setState({images: ImageStore.getAllImages() });
-    //console.info('on change ', this.state.images );
+    var imageId = this.props.params.id;
+		this.setState({image: ImageStore.getImageById(imageId) });
 	},
 
   render: function() {
+    var url = "uploads/" + this.state.image.image.full;
+
     return (
       <div>
-        Single Image      
-        -----
-        {this.props.params.id}
+        <img className="image" src={url} />
       </div>
     )
   }

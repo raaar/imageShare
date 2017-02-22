@@ -1,27 +1,18 @@
-// NOT USED! 
-//
 //"use strict";
-//
 var $ = require('jquery');
-var axios = require('axios');
-
-function ajaxFun() {
-    axios.get('api/images')
-      .then(function (response) {
-        console.log(response);
-        return response
-      })
-      .catch(function (error) {
-        console.log(error);
-      }); 
-}
 
 var ImagesApi = {
-  getAllImages: function(cb) {
-    ajaxFun(function(data){
-      cb(data);
-    });
-  }
+  getAllImages: function(url) {
+    return new Promise(function(success,error){
+      $.ajax({
+        url:url,
+        dataType:"json",
+        success:success,
+        error:error
+      })
+    }) 
+  },
+        
 }
 
 module.exports = ImagesApi;

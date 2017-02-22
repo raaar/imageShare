@@ -6,64 +6,36 @@ var ImagesApi = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
-var axios = require('axios');
+// var axios = require('axios');
 
 // http://www.thedreaming.org/2015/03/14/react-ajax/
 var InitializeActions = {
 	initApp: function() {
 
-    /*
+    ImagesApi.getAllImages('api/images')
+      .then(function(data){
+        Dispatcher.dispatch({
+          actionType: ActionTypes.INITIALIZE,
+            initialData: {
+              images: data
+            }
+          });
+        });
+  /*
+    // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
     axios.get('api/images')
       .then(function (response) {
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
           initialData: {
-            images: response 
+            images: response.data 
           }
         });
      })
     .catch(function (error) {
       console.log(error);
     });
-    */
-          
-   $.ajax({  
-      url:'api/images',
-      dataType:"json",
-      success: function(data) {
-        console.log('images ajax success');
-        Dispatcher.dispatch({
-          actionType: ActionTypes.INITIALIZE,
-          initialData: {
-            images: data
-          }
-        });
-      },
-      error: function() {
-      
-      }
-    });
-   
-
-    // TODO: incorrect
-    $.ajax({  
-      url:'api/profile/',
-      dataType:"json",
-      success: function(data) {
-        console.info('initialize profile: ', data );
-
-        Dispatcher.dispatch({
-          actionType: ActionTypes.INITIALIZE_PROFILE,
-          initialData: {
-            profile: data
-          }
-        });
-      },
-      error: function() {
-        console.log('ajax profile fail') 
-      }
-    })
-
+  */
 	}
 };
 
