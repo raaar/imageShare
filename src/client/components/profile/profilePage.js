@@ -39,7 +39,7 @@ var Profile = React.createClass({
   render: function() {
     return (
         <div>
-          <h1>Hi {this.state.profile}</h1>
+          <h1>{this.state.profile}</h1>
           <p>Profile info</p>  
         </div>
       );

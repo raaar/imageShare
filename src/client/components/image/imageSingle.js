@@ -1,14 +1,17 @@
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var ImageSingle = React.createClass({
 
   getInitialState: function() {
     return {
      image: {
+       author: "",
        image: {
          thumb: "",
-         full: ""
+         full: "",
        }
      } 
     };
@@ -45,10 +48,12 @@ var ImageSingle = React.createClass({
 
   render: function() {
     var url = "uploads/" + this.state.image.image.full;
+    var authorUrl = "profile/" + this.state.image.author;
 
     return (
       <div>
         <img className="image" src={url} />
+        By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link>
       </div>
     )
   }

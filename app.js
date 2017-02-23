@@ -31,7 +31,7 @@ var profileRouter = require('./src/server/routes/profileRoutes')();
 var signInStatus = require('./src/server/middleware/middleware');
 
 
-app.use('/api/Images', imageRouter);
+app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
 app.use('/', signInStatus);
 app.use('/', userRouter);

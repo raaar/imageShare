@@ -52845,15 +52845,18 @@ module.exports = ImageGrid;
 },{"react":223,"react-router":35}],230:[function(require,module,exports){
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var ImageSingle = React.createClass({displayName: "ImageSingle",
 
   getInitialState: function() {
     return {
      image: {
+       author: "",
        image: {
          thumb: "",
-         full: ""
+         full: "",
        }
      } 
     };
@@ -52890,10 +52893,12 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
   render: function() {
     var url = "uploads/" + this.state.image.image.full;
+    var authorUrl = "profile/" + this.state.image.author;
 
     return (
       React.createElement("div", null, 
-        React.createElement("img", {className: "image", src: url})
+        React.createElement("img", {className: "image", src: url}), 
+        "By: ", React.createElement(Link, {to: "profile", params: {author: this.state.image.author}}, this.state.image.author)
       )
     )
   }
@@ -52901,7 +52906,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../stores/imageStore":237,"react":223}],231:[function(require,module,exports){
+},{"../../stores/imageStore":237,"react":223,"react-router":35}],231:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
