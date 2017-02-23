@@ -6,12 +6,11 @@ var routes = function(Book) {
 
   userRouter.route('/')
     .get(function(req, res) {
-      res.render('index', {
-        message: 'Hi ' + req.user.username,
-        error: req.query.message,
-        pageName: 'index',
+      var userData = {
         user: req.user.username
-      });
+      }
+
+      res.json(userData);
     });
     // .post(userController.post);
 

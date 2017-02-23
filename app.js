@@ -34,19 +34,16 @@ var signInStatus = require('./src/server/middleware/middleware');
 app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
 app.use('/', signInStatus);
-app.use('/', userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 
 
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
 
-// app.get('/', function(req , res) {
-//   //res.send('Welcome to my api');
-//   res.render('index', {
-//     message: 'Welcome to my api'
-//   });
-// });
+app.get('/', function(req , res) {
+  res.render('index');
+});
 
 // app.get('/archive', function(req, res) {
 //   res.render('archive', {
