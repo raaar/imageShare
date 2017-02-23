@@ -52631,6 +52631,21 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":81}],224:[function(require,module,exports){
 "use strict";
+
+var Dispatcher = require('../dispatcher/appDispatcher');
+var ImageApi = require('../api/imagesApi');
+var ActionTypes = require('../constants/actionTypes');
+
+var ImageActions = {
+	createImage: function(image) {
+    var newImage = ImageApi.saveImage(image);
+	}
+}
+
+module.exports = ImageActions;
+
+},{"../api/imagesApi":226,"../constants/actionTypes":237,"../dispatcher/appDispatcher":238}],225:[function(require,module,exports){
+"use strict";
 // TODO: see if this is needed
 
 var Dispatcher = require('../dispatcher/appDispatcher');
@@ -52673,7 +52688,7 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":225,"../constants/actionTypes":233,"../dispatcher/appDispatcher":234,"../stores/imageStore":237,"jquery":7}],225:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"../stores/imageStore":241,"jquery":7}],226:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 
@@ -52686,14 +52701,24 @@ var ImagesApi = {
         success:success,
         error:error
       })
-    }) 
+    }); 
   },
+
+  saveImage: function(data) {
+     return new Promise(function(success,error){
+       $.ajax({
+         type: 'POST',
+         url: 'api/images/create',
+         data: data
+       });       
+     }); 
+  }
         
 }
 
 module.exports = ImagesApi;
 
-},{"jquery":7}],226:[function(require,module,exports){
+},{"jquery":7}],227:[function(require,module,exports){
 /* eslint-disable strict*/ // Disable check, as jQuery global var is being flagged
 
 var React = require('react');
@@ -52717,7 +52742,21 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":227,"react":223,"react-router":35}],227:[function(require,module,exports){
+},{"./common/header":229,"react":223,"react-router":35}],228:[function(require,module,exports){
+var React = require('react');
+
+
+var fileInput = React.createClass({displayName: "fileInput",
+  render: function() {
+    return (
+      React.createElement("input", {type: "file", name: "image"})  
+    )
+  }
+});
+
+module.exports = fileInput
+
+},{"react":223}],229:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52739,7 +52778,8 @@ var Header = React.createClass({displayName: "Header",
           
           React.createElement("ul", {className: "nav navbar-nav"}, 
             React.createElement("li", null, React.createElement(Link, {to: "app"}, "Home")), 
-            React.createElement("li", null, React.createElement(Link, {to: "profile", params: {author: "5@5.com"}}, "Profile"))
+            React.createElement("li", null, React.createElement(Link, {to: "profile", params: {author: "5@5.com"}}, "Profile")), 
+            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload"))
           )
         
         )
@@ -52753,7 +52793,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"react":223,"react-router":35}],228:[function(require,module,exports){
+},{"react":223,"react-router":35}],230:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52803,7 +52843,40 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"../stores/imageStore":237,"./image/imageGrid":229,"react":223,"react-router":35}],229:[function(require,module,exports){
+},{"../stores/imageStore":241,"./image/imageGrid":232,"react":223,"react-router":35}],231:[function(require,module,exports){
+var React = require('react');
+var FileInput = require('../common/fileInput');
+
+var ImageForm = React.createClass({displayName: "ImageForm",
+
+  propTypes: {
+    onChange: React.PropTypes.func.isRequired,
+    onSave: React.PropTypes.func.isRequired
+  },
+
+  render: function() {
+    console.log('image form');
+
+    return (
+      React.createElement("div", null, 
+        React.createElement("form", null, 
+          React.createElement(FileInput, {
+            name: "image", 
+            type: "file", 
+            onChange: this.props.onChange}
+          ), 
+        
+          React.createElement("input", {type: "submit", className: "btn btn-default", value: "Submit", onClick: this.props.onSave})
+        )
+      )
+    )
+  }
+});
+
+
+module.exports = ImageForm;
+
+},{"../common/fileInput":228,"react":223}],232:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52842,7 +52915,7 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
 
 module.exports = ImageGrid;
 
-},{"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"react":223,"react-router":35}],233:[function(require,module,exports){
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
 var Router = require('react-router');
@@ -52906,7 +52979,68 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../stores/imageStore":237,"react":223,"react-router":35}],231:[function(require,module,exports){
+},{"../../stores/imageStore":241,"react":223,"react-router":35}],234:[function(require,module,exports){
+var React = require('react');
+var ImageForm = require('./imageForm');
+var ImageActions = require('../../actions/imageActions');
+
+var ManageImage = React.createClass({displayName: "ManageImage",
+  
+  getInitialState: function() {
+    return {
+      image: {
+      },
+      errors: {},
+      dirty: false
+    };
+  },
+
+  componentWillMount: function() {
+    // component will not re-render when setting state
+    
+    var imageId = this.props.params.id;
+    
+    // if we are editing an existing author, populate with data
+    if(imageId) {
+    //  this.setState({image: AuthorStore.getAuthorById(authorId)});
+    }
+  },  
+
+  setImageState: function() {
+    console.log('set image state');
+  },
+
+  saveImage: function() {
+    console.log('save image')
+    event.preventDefault();
+    
+    //if(!this.authorFormIsValid()) {
+    //  return;
+    //}
+    
+    ImageActions.createImage(this.state.image);
+    //this.setState({ dirty: false });
+    //this.transitionTo('authors');
+    //toastr.success('Author added');
+  },
+        
+  render: function() {
+    console.log('image form');
+
+    return (
+      React.createElement("div", null, 
+        React.createElement(ImageForm, {
+          onChange: this.setImageState, 
+          onSave: this.saveImage}
+        )
+      )
+    )
+  }
+});
+
+module.exports = ManageImage; 
+
+},{"../../actions/imageActions":224,"./imageForm":231,"react":223}],235:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52930,7 +53064,7 @@ var NotFoundPage = React.createClass({displayName: "NotFoundPage",
 
 module.exports = NotFoundPage;
 
-},{"react":223,"react-router":35}],232:[function(require,module,exports){
+},{"react":223,"react-router":35}],236:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52972,7 +53106,7 @@ var Profile = React.createClass({displayName: "Profile",
   render: function() {
     return (
         React.createElement("div", null, 
-          React.createElement("h1", null, "Hi ", this.state.profile), 
+          React.createElement("h1", null, this.state.profile), 
           React.createElement("p", null, "Profile info")
         )
       );
@@ -52981,7 +53115,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"../../stores/profileStore":238,"react":223}],233:[function(require,module,exports){
+},{"../../stores/profileStore":242,"react":223}],237:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -52990,17 +53124,18 @@ var keyMirror = require('react/lib/keyMirror');
 module.exports = keyMirror({
 	INITIALIZE: null,
   INITIALIZE_PROFILE: null,
+  CREATE_IMAGE: null,
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
-	DELETE_AUTHOR: null,
+	DELETE_AUTHOR: null
 });
 
-},{"react/lib/keyMirror":207}],234:[function(require,module,exports){
+},{"react/lib/keyMirror":207}],238:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":4}],235:[function(require,module,exports){
+},{"flux":4}],239:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -53014,7 +53149,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":224,"./routes":236,"react-router":35,"react/addons":51}],236:[function(require,module,exports){
+},{"./actions/initializeActions":225,"./routes":240,"react-router":35,"react/addons":51}],240:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53029,6 +53164,7 @@ var routes = (
     React.createElement(DefaultRoute, {handler: require('./components/homePage')}), 
     React.createElement(Route, {name: "image", path: "image/:id", handler: require('./components/image/imageSingle')}), 
     React.createElement(Route, {name: "profile", path: "profile/:author", handler: require('./components/profile/profilePage')}), 
+    React.createElement(Route, {name: "upload", path: "upload", handler: require('./components/image/manageImagePage')}), 
     React.createElement(NotFoundRoute, {handler: require('./components/pageNotFound')})
   )
 );
@@ -53051,7 +53187,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":226,"./components/homePage":228,"./components/image/imageSingle":230,"./components/pageNotFound":231,"./components/profile/profilePage":232,"react":223,"react-router":35}],237:[function(require,module,exports){
+},{"./components/app":227,"./components/homePage":230,"./components/image/imageSingle":233,"./components/image/manageImagePage":234,"./components/pageNotFound":235,"./components/profile/profilePage":236,"react":223,"react-router":35}],241:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53104,7 +53240,7 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":233,"../dispatcher/appDispatcher":234,"events":2,"lodash":8,"object-assign":9}],238:[function(require,module,exports){
+},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}],242:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53153,4 +53289,4 @@ Dispatcher.register(function(action){
 
 module.exports = ProfileStore;
 
-},{"../constants/actionTypes":233,"../dispatcher/appDispatcher":234,"events":2,"lodash":8,"object-assign":9}]},{},[235]);
+},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}]},{},[239]);

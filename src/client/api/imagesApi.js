@@ -10,8 +10,18 @@ var ImagesApi = {
         success:success,
         error:error
       })
-    }) 
+    }); 
   },
+
+  saveImage: function(data) {
+     return new Promise(function(success,error){
+       $.ajax({
+         type: 'POST',
+         url: 'api/images/create',
+         data: data
+       });       
+     }); 
+  }
         
 }
 
