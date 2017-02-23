@@ -6,6 +6,7 @@ var keyMirror = require('react/lib/keyMirror');
 module.exports = keyMirror({
 	INITIALIZE: null,
   INITIALIZE_PROFILE: null,
+  INITIALIZE_USER: null,
   CREATE_IMAGE: null,
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,

@@ -52649,7 +52649,7 @@ module.exports = ImageActions;
 // TODO: see if this is needed
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ImagesApi = require('../api/imagesApi');
+var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
@@ -52659,15 +52659,24 @@ var $ = require('jquery');
 var InitializeActions = {
 	initApp: function() {
 
-    ImagesApi.getAllImages('api/images')
+    Api.getAllImages('api/images')
       .then(function(data){
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
-            initialData: {
-              images: data
-            }
-          });
+          initialData: {
+            images: data
+          }
         });
+      });
+
+
+    Api.get('api/user')
+      .then(function(data){
+        Dispatcher.dispatch({
+          actionType: ActionTypes.INITIALIZE_USER,
+          userData: data
+        })
+      });
   /*
     // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
     axios.get('api/images')
@@ -52693,6 +52702,18 @@ module.exports = InitializeActions;
 var $ = require('jquery');
 
 var ImagesApi = {
+ 
+  get: function(url) {
+    return new Promise(function(success,error){
+      $.ajax({
+        url:url,
+        dataType:"json",
+        success:success,
+        error:error
+      })
+    }); 
+  },
+
   getAllImages: function(url) {
     return new Promise(function(success,error){
       $.ajax({
@@ -52762,10 +52783,34 @@ module.exports = fileInput
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var UserStore = require('../../stores/userStore');
+
 var Header = React.createClass({displayName: "Header",
   
-  // A link to root is assigned with to="app"
+  getInitialState: function() {
+    return {
+     user: []
+    };
+  },
+
+  componentDidMount: function() {
+    if(this.isMounted()) {
+      this.setState({user: UserStore.getUser() });
+    }
+  },
   
+	componentWillMount: function() {
+		UserStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		UserStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+		this.setState({user: UserStore.getUser() });
+	},
+
   render: function() {
     return (
       
@@ -52779,7 +52824,8 @@ var Header = React.createClass({displayName: "Header",
           React.createElement("ul", {className: "nav navbar-nav"}, 
             React.createElement("li", null, React.createElement(Link, {to: "app"}, "Home")), 
             React.createElement("li", null, React.createElement(Link, {to: "profile", params: {author: "5@5.com"}}, "Profile")), 
-            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload"))
+            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload")), 
+            React.createElement("li", null, "logged in as: ", this.state.user.userName)
           )
         
         )
@@ -52793,7 +52839,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"../../stores/userStore":243,"react":223,"react-router":35}],230:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53069,23 +53115,29 @@ module.exports = NotFoundPage;
 
 var React = require('react');
 var ProfileStore = require('../../stores/profileStore');
+var UserStore = require('../../stores/userStore');
 
 var Profile = React.createClass({displayName: "Profile",
 
   getInitialState: function() {
     return {
-     profile: []
+     profile: {
+     },
+     own: false
     };
   },
 
   componentDidMount: function() {
     var author = this.props.params.author;
+        
     if(this.isMounted()) {
-      this.setState({profile: ProfileStore.getProfile(author) });
-			//console.info('authorPage comp did mount: ', ImageStore );
-      //this.setState({images: ImageStore.getAllImages() });
+      
+      this.setState({
+        profile: ProfileStore.getProfile(author),
+      });
 
-//      console.info('homepage images data: ', this.state.images);
+      // create conditional to check if the profile viewed belongs to the user
+
     }
   },
 
@@ -53104,6 +53156,8 @@ var Profile = React.createClass({displayName: "Profile",
 	},
 
   render: function() {
+    console.log(this.state.own);
+
     return (
         React.createElement("div", null, 
           React.createElement("h1", null, this.state.profile), 
@@ -53115,7 +53169,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"../../stores/profileStore":242,"react":223}],237:[function(require,module,exports){
+},{"../../stores/profileStore":242,"../../stores/userStore":243,"react":223}],237:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -53124,6 +53178,7 @@ var keyMirror = require('react/lib/keyMirror');
 module.exports = keyMirror({
 	INITIALIZE: null,
   INITIALIZE_PROFILE: null,
+  INITIALIZE_USER: null,
   CREATE_IMAGE: null,
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
@@ -53279,6 +53334,54 @@ Dispatcher.register(function(action){
 		case ActionTypes.INITIALIZE_PROFILE:
 			_profile = action.initialData.profile;
       console.info('profileStore INITIALIZE: ', _profile);
+			ProfileStore.emitChange();
+			break;
+
+		default:
+			// no operations
+	}
+});
+
+module.exports = ProfileStore;
+
+},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}],243:[function(require,module,exports){
+"use strict";
+
+var _ = require('lodash');
+var Dispatcher = require('../dispatcher/appDispatcher');
+var ActionTypes = require('../constants/actionTypes');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+var CHANGE_EVENT = 'change';
+
+var _user = [];
+
+var ProfileStore = assign({}, EventEmitter.prototype, {
+
+	addChangeListener: function(callback) {
+		this.on(CHANGE_EVENT, callback);
+	},
+
+	removeChangeListener: function(callback) {
+		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	emitChange: function() {
+		this.emit(CHANGE_EVENT);
+	},
+
+  getUser: function() {
+    return _user;
+  }
+
+});
+
+
+Dispatcher.register(function(action){
+	switch(action.actionType) {
+		case ActionTypes.INITIALIZE_USER:
+			_user = action.userData;
+      console.info('userStore INITIALIZE: ', _user);
 			ProfileStore.emitChange();
 			break;
 

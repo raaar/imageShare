@@ -2,23 +2,29 @@
 
 var React = require('react');
 var ProfileStore = require('../../stores/profileStore');
+var UserStore = require('../../stores/userStore');
 
 var Profile = React.createClass({
 
   getInitialState: function() {
     return {
-     profile: []
+     profile: {
+     },
+     own: false
     };
   },
 
   componentDidMount: function() {
     var author = this.props.params.author;
+        
     if(this.isMounted()) {
-      this.setState({profile: ProfileStore.getProfile(author) });
-			//console.info('authorPage comp did mount: ', ImageStore );
-      //this.setState({images: ImageStore.getAllImages() });
+      
+      this.setState({
+        profile: ProfileStore.getProfile(author),
+      });
 
-//      console.info('homepage images data: ', this.state.images);
+      // create conditional to check if the profile viewed belongs to the user
+
     }
   },
 
@@ -37,6 +43,8 @@ var Profile = React.createClass({
 	},
 
   render: function() {
+    console.log(this.state.own);
+
     return (
         <div>
           <h1>{this.state.profile}</h1>

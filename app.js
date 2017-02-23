@@ -45,11 +45,6 @@ app.get('/', function(req , res) {
   res.render('index');
 });
 
-// app.get('/archive', function(req, res) {
-//   res.render('archive', {
-//     message: 'boo information'
-//   });
-// });
 
 app.listen(port, function(req, res){
   console.log('server running on port ' + port);

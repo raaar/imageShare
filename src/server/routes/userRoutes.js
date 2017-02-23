@@ -7,9 +7,9 @@ var routes = function(Book) {
   userRouter.route('/')
     .get(function(req, res) {
       var userData = {
-        user: req.user.username
+        userName: req.user.username
       }
-
+      console.log(userData);
       res.json(userData);
     });
     // .post(userController.post);

@@ -2,7 +2,7 @@
 // TODO: see if this is needed
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ImagesApi = require('../api/imagesApi');
+var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
@@ -12,15 +12,24 @@ var $ = require('jquery');
 var InitializeActions = {
 	initApp: function() {
 
-    ImagesApi.getAllImages('api/images')
+    Api.getAllImages('api/images')
       .then(function(data){
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
-            initialData: {
-              images: data
-            }
-          });
+          initialData: {
+            images: data
+          }
         });
+      });
+
+
+    Api.get('api/user')
+      .then(function(data){
+        Dispatcher.dispatch({
+          actionType: ActionTypes.INITIALIZE_USER,
+          userData: data
+        })
+      });
   /*
     // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
     axios.get('api/images')
