@@ -6,6 +6,7 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 	createImage: function(image) {
+    console.info('imageActions: ', image );
     var newImage = ImageApi.saveImage(image);
 	}
 }

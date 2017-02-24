@@ -3,9 +3,23 @@ var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
 
 var ManageImage = React.createClass({
-  
+ /* 
+       var image = {
+        title: req.body.title,
+        author: req.user.username,
+        image: {
+          id: req.file.filename,
+          full: req.file.filename,
+          thumb: 'thumb-' + req.file.filename,
+          originalname: req.file.originalname,
+          size: req.file.size
+        }
+      };
+  */
   getInitialState: function() {
     return {
+      title: "test",
+      author: "test",
       image: {
       },
       errors: {},

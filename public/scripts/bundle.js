@@ -52638,6 +52638,7 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 	createImage: function(image) {
+    console.info('imageActions: ', image );
     var newImage = ImageApi.saveImage(image);
 	}
 }
@@ -52726,6 +52727,7 @@ var ImagesApi = {
   },
 
   saveImage: function(data) {
+     console.log('posting image');
      return new Promise(function(success,error){
        $.ajax({
          type: 'POST',
@@ -52812,6 +52814,7 @@ var Header = React.createClass({displayName: "Header",
 	},
 
   render: function() {
+
     return (
       
       React.createElement("nav", {className: "navbar navbar-default"}, 
@@ -52835,7 +52838,6 @@ var Header = React.createClass({displayName: "Header",
   }
   
 });
-
 
 module.exports = Header;
 
@@ -52901,11 +52903,10 @@ var ImageForm = React.createClass({displayName: "ImageForm",
   },
 
   render: function() {
-    console.log('image form');
 
     return (
       React.createElement("div", null, 
-        React.createElement("form", null, 
+       React.createElement("form", null, 
           React.createElement(FileInput, {
             name: "image", 
             type: "file", 
@@ -52972,6 +52973,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
   getInitialState: function() {
     return {
      image: {
+       title: "",
        author: "",
        image: {
          thumb: "",
@@ -53017,7 +53019,9 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
     return (
       React.createElement("div", null, 
         React.createElement("img", {className: "image", src: url}), 
-        "By: ", React.createElement(Link, {to: "profile", params: {author: this.state.image.author}}, this.state.image.author)
+        React.createElement("p", null, "Title: ", this.state.image.title), 
+        React.createElement("p", null, "By: ", React.createElement(Link, {to: "profile", params: {author: this.state.image.author}}, this.state.image.author)), 
+        React.createElement("p", null, "Size: ", this.state.image.image.size)
       )
     )
   }
@@ -53031,9 +53035,23 @@ var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
 
 var ManageImage = React.createClass({displayName: "ManageImage",
-  
+ /* 
+       var image = {
+        title: req.body.title,
+        author: req.user.username,
+        image: {
+          id: req.file.filename,
+          full: req.file.filename,
+          thumb: 'thumb-' + req.file.filename,
+          originalname: req.file.originalname,
+          size: req.file.size
+        }
+      };
+  */
   getInitialState: function() {
     return {
+      title: "test",
+      author: "test",
       image: {
       },
       errors: {},
@@ -53121,23 +53139,27 @@ var Profile = React.createClass({displayName: "Profile",
 
   getInitialState: function() {
     return {
-     profile: {
-     },
-     own: false
+      profile: {
+      },
+      own: false
     };
   },
 
   componentDidMount: function() {
     var author = this.props.params.author;
-        
+    var user = UserStore.getUser(); // logged in user
+
     if(this.isMounted()) {
       
       this.setState({
         profile: ProfileStore.getProfile(author),
       });
 
-      // create conditional to check if the profile viewed belongs to the user
-
+      if(user.userName === author) {
+        this.setState({
+          own: true
+        });
+      }
     }
   },
 
@@ -53152,16 +53174,31 @@ var Profile = React.createClass({displayName: "Profile",
 
 	_onChange: function() {
     this.setState({profile: ProfileStore.getProfile(author) });
-    // console.info('on change ', this.state.images );
 	},
 
   render: function() {
-    console.log(this.state.own);
+    var self = this;
+
+    var profile = function() {
+      if(self.state.own === true) {
+        return (
+          React.createElement("div", null, 
+            "My Profile"      
+          )
+        );
+      } else {
+        return (
+          React.createElement("div", null, 
+            "User profile"
+          )
+        );
+      }
+    };
 
     return (
         React.createElement("div", null, 
           React.createElement("h1", null, this.state.profile), 
-          React.createElement("p", null, "Profile info")
+          profile()
         )
       );
   }

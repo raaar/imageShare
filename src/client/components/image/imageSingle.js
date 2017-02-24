@@ -8,6 +8,7 @@ var ImageSingle = React.createClass({
   getInitialState: function() {
     return {
      image: {
+       title: "",
        author: "",
        image: {
          thumb: "",
@@ -53,7 +54,9 @@ var ImageSingle = React.createClass({
     return (
       <div>
         <img className="image" src={url} />
-        By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link>
+        <p>Title: {this.state.image.title}</p>
+        <p>By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link></p>
+        <p>Size: {this.state.image.image.size}</p>
       </div>
     )
   }

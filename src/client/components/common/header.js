@@ -32,6 +32,7 @@ var Header = React.createClass({
 	},
 
   render: function() {
+
     return (
       
       <nav className="navbar navbar-default">
@@ -55,6 +56,5 @@ var Header = React.createClass({
   }
   
 });
-
 
 module.exports = Header;

@@ -9,11 +9,10 @@ var ImageForm = React.createClass({
   },
 
   render: function() {
-    console.log('image form');
 
     return (
       <div>
-        <form>
+       <form>
           <FileInput 
             name="image"
             type="file"

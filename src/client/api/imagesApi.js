@@ -26,6 +26,7 @@ var ImagesApi = {
   },
 
   saveImage: function(data) {
+     console.log('posting image');
      return new Promise(function(success,error){
        $.ajax({
          type: 'POST',

@@ -8,23 +8,27 @@ var Profile = React.createClass({
 
   getInitialState: function() {
     return {
-     profile: {
-     },
-     own: false
+      profile: {
+      },
+      own: false
     };
   },
 
   componentDidMount: function() {
     var author = this.props.params.author;
-        
+    var user = UserStore.getUser(); // logged in user
+
     if(this.isMounted()) {
       
       this.setState({
         profile: ProfileStore.getProfile(author),
       });
 
-      // create conditional to check if the profile viewed belongs to the user
-
+      if(user.userName === author) {
+        this.setState({
+          own: true
+        });
+      }
     }
   },
 
@@ -39,16 +43,31 @@ var Profile = React.createClass({
 
 	_onChange: function() {
     this.setState({profile: ProfileStore.getProfile(author) });
-    // console.info('on change ', this.state.images );
 	},
 
   render: function() {
-    console.log(this.state.own);
+    var self = this;
+
+    var profile = function() {
+      if(self.state.own === true) {
+        return (
+          <div>
+            My Profile      
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            User profile
+          </div>
+        );
+      }
+    };
 
     return (
         <div>
           <h1>{this.state.profile}</h1>
-          <p>Profile info</p>  
+          {profile()}
         </div>
       );
   }
