@@ -13,7 +13,7 @@ var ImageForm = React.createClass({
 
     return (
       <div>
-       <form>
+        <form encType="multipart/form-data">
           <Input
             name="title"
             label="Image Title"

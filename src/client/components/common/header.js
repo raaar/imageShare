@@ -14,8 +14,10 @@ var Header = React.createClass({
   },
 
   componentDidMount: function() {
+
     if(this.isMounted()) {
       this.setState({user: UserStore.getUser() });
+
     }
   },
   
@@ -33,12 +35,22 @@ var Header = React.createClass({
 
   render: function() {
 
+
+    console.info('mounted user: ', this.state.user);
+    var userNameTest = "5@5.com";
+
+    var testObj = {
+      author: userNameTest
+    }
+    
+    console.log(testObj);
+
     return (
       
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           
-          <Link to="app" className="navbar-brand">
+          <Link to="profile" params={ testObj } className="navbar-brand">
             <img src="images/logo.jpg" width="40"/>
           </Link>
           
@@ -52,7 +64,7 @@ var Header = React.createClass({
         </div>
       </nav>
       
-      );
+    );
   }
   
 });

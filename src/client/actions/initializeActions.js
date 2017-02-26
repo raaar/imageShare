@@ -12,7 +12,7 @@ var $ = require('jquery');
 var InitializeActions = {
 	initApp: function() {
 
-    Api.getAllImages('api/images')
+    Api.get('api/images')
       .then(function(data){
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,

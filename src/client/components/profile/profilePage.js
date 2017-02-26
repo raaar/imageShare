@@ -15,6 +15,7 @@ var Profile = React.createClass({
   },
 
   componentDidMount: function() {
+    console.info('profile params: ', this.props.params);
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
 
@@ -30,6 +31,8 @@ var Profile = React.createClass({
         });
       }
     }
+
+
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item

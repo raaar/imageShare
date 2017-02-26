@@ -42,7 +42,8 @@ var imageController = function() {
 
       console.error('status 400, missing required form information:');
       console.log(req.body.title);
-      console.log(req.body.file);
+      console.log(req.file);
+      console.log(req.body.image);
     } else {
 
       /* Data object passed by uploader

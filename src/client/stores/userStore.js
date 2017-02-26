@@ -9,7 +9,7 @@ var CHANGE_EVENT = 'change';
 
 var _user = [];
 
-var ProfileStore = assign({}, EventEmitter.prototype, {
+var UserStore = assign({}, EventEmitter.prototype, {
 
 	addChangeListener: function(callback) {
 		this.on(CHANGE_EVENT, callback);
@@ -35,7 +35,7 @@ Dispatcher.register(function(action){
 		case ActionTypes.INITIALIZE_USER:
 			_user = action.userData;
       console.info('userStore INITIALIZE: ', _user);
-			ProfileStore.emitChange();
+			UserStore.emitChange();
 			break;
 
 		default:
@@ -43,4 +43,4 @@ Dispatcher.register(function(action){
 	}
 });
 
-module.exports = ProfileStore;
+module.exports = UserStore;

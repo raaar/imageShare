@@ -11,7 +11,6 @@ var fileInput = React.createClass({
             type="file"
             name="image" 
             ref="file" 
-            defaultValue={this.props.file}
             onChange={this.props.onChange}
       />  
     )

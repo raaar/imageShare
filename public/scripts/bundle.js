@@ -52669,7 +52669,7 @@ var $ = require('jquery');
 var InitializeActions = {
 	initApp: function() {
 
-    Api.getAllImages('api/images')
+    Api.get('api/images')
       .then(function(data){
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE,
@@ -52714,17 +52714,6 @@ var $ = require('jquery');
 var ImagesApi = {
  
   get: function(url) {
-    return new Promise(function(success,error){
-      $.ajax({
-        url:url,
-        dataType:"json",
-        success:success,
-        error:error
-      })
-    }); 
-  },
-
-  getAllImages: function(url) {
     return new Promise(function(success,error){
       $.ajax({
         url:url,
@@ -52799,7 +52788,6 @@ var fileInput = React.createClass({displayName: "fileInput",
             type: "file", 
             name: "image", 
             ref: "file", 
-            defaultValue: this.props.file, 
             onChange: this.props.onChange}
       )  
     )
@@ -52825,8 +52813,10 @@ var Header = React.createClass({displayName: "Header",
   },
 
   componentDidMount: function() {
+
     if(this.isMounted()) {
       this.setState({user: UserStore.getUser() });
+
     }
   },
   
@@ -52844,12 +52834,22 @@ var Header = React.createClass({displayName: "Header",
 
   render: function() {
 
+
+    console.info('mounted user: ', this.state.user);
+    var userNameTest = "5@5.com";
+
+    var testObj = {
+      author: userNameTest
+    }
+    
+    console.log(testObj);
+
     return (
       
       React.createElement("nav", {className: "navbar navbar-default"}, 
         React.createElement("div", {className: "container-fluid"}, 
           
-          React.createElement(Link, {to: "app", className: "navbar-brand"}, 
+          React.createElement(Link, {to: "profile", params:  testObj, className: "navbar-brand"}, 
             React.createElement("img", {src: "images/logo.jpg", width: "40"})
           ), 
           
@@ -52863,7 +52863,7 @@ var Header = React.createClass({displayName: "Header",
         )
       )
       
-      );
+    );
   }
   
 });
@@ -52980,7 +52980,7 @@ var ImageForm = React.createClass({displayName: "ImageForm",
 
     return (
       React.createElement("div", null, 
-       React.createElement("form", null, 
+        React.createElement("form", {encType: "multipart/form-data"}, 
           React.createElement(Input, {
             name: "title", 
             label: "Image Title", 
@@ -53242,6 +53242,7 @@ var Profile = React.createClass({displayName: "Profile",
   },
 
   componentDidMount: function() {
+    console.info('profile params: ', this.props.params);
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
 
@@ -53257,6 +53258,8 @@ var Profile = React.createClass({displayName: "Profile",
         });
       }
     }
+
+
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
@@ -53270,6 +53273,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 	_onChange: function() {
     this.setState({profile: ProfileStore.getProfile(author) });
+    this.transitionTo('app'); // redirect to course page
 	},
 
   render: function() {
@@ -53495,7 +53499,7 @@ var CHANGE_EVENT = 'change';
 
 var _user = [];
 
-var ProfileStore = assign({}, EventEmitter.prototype, {
+var UserStore = assign({}, EventEmitter.prototype, {
 
 	addChangeListener: function(callback) {
 		this.on(CHANGE_EVENT, callback);
@@ -53521,7 +53525,7 @@ Dispatcher.register(function(action){
 		case ActionTypes.INITIALIZE_USER:
 			_user = action.userData;
       console.info('userStore INITIALIZE: ', _user);
-			ProfileStore.emitChange();
+			UserStore.emitChange();
 			break;
 
 		default:
@@ -53529,6 +53533,6 @@ Dispatcher.register(function(action){
 	}
 });
 
-module.exports = ProfileStore;
+module.exports = UserStore;
 
 },{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}]},{},[240]);
