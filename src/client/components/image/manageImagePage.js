@@ -18,9 +18,10 @@ var ManageImage = React.createClass({
   */
   getInitialState: function() {
     return {
-      title: "test",
       author: "test",
       image: {
+        defaultValue: "test.jpeg",
+        title: "",
       },
       errors: {},
       dirty: false
@@ -39,13 +40,25 @@ var ManageImage = React.createClass({
   },  
 
   setImageState: function() {
-    console.log('set image state');
+   // this.setState({dirty: true}); // the form has been modified
+    console.info("name: ", event.target.name);
+    console.info("value: ", event.target.value);
+
+    var field = event.target.name;
+    var value = event.target.value;
+    this.state.image[field] = value;
+
+    return this.setState({
+      image: this.state.image
+    });
+    
   },
 
   saveImage: function() {
-    console.log('save image')
+    console.info('save image', this.state.image);
     event.preventDefault();
     
+          
     //if(!this.authorFormIsValid()) {
     //  return;
     //}
@@ -62,6 +75,7 @@ var ManageImage = React.createClass({
     return (
       <div>
         <ImageForm 
+          title={this.state.title}
           onChange={this.setImageState}    
           onSave={this.saveImage}
         />        

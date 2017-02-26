@@ -52645,7 +52645,7 @@ var ImageActions = {
 
 module.exports = ImageActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":237,"../dispatcher/appDispatcher":238}],225:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":238,"../dispatcher/appDispatcher":239}],225:[function(require,module,exports){
 "use strict";
 // TODO: see if this is needed
 
@@ -52698,7 +52698,7 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"../stores/imageStore":241,"jquery":7}],226:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"../stores/imageStore":242,"jquery":7}],226:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 
@@ -52770,9 +52770,18 @@ var React = require('react');
 
 
 var fileInput = React.createClass({displayName: "fileInput",
+  propTypes: {
+    onChange: React.PropTypes.func.isRequired
+  },
   render: function() {
     return (
-      React.createElement("input", {type: "file", name: "image"})  
+      React.createElement("input", {
+            type: "file", 
+            name: "image", 
+            ref: "file", 
+            defaultValue: this.props.file, 
+            onChange: this.props.onChange}
+      )  
     )
   }
 });
@@ -52841,7 +52850,51 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"../../stores/userStore":243,"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"../../stores/userStore":244,"react":223,"react-router":35}],230:[function(require,module,exports){
+"use strict";
+
+var React = require('react');
+
+var Input = React.createClass({displayName: "Input",
+  
+  propTypes: {
+    name: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    placeholder: React.PropTypes.string,
+    value: React.PropTypes.string,
+    error: React.PropTypes.string
+  },
+  render: function() {
+    var wrapperClass = "form-group";
+    
+    if(this.props.error && this.props.error.length > 0) {
+      wrapperClass += " " + "hasError";
+    }
+    
+    
+    return (
+        React.createElement("div", {className: wrapperClass}, 
+            React.createElement("div", {className: "field"}, 
+              React.createElement("label", {htmlFor: this.props.name}, this.props.label)
+            ), 
+            React.createElement("input", {type: "text", 
+                name: this.props.name, 
+                className: "form-control", 
+                placeholder: this.props.placeholder, 
+                ref: this.props.name, 
+                onChange: this.props.onChange, 
+                value: this.props.value}
+            ), 
+            React.createElement("div", {className: "input"}, this.props.error)
+        )
+      );
+  }
+});
+
+module.exports = Input;
+
+},{"react":223}],231:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52891,9 +52944,10 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"../stores/imageStore":241,"./image/imageGrid":232,"react":223,"react-router":35}],231:[function(require,module,exports){
+},{"../stores/imageStore":242,"./image/imageGrid":233,"react":223,"react-router":35}],232:[function(require,module,exports){
 var React = require('react');
 var FileInput = require('../common/fileInput');
+var Input = require('../common/textInput');
 
 var ImageForm = React.createClass({displayName: "ImageForm",
 
@@ -52907,10 +52961,20 @@ var ImageForm = React.createClass({displayName: "ImageForm",
     return (
       React.createElement("div", null, 
        React.createElement("form", null, 
+          React.createElement(Input, {
+            name: "title", 
+            label: "Image Title", 
+            value: this.props.title, 
+            placeholder: "Image title", 
+            onChange: this.props.onChange}
+						//error={this.props.errors.title}
+          ), 
+
           React.createElement(FileInput, {
             name: "image", 
             type: "file", 
-            onChange: this.props.onChange}
+            onChange: this.props.onChange, 
+            defaultValue: this.props.file}
           ), 
         
           React.createElement("input", {type: "submit", className: "btn btn-default", value: "Submit", onClick: this.props.onSave})
@@ -52923,7 +52987,7 @@ var ImageForm = React.createClass({displayName: "ImageForm",
 
 module.exports = ImageForm;
 
-},{"../common/fileInput":228,"react":223}],232:[function(require,module,exports){
+},{"../common/fileInput":228,"../common/textInput":230,"react":223}],233:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -52962,7 +53026,7 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
 
 module.exports = ImageGrid;
 
-},{"react":223,"react-router":35}],233:[function(require,module,exports){
+},{"react":223,"react-router":35}],234:[function(require,module,exports){
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
 var Router = require('react-router');
@@ -53029,7 +53093,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../stores/imageStore":241,"react":223,"react-router":35}],234:[function(require,module,exports){
+},{"../../stores/imageStore":242,"react":223,"react-router":35}],235:[function(require,module,exports){
 var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
@@ -53050,9 +53114,10 @@ var ManageImage = React.createClass({displayName: "ManageImage",
   */
   getInitialState: function() {
     return {
-      title: "test",
       author: "test",
       image: {
+        defaultValue: "test.jpeg",
+        title: "",
       },
       errors: {},
       dirty: false
@@ -53071,13 +53136,25 @@ var ManageImage = React.createClass({displayName: "ManageImage",
   },  
 
   setImageState: function() {
-    console.log('set image state');
+   // this.setState({dirty: true}); // the form has been modified
+    console.info("name: ", event.target.name);
+    console.info("value: ", event.target.value);
+
+    var field = event.target.name;
+    var value = event.target.value;
+    this.state.image[field] = value;
+
+    return this.setState({
+      image: this.state.image
+    });
+    
   },
 
   saveImage: function() {
-    console.log('save image')
+    console.info('save image', this.state.image);
     event.preventDefault();
     
+          
     //if(!this.authorFormIsValid()) {
     //  return;
     //}
@@ -53094,6 +53171,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     return (
       React.createElement("div", null, 
         React.createElement(ImageForm, {
+          title: this.state.title, 
           onChange: this.setImageState, 
           onSave: this.saveImage}
         )
@@ -53104,7 +53182,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
 
 module.exports = ManageImage; 
 
-},{"../../actions/imageActions":224,"./imageForm":231,"react":223}],235:[function(require,module,exports){
+},{"../../actions/imageActions":224,"./imageForm":232,"react":223}],236:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53128,7 +53206,7 @@ var NotFoundPage = React.createClass({displayName: "NotFoundPage",
 
 module.exports = NotFoundPage;
 
-},{"react":223,"react-router":35}],236:[function(require,module,exports){
+},{"react":223,"react-router":35}],237:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53206,7 +53284,7 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"../../stores/profileStore":242,"../../stores/userStore":243,"react":223}],237:[function(require,module,exports){
+},{"../../stores/profileStore":243,"../../stores/userStore":244,"react":223}],238:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -53222,12 +53300,12 @@ module.exports = keyMirror({
 	DELETE_AUTHOR: null
 });
 
-},{"react/lib/keyMirror":207}],238:[function(require,module,exports){
+},{"react/lib/keyMirror":207}],239:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":4}],239:[function(require,module,exports){
+},{"flux":4}],240:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -53241,7 +53319,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":225,"./routes":240,"react-router":35,"react/addons":51}],240:[function(require,module,exports){
+},{"./actions/initializeActions":225,"./routes":241,"react-router":35,"react/addons":51}],241:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53279,7 +53357,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":227,"./components/homePage":230,"./components/image/imageSingle":233,"./components/image/manageImagePage":234,"./components/pageNotFound":235,"./components/profile/profilePage":236,"react":223,"react-router":35}],241:[function(require,module,exports){
+},{"./components/app":227,"./components/homePage":231,"./components/image/imageSingle":234,"./components/image/manageImagePage":235,"./components/pageNotFound":236,"./components/profile/profilePage":237,"react":223,"react-router":35}],242:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53332,7 +53410,7 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}],242:[function(require,module,exports){
+},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}],243:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53381,7 +53459,7 @@ Dispatcher.register(function(action){
 
 module.exports = ProfileStore;
 
-},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}],243:[function(require,module,exports){
+},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}],244:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53429,4 +53507,4 @@ Dispatcher.register(function(action){
 
 module.exports = ProfileStore;
 
-},{"../constants/actionTypes":237,"../dispatcher/appDispatcher":238,"events":2,"lodash":8,"object-assign":9}]},{},[239]);
+},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}]},{},[240]);
