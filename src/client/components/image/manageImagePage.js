@@ -1,8 +1,12 @@
 var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
+var Router = require('react-router');
 
 var ManageImage = React.createClass({
+        mixins: [
+          Router.Navigation
+        ],
  /* 
        var image = {
         title: req.body.title,
@@ -64,7 +68,7 @@ var ManageImage = React.createClass({
     
     ImageActions.createImage(this.state.image);
     //this.setState({ dirty: false });
-    //this.transitionTo('authors');
+    this.transitionTo('app');
     //toastr.success('Author added');
   },
         

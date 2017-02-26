@@ -24,6 +24,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
 	},
 
   getUser: function() {
+    console.info('get user' , _user );
     return _user;
   }
 

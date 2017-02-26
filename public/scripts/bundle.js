@@ -52654,7 +52654,7 @@ var ImageActions = {
 
 module.exports = ImageActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":238,"../dispatcher/appDispatcher":239}],225:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240}],225:[function(require,module,exports){
 "use strict";
 // TODO: see if this is needed
 
@@ -52707,7 +52707,7 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"../stores/imageStore":242,"jquery":7}],226:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"../stores/imageStore":243,"jquery":7}],226:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 
@@ -52725,7 +52725,6 @@ var ImagesApi = {
   },
 
   post: function(url, data) {
-     console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
          type: 'POST',
@@ -52808,19 +52807,19 @@ var Header = React.createClass({displayName: "Header",
   
   getInitialState: function() {
     return {
-     user: []
+     user: "" 
     };
   },
 
   componentDidMount: function() {
 
     if(this.isMounted()) {
-      this.setState({user: UserStore.getUser() });
 
     }
   },
   
 	componentWillMount: function() {
+    this.setState({user: UserStore.getUser() });
 		UserStore.addChangeListener(this._onChange);
 	},
 
@@ -52834,30 +52833,25 @@ var Header = React.createClass({displayName: "Header",
 
   render: function() {
 
-
-    console.info('mounted user: ', this.state.user);
-    var userNameTest = "5@5.com";
+    var userObject = UserStore.getUser(); 
+    console.info("header render: ", userObject);
 
     var testObj = {
-      author: userNameTest
+      author: "5@5.com" 
     }
     
-    console.log(testObj);
-
     return (
       
       React.createElement("nav", {className: "navbar navbar-default"}, 
         React.createElement("div", {className: "container-fluid"}, 
           
-          React.createElement(Link, {to: "profile", params:  testObj, className: "navbar-brand"}, 
+          React.createElement(Link, {to: "my-profile", params:  testObj, className: "navbar-brand"}, 
             React.createElement("img", {src: "images/logo.jpg", width: "40"})
           ), 
           
           React.createElement("ul", {className: "nav navbar-nav"}, 
             React.createElement("li", null, React.createElement(Link, {to: "app"}, "Home")), 
-            React.createElement("li", null, React.createElement(Link, {to: "profile", params: {author: "5@5.com"}}, "Profile")), 
-            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload")), 
-            React.createElement("li", null, "logged in as: ", this.state.user.userName)
+            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload"))
           )
         
         )
@@ -52870,7 +52864,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"../../stores/userStore":244,"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"../../stores/userStore":245,"react":223,"react-router":35}],230:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52964,7 +52958,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"../stores/imageStore":242,"./image/imageGrid":233,"react":223,"react-router":35}],232:[function(require,module,exports){
+},{"../stores/imageStore":243,"./image/imageGrid":233,"react":223,"react-router":35}],232:[function(require,module,exports){
 var React = require('react');
 var FileInput = require('../common/fileInput');
 var Input = require('../common/textInput');
@@ -53112,12 +53106,16 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../stores/imageStore":242,"react":223,"react-router":35}],235:[function(require,module,exports){
+},{"../../stores/imageStore":243,"react":223,"react-router":35}],235:[function(require,module,exports){
 var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
+var Router = require('react-router');
 
 var ManageImage = React.createClass({displayName: "ManageImage",
+        mixins: [
+          Router.Navigation
+        ],
  /* 
        var image = {
         title: req.body.title,
@@ -53179,7 +53177,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     
     ImageActions.createImage(this.state.image);
     //this.setState({ dirty: false });
-    //this.transitionTo('authors');
+    this.transitionTo('app');
     //toastr.success('Author added');
   },
         
@@ -53200,7 +53198,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
 
 module.exports = ManageImage; 
 
-},{"../../actions/imageActions":224,"./imageForm":232,"react":223}],236:[function(require,module,exports){
+},{"../../actions/imageActions":224,"./imageForm":232,"react":223,"react-router":35}],236:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53230,21 +53228,25 @@ module.exports = NotFoundPage;
 var React = require('react');
 var ProfileStore = require('../../stores/profileStore');
 var UserStore = require('../../stores/userStore');
+var Router = require('react-router');
 
 var Profile = React.createClass({displayName: "Profile",
+
+  mixins: [
+    Router.Navigation
+  ],
 
   getInitialState: function() {
     return {
       profile: {
-      },
-      own: false
+      }
     };
   },
-
+        
   componentDidMount: function() {
-    console.info('profile params: ', this.props.params);
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
+
 
     if(this.isMounted()) {
       
@@ -53253,13 +53255,9 @@ var Profile = React.createClass({displayName: "Profile",
       });
 
       if(user.userName === author) {
-        this.setState({
-          own: true
-        });
+        this.transitionTo('my-profile')
       }
     }
-
-
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
@@ -53273,32 +53271,14 @@ var Profile = React.createClass({displayName: "Profile",
 
 	_onChange: function() {
     this.setState({profile: ProfileStore.getProfile(author) });
-    this.transitionTo('app'); // redirect to course page
 	},
 
   render: function() {
-    var self = this;
-
-    var profile = function() {
-      if(self.state.own === true) {
-        return (
-          React.createElement("div", null, 
-            "My Profile"      
-          )
-        );
-      } else {
-        return (
-          React.createElement("div", null, 
-            "User profile"
-          )
-        );
-      }
-    };
 
     return (
         React.createElement("div", null, 
           React.createElement("h1", null, this.state.profile), 
-          profile()
+          "User profile"
         )
       );
   }
@@ -53306,7 +53286,58 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"../../stores/profileStore":243,"../../stores/userStore":244,"react":223}],238:[function(require,module,exports){
+},{"../../stores/profileStore":244,"../../stores/userStore":245,"react":223,"react-router":35}],238:[function(require,module,exports){
+
+'use strict';
+
+var React = require('react');
+var UserStore = require('../../stores/userStore');
+
+var UserProfile = React.createClass({displayName: "UserProfile",
+
+  getInitialState: function() {
+    return {
+      user: {
+      },
+      own: false
+    };
+  },
+
+  componentDidMount: function() {
+    var user = UserStore.getUser(); // logged in user
+
+    if(this.isMounted()) {
+      this.setState({
+        user: UserStore.getUser(),
+      });
+    }
+  },
+
+	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
+	componentWillMount: function() {
+		UserStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		UserStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+    this.setState({user: UserStore.getUser() });
+	},
+
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", null, "Hi, ", this.state.user.userName)
+      )
+    );
+  }
+});
+
+module.exports = UserProfile
+
+},{"../../stores/userStore":245,"react":223}],239:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -53322,12 +53353,12 @@ module.exports = keyMirror({
 	DELETE_AUTHOR: null
 });
 
-},{"react/lib/keyMirror":207}],239:[function(require,module,exports){
+},{"react/lib/keyMirror":207}],240:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":4}],240:[function(require,module,exports){
+},{"flux":4}],241:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -53341,7 +53372,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":225,"./routes":241,"react-router":35,"react/addons":51}],241:[function(require,module,exports){
+},{"./actions/initializeActions":225,"./routes":242,"react-router":35,"react/addons":51}],242:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53356,6 +53387,7 @@ var routes = (
     React.createElement(DefaultRoute, {handler: require('./components/homePage')}), 
     React.createElement(Route, {name: "image", path: "image/:id", handler: require('./components/image/imageSingle')}), 
     React.createElement(Route, {name: "profile", path: "profile/:author", handler: require('./components/profile/profilePage')}), 
+    React.createElement(Route, {name: "my-profile", path: "my-profile", handler: require('./components/profile/userPage')}), 
     React.createElement(Route, {name: "upload", path: "upload", handler: require('./components/image/manageImagePage')}), 
     React.createElement(NotFoundRoute, {handler: require('./components/pageNotFound')})
   )
@@ -53379,7 +53411,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":227,"./components/homePage":231,"./components/image/imageSingle":234,"./components/image/manageImagePage":235,"./components/pageNotFound":236,"./components/profile/profilePage":237,"react":223,"react-router":35}],242:[function(require,module,exports){
+},{"./components/app":227,"./components/homePage":231,"./components/image/imageSingle":234,"./components/image/manageImagePage":235,"./components/pageNotFound":236,"./components/profile/profilePage":237,"./components/profile/userPage":238,"react":223,"react-router":35}],243:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53438,7 +53470,7 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}],243:[function(require,module,exports){
+},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}],244:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53487,7 +53519,7 @@ Dispatcher.register(function(action){
 
 module.exports = ProfileStore;
 
-},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}],244:[function(require,module,exports){
+},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}],245:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53514,6 +53546,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
 	},
 
   getUser: function() {
+    console.info('get user' , _user );
     return _user;
   }
 
@@ -53535,4 +53568,4 @@ Dispatcher.register(function(action){
 
 module.exports = UserStore;
 
-},{"../constants/actionTypes":238,"../dispatcher/appDispatcher":239,"events":2,"lodash":8,"object-assign":9}]},{},[240]);
+},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}]},{},[241]);

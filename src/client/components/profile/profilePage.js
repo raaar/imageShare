@@ -3,21 +3,25 @@
 var React = require('react');
 var ProfileStore = require('../../stores/profileStore');
 var UserStore = require('../../stores/userStore');
+var Router = require('react-router');
 
 var Profile = React.createClass({
+
+  mixins: [
+    Router.Navigation
+  ],
 
   getInitialState: function() {
     return {
       profile: {
-      },
-      own: false
+      }
     };
   },
-
+        
   componentDidMount: function() {
-    console.info('profile params: ', this.props.params);
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
+
 
     if(this.isMounted()) {
       
@@ -26,13 +30,9 @@ var Profile = React.createClass({
       });
 
       if(user.userName === author) {
-        this.setState({
-          own: true
-        });
+        this.transitionTo('my-profile')
       }
     }
-
-
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
@@ -49,28 +49,11 @@ var Profile = React.createClass({
 	},
 
   render: function() {
-    var self = this;
-
-    var profile = function() {
-      if(self.state.own === true) {
-        return (
-          <div>
-            My Profile      
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            User profile
-          </div>
-        );
-      }
-    };
 
     return (
         <div>
           <h1>{this.state.profile}</h1>
-          {profile()}
+          User profile
         </div>
       );
   }

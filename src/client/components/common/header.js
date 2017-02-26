@@ -9,19 +9,19 @@ var Header = React.createClass({
   
   getInitialState: function() {
     return {
-     user: []
+     user: "" 
     };
   },
 
   componentDidMount: function() {
 
     if(this.isMounted()) {
-      this.setState({user: UserStore.getUser() });
 
     }
   },
   
 	componentWillMount: function() {
+    this.setState({user: UserStore.getUser() });
 		UserStore.addChangeListener(this._onChange);
 	},
 
@@ -35,30 +35,25 @@ var Header = React.createClass({
 
   render: function() {
 
-
-    console.info('mounted user: ', this.state.user);
-    var userNameTest = "5@5.com";
+    var userObject = UserStore.getUser(); 
+    console.info("header render: ", userObject);
 
     var testObj = {
-      author: userNameTest
+      author: "5@5.com" 
     }
     
-    console.log(testObj);
-
     return (
       
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           
-          <Link to="profile" params={ testObj } className="navbar-brand">
+          <Link to="my-profile" params={ testObj } className="navbar-brand">
             <img src="images/logo.jpg" width="40"/>
           </Link>
           
           <ul className="nav navbar-nav">
             <li><Link to="app">Home</Link></li>
-            <li><Link to="profile" params={{author: "5@5.com"}} >Profile</Link></li>
             <li><Link to="upload">Upload</Link></li>
-            <li>logged in as: {this.state.user.userName}</li>
           </ul>
         
         </div>

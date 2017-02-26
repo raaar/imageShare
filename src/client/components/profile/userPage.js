@@ -26,7 +26,7 @@ var UserProfile = React.createClass({
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
-		ProfileStore.addChangeListener(this._onChange);
+		UserStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
@@ -34,13 +34,13 @@ var UserProfile = React.createClass({
 	},
 
 	_onChange: function() {
-    this.setState({profile: UserStore.getUser() });
+    this.setState({user: UserStore.getUser() });
 	},
 
   render: function() {
     return (
       <div>
-        <h1>User profile/h1>
+        <h1>Hi, {this.state.user.userName}</h1>
       </div>
     );
   }

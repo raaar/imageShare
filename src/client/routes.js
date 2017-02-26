@@ -12,6 +12,7 @@ var routes = (
     <DefaultRoute handler={require('./components/homePage')} />
     <Route name="image" path="image/:id" handler={require('./components/image/imageSingle')} />
     <Route name="profile" path="profile/:author" handler={require('./components/profile/profilePage')} />
+    <Route name="my-profile" path="my-profile" handler={require('./components/profile/userPage')} />
     <Route name="upload" path="upload" handler={require('./components/image/manageImagePage')} />
     <NotFoundRoute handler={require('./components/pageNotFound')} />
   </Route>
