@@ -27,7 +27,6 @@ var ImageForm = React.createClass({
             name="image"
             type="file"
             onChange={this.props.onChange}
-            defaultValue={this.props.file}
           />
         
           <input type="submit" className="btn btn-default" value="Submit" onClick={this.props.onSave} />

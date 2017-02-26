@@ -42,6 +42,12 @@ Dispatcher.register(function(action){
 			ImageStore.emitChange();
 			break;
 
+    case ActionTypes.CREATE_IMAGE: 
+      console.info('imageStore: ' + action);
+			_images.push(action.image);
+			ImageStore.emitChange();
+			break;
+
 		default:
 			// no operations
 	}

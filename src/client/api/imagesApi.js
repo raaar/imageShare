@@ -25,8 +25,19 @@ var ImagesApi = {
     }); 
   },
 
+  post: function(url, data) {
+     console.info('posting image: ', data);
+     return new Promise(function(success,error){
+       $.ajax({
+         type: 'POST',
+         url: url,
+         data: data
+       });       
+     }); 
+  },
+
   saveImage: function(data) {
-     console.log('posting image');
+     console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
          type: 'POST',

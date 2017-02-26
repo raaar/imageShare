@@ -40,6 +40,9 @@ var imageController = function() {
       res.status(400);
       res.redirect('/?message=Missing+information');
 
+      console.error('status 400, missing required form information:');
+      console.log(req.body.title);
+      console.log(req.body.file);
     } else {
 
       /* Data object passed by uploader
@@ -52,6 +55,7 @@ var imageController = function() {
       path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
       size: 171938
       */
+      console.info('image title: ', req.body.title);
     
       var image = {
         title: req.body.title,

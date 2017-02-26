@@ -52633,13 +52633,22 @@ module.exports = require('./lib/React');
 "use strict";
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var ImageApi = require('../api/imagesApi');
+var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 	createImage: function(image) {
-    console.info('imageActions: ', image );
-    var newImage = ImageApi.saveImage(image);
+    console.info('imageActions: ', image);
+    //var newImage = ImageApi.saveImage(image);
+
+    Api.post('api/images/create', image)
+      .then(function(data){
+        console.log('dispatcherData: ', data);
+	    	Dispatcher.dispatch({
+			    actionType: ActionTypes.CREATE_IMAGE,
+		    	image: data 
+	    	});
+      });
 	}
 }
 
@@ -52726,8 +52735,19 @@ var ImagesApi = {
     }); 
   },
 
+  post: function(url, data) {
+     console.info('posting image: ', data);
+     return new Promise(function(success,error){
+       $.ajax({
+         type: 'POST',
+         url: url,
+         data: data
+       });       
+     }); 
+  },
+
   saveImage: function(data) {
-     console.log('posting image');
+     console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
          type: 'POST',
@@ -52973,8 +52993,7 @@ var ImageForm = React.createClass({displayName: "ImageForm",
           React.createElement(FileInput, {
             name: "image", 
             type: "file", 
-            onChange: this.props.onChange, 
-            defaultValue: this.props.file}
+            onChange: this.props.onChange}
           ), 
         
           React.createElement("input", {type: "submit", className: "btn btn-default", value: "Submit", onClick: this.props.onSave})
@@ -53114,10 +53133,9 @@ var ManageImage = React.createClass({displayName: "ManageImage",
   */
   getInitialState: function() {
     return {
-      author: "test",
       image: {
-        defaultValue: "test.jpeg",
         title: "",
+        image: ""
       },
       errors: {},
       dirty: false
@@ -53399,6 +53417,12 @@ Dispatcher.register(function(action){
 		case ActionTypes.INITIALIZE:
 			_images = action.initialData.images;
       console.info('imageStore INITIALIZE: ', _images);
+			ImageStore.emitChange();
+			break;
+
+    case ActionTypes.CREATE_IMAGE: 
+      console.info('imageStore: ' + action);
+			_images.push(action.image);
 			ImageStore.emitChange();
 			break;
 

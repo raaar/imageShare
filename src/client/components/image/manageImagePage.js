@@ -18,10 +18,9 @@ var ManageImage = React.createClass({
   */
   getInitialState: function() {
     return {
-      author: "test",
       image: {
-        defaultValue: "test.jpeg",
         title: "",
+        image: ""
       },
       errors: {},
       dirty: false
