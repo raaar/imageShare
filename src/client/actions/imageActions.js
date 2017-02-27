@@ -6,17 +6,21 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 	createImage: function(image) {
-    console.info('imageActions: ', image);
-    //var newImage = ImageApi.saveImage(image);
 
+  
     Api.post('api/images/create', image)
+         
       .then(function(data){
         console.log('dispatcherData: ', data);
-	    	Dispatcher.dispatch({
+	  /* 
+        Dispatcher.dispatch({
 			    actionType: ActionTypes.CREATE_IMAGE,
 		    	image: data 
 	    	});
+      */  
       });
+      
+      
 	}
 }
 

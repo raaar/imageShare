@@ -36,16 +36,17 @@ var imageController = function() {
   };
 
   var post = function(req , res) {
-    if(!req.body.title || !req.file) {
+    if(/* !req.body.title || */  !req.file) {
       res.status(400);
       res.redirect('/?message=Missing+information');
 
       console.error('status 400, missing required form information:');
-      console.log(req.body.title);
-      console.log(req.file);
-      console.log(req.body.image);
+      console.info('title: ', req.body.title);
+      console.info('file: ', req.file);
+      console.info('image: ', req.body.image);
     } else {
-
+      console.log('Backend submit successful');
+      console.info(req.file);
       /* Data object passed by uploader
       fieldname: 'image',
       originalname: 'beach.jpg',

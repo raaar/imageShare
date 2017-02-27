@@ -3,6 +3,9 @@ var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
 var Router = require('react-router');
 
+var $ = require('jquery');
+var axios = require('axios');
+
 var ManageImage = React.createClass({
         mixins: [
           Router.Navigation
@@ -24,7 +27,8 @@ var ManageImage = React.createClass({
     return {
       image: {
         title: "",
-        image: ""
+        file: {
+        } 
       },
       errors: {},
       dirty: false
@@ -42,11 +46,12 @@ var ManageImage = React.createClass({
     }
   },  
 
-  setImageState: function() {
+  setImageState: function(e) {
+    console.log(this.state);
    // this.setState({dirty: true}); // the form has been modified
     console.info("name: ", event.target.name);
     console.info("value: ", event.target.value);
-
+ 
     var field = event.target.name;
     var value = event.target.value;
     this.state.image[field] = value;
@@ -54,32 +59,67 @@ var ManageImage = React.createClass({
     return this.setState({
       image: this.state.image
     });
-    
   },
 
-  saveImage: function() {
-    console.info('save image', this.state.image);
-    event.preventDefault();
+  handleFile: function(e) {
+    console.log('handle file');
+    e.preventDefault();
+
+    var _self = this;
+    var file = e.target.files[0];
+    var reader = new FileReader();
     
+    var formData = new FormData();
+
+    // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
-    //if(!this.authorFormIsValid()) {
-    //  return;
-    //}
+    formData.append('image', file);
+    formData.append('title', 'this.state.title' ) 
+    reader.onloadend = function(e) {
+
+      _self.setState({
+        formData: formData
+      });
+    }
+
+    reader.readAsDataURL(file);
+  },
+
+  saveImage: function(e) {
+    //console.info('save image', this.state.image);
+    e.preventDefault();
     
-    ImageActions.createImage(this.state.image);
-    //this.setState({ dirty: false });
-    this.transitionTo('app');
-    //toastr.success('Author added');
+   // var formData = new FormData();
+   // formData.append('file', this.state.image.file);
+/*
+    axios.post('api/images/create', this.state.formData)
+                .then(function(response){
+                    console.log('successfully uploaded', file);
+                });
+*/
+//    ImageActions.createImage(formData);
+    //this.transitionTo('app');
+          //
+    var _self = this;
+
+    $.ajax({
+      method: "POST",
+      url: "api/images/create",
+      data: _self.state.formData,
+      processData: false,
+      contentType: false
+    })
+    
   },
         
   render: function() {
-    console.log('image form');
 
     return (
       <div>
         <ImageForm 
           title={this.state.title}
           onChange={this.setImageState}    
+          onFileChange={this.handleFile}
           onSave={this.saveImage}
         />        
       </div>

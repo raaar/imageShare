@@ -15,13 +15,19 @@ var ImagesApi = {
   },
 
   post: function(url, data) {
+     console.info('post: ',  data);
+
+          
      return new Promise(function(success,error){
        $.ajax({
-         type: 'POST',
+         type: "POST",
          url: url,
-         data: data
+         dataType: "json",
+         data: data, 
+         success: success
        });       
      }); 
+     
   },
 
   saveImage: function(data) {
@@ -30,7 +36,10 @@ var ImagesApi = {
        $.ajax({
          type: 'POST',
          url: 'api/images/create',
-         data: data
+         data: {
+           title: "hello",
+           file: "hello"
+         } 
        });       
      }); 
   }

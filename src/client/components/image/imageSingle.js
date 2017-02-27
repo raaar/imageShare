@@ -53,7 +53,7 @@ var ImageSingle = React.createClass({
 
     return (
       <div>
-        <img className="image" src={url} />
+        <img className="image" width="100"  src={url} />
         <p>Title: {this.state.image.title}</p>
         <p>By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link></p>
         <p>Size: {this.state.image.image.size}</p>

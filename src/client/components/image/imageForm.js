@@ -6,6 +6,7 @@ var ImageForm = React.createClass({
 
   propTypes: {
     onChange: React.PropTypes.func.isRequired,
+    onFileChange: React.PropTypes.func.isRequired,
     onSave: React.PropTypes.func.isRequired
   },
 
@@ -26,7 +27,7 @@ var ImageForm = React.createClass({
           <FileInput 
             name="image"
             type="file"
-            onChange={this.props.onChange}
+            onChange={this.props.onFileChange}
           />
         
           <input type="submit" className="btn btn-default" value="Submit" onClick={this.props.onSave} />
