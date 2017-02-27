@@ -54351,7 +54351,7 @@ var ImageForm = React.createClass({displayName: "ImageForm",
             label: "Image Title", 
             value: this.props.title, 
             placeholder: "Image title", 
-            onChange: this.props.onFileChange}
+            onChange: this.props.onChange}
 						//error={this.props.errors.title}
           ), 
 
@@ -54554,11 +54554,14 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);
-    formData.append('title', this.state.title ) 
+    formData.append('title', this.state.image.title);
+
+    console.info('handleFile: ', this.state.image.title);
+
     reader.onloadend = function(e) {
 
       _self.setState({
-        formData: formData
+        formData: formData,
       });
     }
 
@@ -54581,6 +54584,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     //this.transitionTo('app');
           //
     var _self = this;
+    var formDataVar = this.state.formData;
 
     $.ajax({
       method: "POST",
@@ -54588,7 +54592,17 @@ var ManageImage = React.createClass({displayName: "ManageImage",
       data: _self.state.formData,
       processData: false,
       contentType: false
-    })
+    });
+
+/*
+    $.ajax({
+      method: "POST",
+      url: "api/images/create",
+      data: ,
+      processData: false,
+      contentType: false
+    });
+*/
     
   },
         

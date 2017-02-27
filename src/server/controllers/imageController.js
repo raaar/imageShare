@@ -47,6 +47,7 @@ var imageController = function() {
     } else {
       console.log('Backend submit successful');
       console.info(req.file);
+      console.info(req.body);
       /* Data object passed by uploader
       fieldname: 'image',
       originalname: 'beach.jpg',
