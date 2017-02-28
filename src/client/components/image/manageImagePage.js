@@ -3,13 +3,11 @@ var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
 var Router = require('react-router');
 
-var $ = require('jquery');
-var axios = require('axios');
 
 var ManageImage = React.createClass({
-        mixins: [
-          Router.Navigation
-        ],
+  mixins: [
+    Router.Navigation
+  ],
  /* 
        var image = {
         title: req.body.title,
@@ -35,22 +33,10 @@ var ManageImage = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-    // component will not re-render when setting state
-    
-    var imageId = this.props.params.id;
-    
-    // if we are editing an existing author, populate with data
-    if(imageId) {
-    //  this.setState({image: AuthorStore.getAuthorById(authorId)});
-    }
-  },  
-
   setImageState: function(e) {
-    console.log(this.state);
    // this.setState({dirty: true}); // the form has been modified
-    console.info("name: ", event.target.name);
-    console.info("value: ", event.target.value);
+   // console.info("name: ", event.target.name);
+   // console.info("value: ", event.target.value);
  
     var field = event.target.name;
     var value = event.target.value;
@@ -89,41 +75,20 @@ var ManageImage = React.createClass({
   },
 
   saveImage: function(e) {
-    //console.info('save image', this.state.image);
     e.preventDefault();
     
-   // var formData = new FormData();
-   // formData.append('file', this.state.image.file);
-/*
-    axios.post('api/images/create', this.state.formData)
-                .then(function(response){
-                    console.log('successfully uploaded', file);
-                });
-*/
-//    ImageActions.createImage(formData);
-    //this.transitionTo('app');
+    ImageActions.createImage(this.state.formData);
+    this.transitionTo('app');
           //
-    var _self = this;
-    var formDataVar = this.state.formData;
-
-    $.ajax({
-      method: "POST",
-      url: "api/images/create",
-      data: _self.state.formData,
-      processData: false,
-      contentType: false
-    });
-
 /*
     $.ajax({
       method: "POST",
       url: "api/images/create",
-      data: ,
+      data: this.state.formData,
       processData: false,
       contentType: false
     });
-*/
-    
+    */
   },
         
   render: function() {

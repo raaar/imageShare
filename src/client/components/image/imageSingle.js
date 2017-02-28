@@ -1,5 +1,6 @@
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
+var ImageActions = require('../../actions/imageActions');
 var Router = require('react-router');
 var Link = Router.Link;
 
@@ -47,9 +48,16 @@ var ImageSingle = React.createClass({
 		this.setState({image: ImageStore.getImageById(imageId) });
 	},
 
+  deleteImage: function(id, e) {
+    e.preventDefault();
+    ImageActions.deleteImage(id); 
+  },
+
   render: function() {
     var url = "uploads/" + this.state.image.image.full;
     var authorUrl = "profile/" + this.state.image.author;
+
+    console.info("id: ", this.state.image._id);
 
     return (
       <div>
@@ -57,6 +65,7 @@ var ImageSingle = React.createClass({
         <p>Title: {this.state.image.title}</p>
         <p>By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link></p>
         <p>Size: {this.state.image.image.size}</p>
+			  <a href="#" onClick={this.deleteImage.bind(this, this.state.image._id)}>Delete</a>
       </div>
     )
   }

@@ -6,6 +6,7 @@ var ImagesApi = {
   get: function(url) {
     return new Promise(function(success,error){
       $.ajax({
+        method: "GET",
         url:url,
         dataType:"json",
         success:success,
@@ -30,17 +31,17 @@ var ImagesApi = {
      
   },
 
-  saveImage: function(data) {
+  saveImage: function(url, data) {
      console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
-         type: 'POST',
-         url: 'api/images/create',
-         data: {
-           title: "hello",
-           file: "hello"
-         } 
-       });       
+         method: "POST",
+         url: url,
+         data: data,
+         processData: false,
+         contentType: false,
+         success: success
+       });
      }); 
   }
         
