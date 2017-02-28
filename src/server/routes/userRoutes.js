@@ -17,7 +17,7 @@ var upload = multer({ storage: storage });
 
 var routes = function(Book) {
   var userRouter = express.Router();
-  var userController = require('../controllers/userController')(Book);
+  var userController = require('../controllers/userController')();
 
   userRouter.route('/')
     .get(function(req, res) {
@@ -35,7 +35,8 @@ var routes = function(Book) {
     // .post(userController.removeItem);
 
   userRouter.route('/avatar')
-    .post(upload.single('image'), userController.postAvatar);
+    .post(upload.single('image'),
+     userController.postAvatar);
 
   return userRouter;
 };

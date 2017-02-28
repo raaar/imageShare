@@ -1,8 +1,46 @@
 var mongodb = require('mongodb').MongoClient;
+var objectId = require('mongodb').ObjectID;
+var sharp = require('sharp'); // image processing library
 var dbConfig = require('../config/db');
+var dbUrl = dbConfig.url;
 
-var userController = function(Book) {
+var userController = function() {
 
+  var postAvatar = function(req, res) {
+    console.info('file: ',req.file);
+    console.info('user: ', req.user); 
+
+    var userData = {
+      user: req.user,
+      avatar: {
+        large: req.file.filename,
+        small: req.file.filename
+      }
+    }
+
+    console.log(userData);
+/*
+    mongodb.connect(dbUrl, function(err, db){
+      var collection = db.collection('useer');
+      collection.findOne({_id : req.user._id}, function(err, user ) {
+        console.info('queried user',  user); 
+      });
+    });
+*/
+          // process image
+          sharp('public/uploads/avatar/' + req.file.filename)
+            .resize(70, 70)
+            .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
+              if (err) {
+                return err;
+              }
+                    
+              res.status(201); // 201: item created
+              res.send('avatar arrivet to bakend'); 
+            });
+         
+  };
+        
   var get = function(req, res) {
     var url = dbConfig.url;
 
@@ -41,11 +79,6 @@ var userController = function(Book) {
     // });
   };
 
-  var postAvatar = function(req, res) {
-    console.info('file: ',req.file);
-    res.status(201); // 201: item created
-    res.send('avatar arrivet to bakend'); 
-  };
   // var post = function(req, res) {
   //     var book = new Book(req.body); // this works thanks to 'bodyParser';
 

@@ -52638,10 +52638,11 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 
-  saveAvatar: function(image) {
+  saveAvatar: function(data) {
 //    console.log(image);
           
-    Api.postImage('api/user/avatar', image)
+    Api.postImage('api/user/avatar', data)
+      
       // render the data that was posted to the server
       .then(function(data){
        /*       
@@ -52776,6 +52777,9 @@ var ImagesApi = {
   },
 
   postImage: function(url, data) {
+     console.info('url: ', url);
+     console.info('data: ', data);
+
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",
@@ -53393,6 +53397,7 @@ var UserProfile = React.createClass({displayName: "UserProfile",
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);
+    formData.append('user', this.state.user);
 
     reader.onloadend = function(e) {
       _self.setState({

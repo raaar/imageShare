@@ -6,10 +6,11 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 
-  saveAvatar: function(image) {
+  saveAvatar: function(data) {
 //    console.log(image);
           
-    Api.postImage('api/user/avatar', image)
+    Api.postImage('api/user/avatar', data)
+      
       // render the data that was posted to the server
       .then(function(data){
        /*       

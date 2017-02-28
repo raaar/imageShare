@@ -31,6 +31,9 @@ var ImagesApi = {
   },
 
   postImage: function(url, data) {
+     console.info('url: ', url);
+     console.info('data: ', data);
+
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",

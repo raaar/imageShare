@@ -50,6 +50,7 @@ var UserProfile = React.createClass({
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);
+    formData.append('user', this.state.user);
 
     reader.onloadend = function(e) {
       _self.setState({
