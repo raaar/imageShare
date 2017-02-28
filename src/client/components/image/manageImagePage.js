@@ -35,8 +35,6 @@ var ManageImage = React.createClass({
 
   setImageState: function(e) {
    // this.setState({dirty: true}); // the form has been modified
-   // console.info("name: ", event.target.name);
-   // console.info("value: ", event.target.value);
  
     var field = event.target.name;
     var value = event.target.value;
@@ -48,13 +46,11 @@ var ManageImage = React.createClass({
   },
 
   handleFile: function(e) {
-    console.log('handle file');
     e.preventDefault();
 
     var _self = this;
     var file = e.target.files[0];
     var reader = new FileReader();
-    
     var formData = new FormData();
 
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
@@ -62,10 +58,7 @@ var ManageImage = React.createClass({
     formData.append('image', file);
     formData.append('title', this.state.image.title);
 
-    console.info('handleFile: ', this.state.image.title);
-
     reader.onloadend = function(e) {
-
       _self.setState({
         formData: formData
       });
@@ -76,7 +69,6 @@ var ManageImage = React.createClass({
 
   saveImage: function(e) {
     e.preventDefault();
-    
     ImageActions.createImage(this.state.formData);
     this.transitionTo('app');
   },

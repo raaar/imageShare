@@ -5,9 +5,26 @@ var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
+
+  saveAvatar: function(image) {
+//    console.log(image);
+          
+    Api.postImage('api/user/avatar', image)
+      // render the data that was posted to the server
+      .then(function(data){
+       /*       
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.CREATE_IMAGE,
+		    	image: data 
+	    	});
+        */
+      });
+    
+  },
+
 	createImage: function(image) {
 
-    Api.saveImage('api/images', image)
+    Api.postImage('api/images', image)
       // render the data that was posted to the server
       .then(function(data){
         Dispatcher.dispatch({

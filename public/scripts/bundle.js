@@ -52637,9 +52637,26 @@ var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
+
+  saveAvatar: function(image) {
+//    console.log(image);
+          
+    Api.postImage('api/user/avatar', image)
+      // render the data that was posted to the server
+      .then(function(data){
+       /*       
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.CREATE_IMAGE,
+		    	image: data 
+	    	});
+        */
+      });
+    
+  },
+
 	createImage: function(image) {
 
-    Api.saveImage('api/images', image)
+    Api.postImage('api/images', image)
       // render the data that was posted to the server
       .then(function(data){
         Dispatcher.dispatch({
@@ -52756,10 +52773,9 @@ var ImagesApi = {
          success: success
        });       
      }); 
-     
   },
 
-  saveImage: function(url, data) {
+  postImage: function(url, data) {
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",
@@ -52825,13 +52841,14 @@ var React = require('react');
 
 var fileInput = React.createClass({displayName: "fileInput",
   propTypes: {
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    name: React.PropTypes.string.isRequired
   },
   render: function() {
     return (
       React.createElement("input", {
             type: "file", 
-            name: "image", 
+            name: this.props.name, 
             ref: "file", 
             onChange: this.props.onChange}
       )  
@@ -53117,7 +53134,6 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 	},
 
   deleteImage: function(id, e) {
-   console.info('event', e);
     e.preventDefault();
     ImageActions.deleteImage(id); 
     this.transitionTo('app');
@@ -53181,8 +53197,6 @@ var ManageImage = React.createClass({displayName: "ManageImage",
 
   setImageState: function(e) {
    // this.setState({dirty: true}); // the form has been modified
-   // console.info("name: ", event.target.name);
-   // console.info("value: ", event.target.value);
  
     var field = event.target.name;
     var value = event.target.value;
@@ -53194,13 +53208,11 @@ var ManageImage = React.createClass({displayName: "ManageImage",
   },
 
   handleFile: function(e) {
-    console.log('handle file');
     e.preventDefault();
 
     var _self = this;
     var file = e.target.files[0];
     var reader = new FileReader();
-    
     var formData = new FormData();
 
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
@@ -53208,10 +53220,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     formData.append('image', file);
     formData.append('title', this.state.image.title);
 
-    console.info('handleFile: ', this.state.image.title);
-
     reader.onloadend = function(e) {
-
       _self.setState({
         formData: formData
       });
@@ -53222,7 +53231,6 @@ var ManageImage = React.createClass({displayName: "ManageImage",
 
   saveImage: function(e) {
     e.preventDefault();
-    
     ImageActions.createImage(this.state.formData);
     this.transitionTo('app');
   },
@@ -53338,6 +53346,8 @@ module.exports = Profile;
 
 var React = require('react');
 var UserStore = require('../../stores/userStore');
+var FileInput = require('../common/fileInput');
+var ImageActions = require('../../actions/imageActions');
 
 var UserProfile = React.createClass({displayName: "UserProfile",
 
@@ -53372,10 +53382,44 @@ var UserProfile = React.createClass({displayName: "UserProfile",
     this.setState({user: UserStore.getUser() });
 	},
 
+  handleFile: function(e) {
+    e.preventDefault();
+
+    var _self = this;
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    var formData = new FormData();
+
+    // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
+          
+    formData.append('image', file);
+
+    reader.onloadend = function(e) {
+      _self.setState({
+        formData: formData
+      });
+    }
+
+    reader.readAsDataURL(file);
+  },
+
+  saveAvatar: function(e) {
+    e.preventDefault();
+    ImageActions.saveAvatar(this.state.formData);
+    //this.transitionTo('app');
+  },
+
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement("h1", null, "Hi, ", this.state.user.userName)
+        React.createElement("h1", null, "Hi, ", this.state.user.userName), 
+        React.createElement("form", {encType: "multipart/form-data"}, 
+          React.createElement(FileInput, {
+            onChange: this.handleFile, 
+            name: "image"}
+          ), 
+          React.createElement("input", {type: "submit", className: "btn btn-default", value: "Submit", onClick: this.saveAvatar})
+        )
       )
     );
   }
@@ -53383,7 +53427,7 @@ var UserProfile = React.createClass({displayName: "UserProfile",
 
 module.exports = UserProfile
 
-},{"../../stores/userStore":245,"react":223}],239:[function(require,module,exports){
+},{"../../actions/imageActions":224,"../../stores/userStore":245,"../common/fileInput":228,"react":223}],239:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');

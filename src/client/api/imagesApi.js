@@ -28,10 +28,9 @@ var ImagesApi = {
          success: success
        });       
      }); 
-     
   },
 
-  saveImage: function(url, data) {
+  postImage: function(url, data) {
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",

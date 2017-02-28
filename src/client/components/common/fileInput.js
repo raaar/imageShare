@@ -3,13 +3,14 @@ var React = require('react');
 
 var fileInput = React.createClass({
   propTypes: {
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    name: React.PropTypes.string.isRequired
   },
   render: function() {
     return (
       <input
             type="file"
-            name="image" 
+            name={this.props.name}
             ref="file" 
             onChange={this.props.onChange}
       />  

@@ -24,7 +24,6 @@ var userController = function(Book) {
       });
     });
     
-    
     // Book.find('', function(err, books) {
     //   if(err)
     //     res.status(500).send(err);
@@ -42,6 +41,11 @@ var userController = function(Book) {
     // });
   };
 
+  var postAvatar = function(req, res) {
+    console.info('file: ',req.file);
+    res.status(201); // 201: item created
+    res.send('avatar arrivet to bakend'); 
+  };
   // var post = function(req, res) {
   //     var book = new Book(req.body); // this works thanks to 'bodyParser';
 
@@ -90,8 +94,8 @@ var userController = function(Book) {
   // };
 
   return {
-    get: get
-    // post: post
+    get: get,
+    postAvatar: postAvatar
   };
 };
 
