@@ -3,8 +3,10 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-var dbConfig = require('../config/db');
 var sharp = require('sharp'); // image processing library
+
+var dbConfig = require('../config/db');
+var dbUrl = dbConfig.url;
 
 // Reveal model pattern
 var imageController = function() {
@@ -15,10 +17,9 @@ var imageController = function() {
   };
   
   var middlewareFetchSingle = function(req, res, next) {
-    var url = dbConfig.url;
     var id = new objectId(req.params.id);
 
-    mongodb.connect(url, function(err, db){
+    mongodb.connect(dbUrl, function(err, db){
       var collection = db.collection('images');
 
       collection.findOne({_id : id}, function(err, image) {
@@ -45,9 +46,8 @@ var imageController = function() {
       console.info('file: ', req.file);
       console.info('image: ', req.body.image);
     } else {
-      console.log('Backend submit successful');
-      console.info(req.file);
-      console.info(req.body);
+      //console.info(req.file);
+      //console.info(req.body);
       /* Data object passed by uploader
       fieldname: 'image',
       originalname: 'beach.jpg',
@@ -58,7 +58,7 @@ var imageController = function() {
       path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
       size: 171938
       */
-      console.info('image title: ', req.body.title);
+      //console.info('image title: ', req.body.title);
     
       var image = {
         title: req.body.title,
@@ -72,8 +72,7 @@ var imageController = function() {
         }
       };
       
-      var url = dbConfig.url;
-      mongodb.connect(url, function(err, db) {
+      mongodb.connect(dbUrl, function(err, db) {
         var collection = db.collection('images');
 
         collection.insert(image, function(err, results) {
@@ -105,7 +104,6 @@ var imageController = function() {
 
 
   var get = function(req, res){
-    var url = dbConfig.url;
     var id = new objectId(req.params.id);
     var query = {};
 
@@ -117,7 +115,7 @@ var imageController = function() {
       query.author = req.query.author;
     }
 
-    mongodb.connect(url, function(err, db) {
+    mongodb.connect(dbUrl, function(err, db) {
       if(err) {
         res.status(500).send(err);
       } else {
@@ -165,16 +163,18 @@ var imageController = function() {
   //         console.log('clean up uploads folder...');
   //         res.redirect('/archive');
   //       });
-
-        
-  
-
-        
   //     }
-
   //   });
   // }
-  
+
+  var destroyImage = function(req, res) {
+    var id = new objectId(req.params.id);
+
+    mongodb.connect(dbUrl, function(err, db){
+      var collection = db.collection('images');
+      removeImage(req, res, collection, id);
+    });
+  }
   
   var edit = function(req, res) {
       var url = dbConfig.url;
@@ -213,6 +213,8 @@ var imageController = function() {
     });
   };
   
+
+
   
   function updateImage(req, res, collection, id, image) {
     collection.update({_id: objectId.createFromHexString(req.params.id)},
@@ -262,6 +264,7 @@ var imageController = function() {
     post: post,
     edit: edit,
     update: update,
+    destroyImage: destroyImage,
     middleware: middleware,
     middlewareFetchSingle: middlewareFetchSingle
   }

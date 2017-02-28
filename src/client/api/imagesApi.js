@@ -32,7 +32,6 @@ var ImagesApi = {
   },
 
   saveImage: function(url, data) {
-     console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",
@@ -45,11 +44,26 @@ var ImagesApi = {
            console.error(error);
          }
        }).done(function(){
-         console.log('done');
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+          //console.log('done');
        });
      }); 
+  },
+  
+  delete: function(url, id) {
+     $.ajax({
+         method: "POST",
+         url: url,
+         data: {
+           id: id
+         },
+         success: function() {
+         },
+         error: function(error) {
+           console.error(error);
+         }
+       });
   }
-        
 }
 
 module.exports = ImagesApi;

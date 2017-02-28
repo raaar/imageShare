@@ -20,7 +20,6 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	emitChange: function() {
-    console.log('emitChange imageStore');
 		this.emit(CHANGE_EVENT);
 	},
 
@@ -42,7 +41,6 @@ Dispatcher.register(function(action){
 			break;
 
     case ActionTypes.CREATE_IMAGE: 
-      console.info('imageStore: ' + action);
 			_images.push(action.image);
 			ImageStore.emitChange();
 			break;

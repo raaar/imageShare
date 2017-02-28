@@ -40,7 +40,7 @@ var routes = function() {
   imageRouter.route('/:id/update')
     .post(imageController.update);
 
-    
+   
   // imageRouter.route('/:id/delete')
   //   .post(imageController.remove);
 
@@ -50,7 +50,8 @@ var routes = function() {
   imageRouter.route('/:id')
     .get(function(req, res){
       res.json(req.image);
-    });
+    })
+    .post(imageController.destroyImage);
     // .put(function(req, res) {
     //   req.book.title = req.body.title;
     //   req.book.author = req.body.author;
@@ -82,13 +83,15 @@ var routes = function() {
     //   });
     // })
     // .post(function(req, res) {
-    //   req.book.remove(function(err) {
-    //     if(err)
-    //       res.status(500).send(err);
-    //     else
-    //       // status 204 means item removed
-    //       res.status(204).send('Removed');
-    //   });
+       /*      
+       req.book.remove(function(err) {
+         if(err)
+           res.status(500).send(err);
+         else
+           // status 204 means item removed
+           res.status(204).send('Removed');
+       });
+       */
     // });
   
 

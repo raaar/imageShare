@@ -35,7 +35,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_PROFILE:
 			_profile = action.initialData.profile;
-      console.info('profileStore INITIALIZE: ', _profile);
 			ProfileStore.emitChange();
 			break;
 

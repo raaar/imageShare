@@ -52640,18 +52640,25 @@ var ImageActions = {
 	createImage: function(image) {
 
     Api.saveImage('api/images', image)
+      // render the data that was posted to the server
       .then(function(data){
-        console.log('dispatcherData: ', data);
-	   
         Dispatcher.dispatch({
 			    actionType: ActionTypes.CREATE_IMAGE,
 		    	image: data 
 	    	});
-        
       });
 	},
 
   deleteImage: function(id) {
+   var url = "api/images/" + id;
+   Api.delete(url, id);
+    /*      
+		AuthorApi.deleteAuthor(id);
+		Dispatcher.dispatch({
+			actionType: ActionTypes.DELETE_AUTHOR,
+			id: id
+		});
+    */
     console.info('Deleting: ', id );
   }
 }
@@ -52746,7 +52753,6 @@ var ImagesApi = {
   },
 
   saveImage: function(url, data) {
-     console.info('posting image: ', data);
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",
@@ -52759,11 +52765,26 @@ var ImagesApi = {
            console.error(error);
          }
        }).done(function(){
-         console.log('done');
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+          //console.log('done');
        });
      }); 
+  },
+  
+  delete: function(url, id) {
+     $.ajax({
+         method: "POST",
+         url: url,
+         data: {
+           id: id
+         },
+         success: function() {
+         },
+         error: function(error) {
+           console.error(error);
+         }
+       });
   }
-        
 }
 
 module.exports = ImagesApi;
@@ -53447,7 +53468,6 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	emitChange: function() {
-    console.log('emitChange imageStore');
 		this.emit(CHANGE_EVENT);
 	},
 
@@ -53469,7 +53489,6 @@ Dispatcher.register(function(action){
 			break;
 
     case ActionTypes.CREATE_IMAGE: 
-      console.info('imageStore: ' + action);
 			_images.push(action.image);
 			ImageStore.emitChange();
 			break;
@@ -53520,7 +53539,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_PROFILE:
 			_profile = action.initialData.profile;
-      console.info('profileStore INITIALIZE: ', _profile);
 			ProfileStore.emitChange();
 			break;
 
@@ -53566,7 +53584,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_USER:
 			_user = action.userData;
-      console.info('userStore INITIALIZE: ', _user);
 			UserStore.emitChange();
 			break;
 

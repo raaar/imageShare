@@ -32,7 +32,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_USER:
 			_user = action.userData;
-      console.info('userStore INITIALIZE: ', _user);
 			UserStore.emitChange();
 			break;
 
