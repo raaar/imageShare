@@ -45,6 +45,20 @@ Dispatcher.register(function(action){
 			ImageStore.emitChange();
 			break;
 
+    case ActionTypes.DELETE_IMAGE: 
+			console.log('delete image, do something in the image store');
+      //console.log(action);
+                  
+      console.info('before: ', _images.length);            
+			_.remove(_images, function(image){
+		//		console.log(image._id);
+		//		console.info("action:" , action.id);
+        return image._id === action.id;
+			});
+      
+      console.info('after: ', _images.length);            
+			ImageStore.emitChange();
+			break;
 		default:
 			// no operations
 	}

@@ -51,18 +51,17 @@ var ImagesApi = {
   },
   
   delete: function(url, id) {
-     $.ajax({
-         method: "POST",
-         url: url,
-         data: {
-           id: id
-         },
-         success: function() {
-         },
-         error: function(error) {
-           console.error(error);
-         }
+     return new Promise(function(success,error){
+       $.ajax({
+           method: "POST",
+           url: url,
+           data: {
+             id: id
+           },
+           success: success,
+           error: error 
        });
+     });
   }
 }
 

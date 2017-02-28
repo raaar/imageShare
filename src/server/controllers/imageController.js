@@ -241,7 +241,7 @@ var imageController = function() {
           });
         } else {
           console.log('You don\'t have permission to delete this file' );
-          res.redirect('/archive');
+          res.json('You don\t have permission to delete this file');
           return;
         }
       });
@@ -255,7 +255,8 @@ var imageController = function() {
         fs.unlinkSync(fileName);
       });
   
-      res.redirect('/archive');
+      res.json('Item deleted');
+
     });
   }
 

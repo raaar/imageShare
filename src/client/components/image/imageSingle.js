@@ -6,6 +6,10 @@ var Link = Router.Link;
 
 var ImageSingle = React.createClass({
 
+  mixins: [
+    Router.Navigation
+  ],
+
   getInitialState: function() {
     return {
      image: {
@@ -51,6 +55,7 @@ var ImageSingle = React.createClass({
   deleteImage: function(id, e) {
     e.preventDefault();
     ImageActions.deleteImage(id); 
+    this.transitionTo('app');
   },
 
   render: function() {

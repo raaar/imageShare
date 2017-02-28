@@ -52651,7 +52651,14 @@ var ImageActions = {
 
   deleteImage: function(id) {
    var url = "api/images/" + id;
-   Api.delete(url, id);
+   Api.delete(url, id)
+     .then(function(data){
+       console.info('success: ', data ); 
+       Dispatcher.dispatch({
+         actionType: ActionTypes.DELETE_IMAGE,
+         id: id
+		   });
+     });
     /*      
 		AuthorApi.deleteAuthor(id);
 		Dispatcher.dispatch({
@@ -52772,18 +52779,17 @@ var ImagesApi = {
   },
   
   delete: function(url, id) {
-     $.ajax({
-         method: "POST",
-         url: url,
-         data: {
-           id: id
-         },
-         success: function() {
-         },
-         error: function(error) {
-           console.error(error);
-         }
+     return new Promise(function(success,error){
+       $.ajax({
+           method: "POST",
+           url: url,
+           data: {
+             id: id
+           },
+           success: success,
+           error: error 
        });
+     });
   }
 }
 
@@ -53064,6 +53070,10 @@ var Link = Router.Link;
 
 var ImageSingle = React.createClass({displayName: "ImageSingle",
 
+  mixins: [
+    Router.Navigation
+  ],
+
   getInitialState: function() {
     return {
      image: {
@@ -53107,8 +53117,10 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 	},
 
   deleteImage: function(id, e) {
+   console.info('event', e);
     e.preventDefault();
     ImageActions.deleteImage(id); 
+    this.transitionTo('app');
   },
 
   render: function() {
@@ -53382,6 +53394,7 @@ module.exports = keyMirror({
   INITIALIZE_PROFILE: null,
   INITIALIZE_USER: null,
   CREATE_IMAGE: null,
+  DELETE_IMAGE: null,
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
 	DELETE_AUTHOR: null
@@ -53493,6 +53506,20 @@ Dispatcher.register(function(action){
 			ImageStore.emitChange();
 			break;
 
+    case ActionTypes.DELETE_IMAGE: 
+			console.log('delete image, do something in the image store');
+      //console.log(action);
+                  
+      console.info('before: ', _images.length);            
+			_.remove(_images, function(image){
+		//		console.log(image._id);
+		//		console.info("action:" , action.id);
+        return image._id === action.id;
+			});
+      
+      console.info('after: ', _images.length);            
+			ImageStore.emitChange();
+			break;
 		default:
 			// no operations
 	}

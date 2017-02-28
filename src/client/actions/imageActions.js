@@ -19,7 +19,14 @@ var ImageActions = {
 
   deleteImage: function(id) {
    var url = "api/images/" + id;
-   Api.delete(url, id);
+   Api.delete(url, id)
+     .then(function(data){
+       console.info('success: ', data ); 
+       Dispatcher.dispatch({
+         actionType: ActionTypes.DELETE_IMAGE,
+         id: id
+		   });
+     });
     /*      
 		AuthorApi.deleteAuthor(id);
 		Dispatcher.dispatch({
