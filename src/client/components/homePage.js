@@ -19,8 +19,6 @@ var Home = React.createClass({
       // this.setState({ authors: AuthorApi.getAllAuthors() });
 			//console.info('authorPage comp did mount: ', ImageStore );
       this.setState({images: ImageStore.getAllImages() });
-
-      console.info('homepage images data: ', this.state.images);
     }
   },
 

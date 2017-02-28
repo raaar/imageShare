@@ -52639,8 +52639,7 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 	createImage: function(image) {
 
-    Api.saveImage('api/images/create', image)
-         
+    Api.saveImage('api/images', image)
       .then(function(data){
         console.log('dispatcherData: ', data);
 	   
@@ -52755,7 +52754,12 @@ var ImagesApi = {
          data: data,
          processData: false,
          contentType: false,
-         success: success
+         success: success,
+         error: function(error) {
+           console.error(error);
+         }
+       }).done(function(){
+         console.log('done');
        });
      }); 
   }
@@ -52911,8 +52915,6 @@ var Home = React.createClass({displayName: "Home",
       // this.setState({ authors: AuthorApi.getAllAuthors() });
 			//console.info('authorPage comp did mount: ', ImageStore );
       this.setState({images: ImageStore.getAllImages() });
-
-      console.info('homepage images data: ', this.state.images);
     }
   },
 
@@ -52998,6 +53000,17 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
   render: function() {
 
     var createImageTile = function(image) {
+      
+      if (image.image === undefined) {
+        console.log('image is undefined'); 
+
+        var image = {
+          _id: "666",
+          image: {
+            thumb: "placeholder.jpeg"
+          }
+        }
+      }       
 
       var src = "uploads/" + image.image.thumb;
 
@@ -53167,7 +53180,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     reader.onloadend = function(e) {
 
       _self.setState({
-        formData: formData,
+        formData: formData
       });
     }
 
@@ -53179,16 +53192,6 @@ var ManageImage = React.createClass({displayName: "ManageImage",
     
     ImageActions.createImage(this.state.formData);
     this.transitionTo('app');
-          //
-/*
-    $.ajax({
-      method: "POST",
-      url: "api/images/create",
-      data: this.state.formData,
-      processData: false,
-      contentType: false
-    });
-    */
   },
         
   render: function() {
@@ -53444,6 +53447,7 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	emitChange: function() {
+    console.log('emitChange imageStore');
 		this.emit(CHANGE_EVENT);
 	},
 
@@ -53452,7 +53456,6 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	getAllImages: function() {
-		console.info('image store get all images: ', _images);
 		return _images;
 	},
 
@@ -53462,7 +53465,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE:
 			_images = action.initialData.images;
-      console.info('imageStore INITIALIZE: ', _images);
 			ImageStore.emitChange();
 			break;
 
@@ -53556,12 +53558,9 @@ var UserStore = assign({}, EventEmitter.prototype, {
 	},
 
   getUser: function() {
-    console.info('get user' , _user );
     return _user;
   }
-
 });
-
 
 Dispatcher.register(function(action){
 	switch(action.actionType) {

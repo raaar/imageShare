@@ -13,6 +13,17 @@ var ImageGrid = React.createClass({
   render: function() {
 
     var createImageTile = function(image) {
+      
+      if (image.image === undefined) {
+        console.log('image is undefined'); 
+
+        var image = {
+          _id: "666",
+          image: {
+            thumb: "placeholder.jpeg"
+          }
+        }
+      }       
 
       var src = "uploads/" + image.image.thumb;
 

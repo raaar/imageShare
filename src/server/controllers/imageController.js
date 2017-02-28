@@ -94,9 +94,9 @@ var imageController = function() {
 
 
           res.status(201); // 201: item created
-          res.redirect('/archive');
+          //res.redirect('/archive');
           // res.send(book); // alternatively you can send json back to the browser
-          
+          res.send(image); 
         });
       });
       

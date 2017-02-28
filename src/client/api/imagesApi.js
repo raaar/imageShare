@@ -40,7 +40,12 @@ var ImagesApi = {
          data: data,
          processData: false,
          contentType: false,
-         success: success
+         success: success,
+         error: function(error) {
+           console.error(error);
+         }
+       }).done(function(){
+         console.log('done');
        });
      }); 
   }

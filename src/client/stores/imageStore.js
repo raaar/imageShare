@@ -20,6 +20,7 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	emitChange: function() {
+    console.log('emitChange imageStore');
 		this.emit(CHANGE_EVENT);
 	},
 
@@ -28,7 +29,6 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 	},
 
 	getAllImages: function() {
-		console.info('image store get all images: ', _images);
 		return _images;
 	},
 
@@ -38,7 +38,6 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE:
 			_images = action.initialData.images;
-      console.info('imageStore INITIALIZE: ', _images);
 			ImageStore.emitChange();
 			break;
 

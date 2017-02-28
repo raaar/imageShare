@@ -67,7 +67,7 @@ var ManageImage = React.createClass({
     reader.onloadend = function(e) {
 
       _self.setState({
-        formData: formData,
+        formData: formData
       });
     }
 
@@ -79,16 +79,6 @@ var ManageImage = React.createClass({
     
     ImageActions.createImage(this.state.formData);
     this.transitionTo('app');
-          //
-/*
-    $.ajax({
-      method: "POST",
-      url: "api/images/create",
-      data: this.state.formData,
-      processData: false,
-      contentType: false
-    });
-    */
   },
         
   render: function() {

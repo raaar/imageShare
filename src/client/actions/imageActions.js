@@ -7,8 +7,7 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 	createImage: function(image) {
 
-    Api.saveImage('api/images/create', image)
-         
+    Api.saveImage('api/images', image)
       .then(function(data){
         console.log('dispatcherData: ', data);
 	   

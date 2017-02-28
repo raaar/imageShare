@@ -28,11 +28,9 @@ var routes = function() {
 
   imageRouter.route('/')
     .get(imageController.get)
-    .post(imageController.post);
-
-
-  imageRouter.route('/create')
     .post(upload.single('image'), imageController.post);
+
+  imageRouter.route('/')
 
 
   imageRouter.route('/:id/edit')
