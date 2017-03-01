@@ -52639,18 +52639,19 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 
   saveAvatar: function(data) {
-//    console.log(image);
+   // console.info('imageActionsData: ', data );
           
-    Api.postImage('api/user/avatar', data)
+    Api.patch('api/user/avatar', data)
       
       // render the data that was posted to the server
       .then(function(data){
-       /*       
+       console.info('put data: ', data );
+              
         Dispatcher.dispatch({
 			    actionType: ActionTypes.CREATE_IMAGE,
 		    	image: data 
 	    	});
-        */
+        
       });
     
   },
@@ -52699,6 +52700,7 @@ var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
+var _ = require('lodash');
 // var axios = require('axios');
 
 // http://www.thedreaming.org/2015/03/14/react-ajax/
@@ -52743,7 +52745,7 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"../stores/imageStore":243,"jquery":7}],226:[function(require,module,exports){
+},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"../stores/imageStore":243,"jquery":7,"lodash":8}],226:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 
@@ -52788,6 +52790,43 @@ var ImagesApi = {
          processData: false,
          contentType: false,
          success: success,
+         error: error
+       }).done(function(){
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+       });
+     }); 
+  },
+  
+  patch: function(url, data) {
+     console.info('patch url: ', url);
+     console.info('patch data: ', data);
+
+     return new Promise(function(success,error){
+       $.ajax({
+         method: "PATCH",
+         url: url,
+         data: data,
+         processData: false,
+         contentType: false,
+         success: success,
+         error: error
+       }).done(function(){
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+       });
+     }); 
+  },
+  put: function(url, data) {
+     console.info('put url: ', url);
+     console.info('put data: ', data);
+
+     return new Promise(function(success,error){
+       $.ajax({
+         method: "POST",
+         url: url,
+         data: data,
+         processData: false,
+         contentType: false,
+         success: success,
          error: function(error) {
            console.error(error);
          }
@@ -52797,7 +52836,7 @@ var ImagesApi = {
        });
      }); 
   },
-  
+
   delete: function(url, id) {
      return new Promise(function(success,error){
        $.ajax({
@@ -52868,8 +52907,37 @@ module.exports = fileInput
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var UserStore = require('../../stores/userStore');
 
 var Header = React.createClass({displayName: "Header",
+
+  getInitialState: function() {
+    return {
+      user: {}
+    };
+  },
+
+  componentDidMount: function() {
+    var user = UserStore.getUser()
+ 
+    if(this.isMounted()) {
+      this.setState({
+        user: user 
+      })
+    }
+  },
+
+	componentWillMount: function() {
+		UserStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnmount: function() {
+		UserStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+    this.setState({user: UserStore.getUser() });
+	},
 
   render: function() {
 
@@ -52879,7 +52947,7 @@ var Header = React.createClass({displayName: "Header",
         React.createElement("div", {className: "container-fluid"}, 
           
           React.createElement(Link, {to: "my-profile", className: "navbar-brand"}, 
-            React.createElement("img", {src: "images/logo.jpg", width: "40"})
+            React.createElement("img", {src: this.state.user.avatarSmall})
           ), 
           
           React.createElement("ul", {className: "nav navbar-nav"}, 
@@ -52892,12 +52960,11 @@ var Header = React.createClass({displayName: "Header",
       
     );
   }
-  
 });
 
 module.exports = Header;
 
-},{"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"../../stores/userStore":245,"react":223,"react-router":35}],230:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53088,6 +53155,7 @@ var ImageStore = require('../../stores/imageStore');
 var ImageActions = require('../../actions/imageActions');
 var Router = require('react-router');
 var Link = Router.Link;
+var UserStore = require('../../stores/userStore');
 
 var ImageSingle = React.createClass({displayName: "ImageSingle",
 
@@ -53097,6 +53165,8 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
   getInitialState: function() {
     return {
+     user: {
+     },
      image: {
        title: "",
        author: "",
@@ -53110,16 +53180,23 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
   componentWillMount: function() {
     var imageId = this.props.params.id;
-    
+
     if(imageId) {
-      this.setState({image: ImageStore.getImageById(imageId)});
+      this.setState({
+              image: ImageStore.getImageById(imageId)
+      });
+
     }
   },
   
   componentDidMount: function() {
+    var user = UserStore.getUser(); // logged in user
     if(this.isMounted()) {
       var imageId = this.props.params.id;
-      this.setState({image: ImageStore.getImageById(imageId)});
+      this.setState({
+              user: user,
+              image: ImageStore.getImageById(imageId)}
+      );
     }
   },
 
@@ -53144,10 +53221,22 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
   },
 
   render: function() {
+    var _self = this;
     var url = "uploads/" + this.state.image.image.full;
     var authorUrl = "profile/" + this.state.image.author;
 
     console.info("id: ", this.state.image._id);
+    
+    console.info(this.state.user.userName);
+    var deleteButton = function() {
+      if(_self.state.image.author === _self.state.user.userName) {
+        return (
+          React.createElement("div", null, 
+			      React.createElement("a", {href: "#", onClick: _self.deleteImage.bind(_self, _self.state.image._id)}, "Delete")
+          )
+        )
+      }
+    } 
 
     return (
       React.createElement("div", null, 
@@ -53155,7 +53244,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
         React.createElement("p", null, "Title: ", this.state.image.title), 
         React.createElement("p", null, "By: ", React.createElement(Link, {to: "profile", params: {author: this.state.image.author}}, this.state.image.author)), 
         React.createElement("p", null, "Size: ", this.state.image.image.size), 
-			  React.createElement("a", {href: "#", onClick: this.deleteImage.bind(this, this.state.image._id)}, "Delete")
+        deleteButton()
       )
     )
   }
@@ -53163,7 +53252,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../actions/imageActions":224,"../../stores/imageStore":243,"react":223,"react-router":35}],235:[function(require,module,exports){
+},{"../../actions/imageActions":224,"../../stores/imageStore":243,"../../stores/userStore":245,"react":223,"react-router":35}],235:[function(require,module,exports){
 var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
@@ -53410,6 +53499,7 @@ var UserProfile = React.createClass({displayName: "UserProfile",
 
   saveAvatar: function(e) {
     e.preventDefault();
+    console.log(this.state.user);
     ImageActions.saveAvatar(this.state.formData);
     //this.transitionTo('app');
   },
@@ -53418,11 +53508,14 @@ var UserProfile = React.createClass({displayName: "UserProfile",
     return (
       React.createElement("div", null, 
         React.createElement("h1", null, "Hi, ", this.state.user.userName), 
+        React.createElement("p", null, this.state.user.id), 
+
         React.createElement("form", {encType: "multipart/form-data"}, 
           React.createElement(FileInput, {
             onChange: this.handleFile, 
             name: "image"}
           ), 
+
           React.createElement("input", {type: "submit", className: "btn btn-default", value: "Submit", onClick: this.saveAvatar})
         )
       )

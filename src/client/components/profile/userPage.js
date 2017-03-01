@@ -63,6 +63,7 @@ var UserProfile = React.createClass({
 
   saveAvatar: function(e) {
     e.preventDefault();
+    console.log(this.state.user);
     ImageActions.saveAvatar(this.state.formData);
     //this.transitionTo('app');
   },
@@ -71,11 +72,14 @@ var UserProfile = React.createClass({
     return (
       <div>
         <h1>Hi, {this.state.user.userName}</h1>
+        <p>{this.state.user.id}</p>
+
         <form encType="multipart/form-data">
           <FileInput
             onChange={this.handleFile}
             name="image"
           />
+
           <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
         </form>
       </div>

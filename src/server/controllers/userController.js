@@ -3,30 +3,73 @@ var objectId = require('mongodb').ObjectID;
 var sharp = require('sharp'); // image processing library
 var dbConfig = require('../config/db');
 var dbUrl = dbConfig.url;
+var ObjectID = require('mongodb').ObjectID;
 
 var userController = function() {
+ 
+  var patchAvatar = function(req, res) {
+    var image = sharp('public/uploads/avatar/' + req.file.filename);
 
+    image
+      .metadata()
+      .then(function(metadata) {
+        return image
+          .resize(70, 70)
+          .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
+            if (err) {
+              return err;
+            }
+
+            res.status(201); // 201: item created
+            res.send('avatar arrived to bakend'); 
+          });
+      })
+      .then(function(data) {
+        mongodb.connect(dbUrl, function(err, db){
+          var collection = db.collection('users');
+
+          collection.update(
+            { username: req.user.username },
+            { $set: {
+              avatar: req.file.path
+            }
+            },
+              { upsert: true }
+            )
+        });   // data contains a WebP image half the width and height of the original JPEG
+      });
+
+  };
+
+  // TODO: this could be replaced by .patch function
   var postAvatar = function(req, res) {
-    console.info('file: ',req.file);
-    console.info('user: ', req.user); 
+    console.log('post avatar');
 
     var userData = {
-      user: req.user,
-      avatar: {
-        large: req.file.filename,
-        small: req.file.filename
+      user: {
+        id: req.user._id,
+        username: req.user.username,
+        avatar: {
+          large: req.file.path,
+          small: req.file.path
+        }
       }
     }
 
     console.log(userData);
-/*
+
     mongodb.connect(dbUrl, function(err, db){
-      var collection = db.collection('useer');
+      var collection = db.collection('user');
+      collection.update(
+
+      )
+      /*      
       collection.findOne({_id : req.user._id}, function(err, user ) {
         console.info('queried user',  user); 
       });
+      */
     });
-*/
+
           // process image
           sharp('public/uploads/avatar/' + req.file.filename)
             .resize(70, 70)
@@ -42,41 +85,12 @@ var userController = function() {
   };
         
   var get = function(req, res) {
-    var url = dbConfig.url;
-
-    mongodb.connect(url, function(err, db) {
-      var collection = db.collection('images');
-      collection.find({}).toArray(function(err, results) {
-        if(err)
-          res.status(500).send(err);
-        if(!req.user) {
-          res.redirect('auth/register');
-        } else {
-          res.render('archive', {
-            items: results,
-            pageName: 'archive',
-            message: '',
-            user: req.user.username
-          });
-        }
-      });
+    res.json({
+      userName: req.user.username,
+      id: req.user._id,
+      avatarSmall: "http://placehold.it/40x40",
+      avatarLarge: "http://placehold.it/120x120"
     });
-    
-    // Book.find('', function(err, books) {
-    //   if(err)
-    //     res.status(500).send(err);
-    //   else
-      
-    //   if(!req.user) {
-    //     res.redirect('auth/register');
-    //   } else {
-    //     res.render('archive', {
-    //       books: books,
-    //       pageName: 'archive'
-    //     });
-        
-    //   }
-    // });
   };
 
   // var post = function(req, res) {
@@ -128,7 +142,7 @@ var userController = function() {
 
   return {
     get: get,
-    postAvatar: postAvatar
+    patchAvatar: patchAvatar
   };
 };
 

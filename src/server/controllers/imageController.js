@@ -233,7 +233,10 @@ var imageController = function() {
     // fetch and delete DB entry...
     function destroyItem(next) {
       collection.findOne({_id : id}, function(err, image) {
+        console.info('author: ', image.author );
+        console.info('user: ', req.user.username);
         if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
+          console.log('author is the user');
           collection.deleteOne(
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {
@@ -256,7 +259,7 @@ var imageController = function() {
       });
   
       res.json('Item deleted');
-
+      console.log('item deleted');
     });
   }
 

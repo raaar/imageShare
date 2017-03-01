@@ -42,6 +42,43 @@ var ImagesApi = {
          processData: false,
          contentType: false,
          success: success,
+         error: error
+       }).done(function(){
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+       });
+     }); 
+  },
+  
+  patch: function(url, data) {
+     console.info('patch url: ', url);
+     console.info('patch data: ', data);
+
+     return new Promise(function(success,error){
+       $.ajax({
+         method: "PATCH",
+         url: url,
+         data: data,
+         processData: false,
+         contentType: false,
+         success: success,
+         error: error
+       }).done(function(){
+          // TODO: success callback will be deprecated in jQuery3. Use done instead
+       });
+     }); 
+  },
+  put: function(url, data) {
+     console.info('put url: ', url);
+     console.info('put data: ', data);
+
+     return new Promise(function(success,error){
+       $.ajax({
+         method: "POST",
+         url: url,
+         data: data,
+         processData: false,
+         contentType: false,
+         success: success,
          error: function(error) {
            console.error(error);
          }
@@ -51,7 +88,7 @@ var ImagesApi = {
        });
      }); 
   },
-  
+
   delete: function(url, id) {
      return new Promise(function(success,error){
        $.ajax({
