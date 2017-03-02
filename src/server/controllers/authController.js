@@ -6,7 +6,7 @@ var authController = function() {
   var logOut = function(req, res) {
     req.session.destroy();
     req.logout();
-    res.redirect('/');
+    res.send('Logged out');
   };
   
   var signIn =  function(req, res) {

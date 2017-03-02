@@ -25,7 +25,8 @@ var ImagesApi = {
          url: url,
          dataType: "json",
          data: data, 
-         success: success
+         success: success,
+         error: error
        });       
      }); 
   },

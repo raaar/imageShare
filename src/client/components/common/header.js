@@ -4,8 +4,13 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var UserStore = require('../../stores/userStore');
+var UserActions = require('../../actions/userActions');
 
 var Header = React.createClass({
+
+  mixins: [
+    Router.Navigation
+  ],
 
   getInitialState: function() {
     return {
@@ -37,6 +42,14 @@ var Header = React.createClass({
     this.setState({user: UserStore.getUser() });
 	},
 
+  logOut: function(data, e) {
+    e.preventDefault();
+
+    UserActions.logOut(function(){
+      location.href="/";
+    });
+  },
+
   render: function() {
 
     if(this.state.user.avatar === undefined) {
@@ -57,7 +70,7 @@ var Header = React.createClass({
           <ul className="nav navbar-nav">
             <li><Link to="app">Home</Link></li>
             <li><Link to="upload">Upload</Link></li>
-            <li><Link to="upload">Logout</Link></li>
+            <li><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></li>
           </ul>
         
         </div>

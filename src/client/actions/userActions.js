@@ -16,6 +16,13 @@ var UserActions = {
 		    	avatar: avatarFileName
 	    	});
       });
+  },
+
+  logOut: function(cb) {
+    Api.post('auth/logout', {} )
+      .catch(function(rejected){
+        cb();
+      });
   }
 }
 

@@ -52759,6 +52759,13 @@ var UserActions = {
 		    	avatar: avatarFileName
 	    	});
       });
+  },
+
+  logOut: function(cb) {
+    Api.post('auth/logout', {} )
+      .catch(function(rejected){
+        cb();
+      });
   }
 }
 
@@ -52792,7 +52799,8 @@ var ImagesApi = {
          url: url,
          dataType: "json",
          data: data, 
-         success: success
+         success: success,
+         error: error
        });       
      }); 
   },
@@ -52927,8 +52935,13 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var UserStore = require('../../stores/userStore');
+var UserActions = require('../../actions/userActions');
 
 var Header = React.createClass({displayName: "Header",
+
+  mixins: [
+    Router.Navigation
+  ],
 
   getInitialState: function() {
     return {
@@ -52960,6 +52973,18 @@ var Header = React.createClass({displayName: "Header",
     this.setState({user: UserStore.getUser() });
 	},
 
+  logOut: function(data, e) {
+    console.log(e);
+    e.preventDefault();
+
+    var _self = this;
+    UserActions.logOut(function(){
+      //location.reload();
+      location.href="/";
+
+    });
+  },
+
   render: function() {
 
     if(this.state.user.avatar === undefined) {
@@ -52980,7 +53005,7 @@ var Header = React.createClass({displayName: "Header",
           React.createElement("ul", {className: "nav navbar-nav"}, 
             React.createElement("li", null, React.createElement(Link, {to: "app"}, "Home")), 
             React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload")), 
-            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Logout"))
+            React.createElement("li", null, React.createElement("a", {href: "#", onClick: this.logOut.bind(null, this)}, "Logout"))
           )
         
         )
@@ -52992,7 +53017,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"../../stores/userStore":246,"react":223,"react-router":35}],231:[function(require,module,exports){
+},{"../../actions/userActions":226,"../../stores/userStore":246,"react":223,"react-router":35}],231:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
