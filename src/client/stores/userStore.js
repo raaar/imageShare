@@ -35,6 +35,14 @@ Dispatcher.register(function(action){
 			UserStore.emitChange();
 			break;
 
+		case ActionTypes.UPDATE_USER:
+			console.log('update user store')
+      console.log(action.avatar);
+      console.log(_user);
+      _user.avatar = action.avatar;
+			UserStore.emitChange();
+			break;
+
 		default:
 			// no operations
 	}

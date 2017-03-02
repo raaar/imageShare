@@ -7,21 +7,15 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 
   saveAvatar: function(data) {
-   // console.info('imageActionsData: ', data );
-          
     Api.patch('api/user/avatar', data)
-      
-      // render the data that was posted to the server
       .then(function(data){
-       console.info('put data: ', data );
-              
+        var avatarFileName = data;
+
         Dispatcher.dispatch({
-			    actionType: ActionTypes.CREATE_IMAGE,
-		    	image: data 
+			    actionType: ActionTypes.UPDATE_USER,
+		    	avatar: avatarFileName
 	    	});
-        
       });
-    
   },
 
 	createImage: function(image) {

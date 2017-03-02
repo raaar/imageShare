@@ -1,13 +1,11 @@
 var mongodb = require('mongodb').MongoClient;
-var objectId = require('mongodb').ObjectID;
 var sharp = require('sharp'); // image processing library
 var dbConfig = require('../config/db');
 var dbUrl = dbConfig.url;
-var ObjectID = require('mongodb').ObjectID;
 
 var userController = function() {
  
-  var patchAvatar = function(req, res) {
+  var patch = function(req, res) {
     var image = sharp('public/uploads/avatar/' + req.file.filename);
 
     image
@@ -19,9 +17,6 @@ var userController = function() {
             if (err) {
               return err;
             }
-
-            res.status(201); // 201: item created
-            res.send('avatar arrived to bakend'); 
           });
       })
       .then(function(data) {
@@ -31,65 +26,22 @@ var userController = function() {
           collection.update(
             { username: req.user.username },
             { $set: {
-              avatar: req.file.path
+              avatar: req.file.filename
             }
             },
               { upsert: true }
             )
+            res.status(201); // 201: item created
+            res.send(req.file.filename); 
         });   // data contains a WebP image half the width and height of the original JPEG
       });
-
   };
 
-  // TODO: this could be replaced by .patch function
-  var postAvatar = function(req, res) {
-    console.log('post avatar');
-
-    var userData = {
-      user: {
-        id: req.user._id,
-        username: req.user.username,
-        avatar: {
-          large: req.file.path,
-          small: req.file.path
-        }
-      }
-    }
-
-    console.log(userData);
-
-    mongodb.connect(dbUrl, function(err, db){
-      var collection = db.collection('user');
-      collection.update(
-
-      )
-      /*      
-      collection.findOne({_id : req.user._id}, function(err, user ) {
-        console.info('queried user',  user); 
-      });
-      */
-    });
-
-          // process image
-          sharp('public/uploads/avatar/' + req.file.filename)
-            .resize(70, 70)
-            .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
-              if (err) {
-                return err;
-              }
-                    
-              res.status(201); // 201: item created
-              res.send('avatar arrivet to bakend'); 
-            });
-         
-  };
-        
   var get = function(req, res) {
     res.json({
       userName: req.user.username,
       id: req.user._id,
-      avatarSmall: "http://placehold.it/40x40",
-      avatarLarge: "http://placehold.it/120x120"
+      avatar: req.user.avatar 
     });
   };
 
@@ -142,7 +94,7 @@ var userController = function() {
 
   return {
     get: get,
-    patchAvatar: patchAvatar
+    patch: patch
   };
 };
 

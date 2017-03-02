@@ -52639,21 +52639,15 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 
   saveAvatar: function(data) {
-   // console.info('imageActionsData: ', data );
-          
     Api.patch('api/user/avatar', data)
-      
-      // render the data that was posted to the server
       .then(function(data){
-       console.info('put data: ', data );
-              
+        var avatarFileName = data;
+
         Dispatcher.dispatch({
-			    actionType: ActionTypes.CREATE_IMAGE,
-		    	image: data 
+			    actionType: ActionTypes.UPDATE_USER,
+		    	avatar: avatarFileName
 	    	});
-        
       });
-    
   },
 
 	createImage: function(image) {
@@ -52691,7 +52685,7 @@ var ImageActions = {
 
 module.exports = ImageActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240}],225:[function(require,module,exports){
+},{"../api/imagesApi":227,"../constants/actionTypes":240,"../dispatcher/appDispatcher":241}],225:[function(require,module,exports){
 "use strict";
 // TODO: see if this is needed
 
@@ -52720,6 +52714,7 @@ var InitializeActions = {
 
     Api.get('api/user')
       .then(function(data){
+        console.info('user data: ', data);
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE_USER,
           userData: data
@@ -52745,7 +52740,31 @@ var InitializeActions = {
 
 module.exports = InitializeActions;
 
-},{"../api/imagesApi":226,"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"../stores/imageStore":243,"jquery":7,"lodash":8}],226:[function(require,module,exports){
+},{"../api/imagesApi":227,"../constants/actionTypes":240,"../dispatcher/appDispatcher":241,"../stores/imageStore":244,"jquery":7,"lodash":8}],226:[function(require,module,exports){
+"use strict";
+
+var Dispatcher = require('../dispatcher/appDispatcher');
+var Api = require('../api/imagesApi');
+var ActionTypes = require('../constants/actionTypes');
+
+
+var UserActions = {
+  saveAvatar: function(data) {
+    Api.patch('api/user/avatar', data)
+      .then(function(data){
+        var avatarFileName = data;
+
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.UPDATE_USER,
+		    	avatar: avatarFileName
+	    	});
+      });
+  }
+}
+
+module.exports = UserActions;
+
+},{"../api/imagesApi":227,"../constants/actionTypes":240,"../dispatcher/appDispatcher":241}],227:[function(require,module,exports){
 //"use strict";
 var $ = require('jquery');
 
@@ -52854,7 +52873,7 @@ var ImagesApi = {
 
 module.exports = ImagesApi;
 
-},{"jquery":7}],227:[function(require,module,exports){
+},{"jquery":7}],228:[function(require,module,exports){
 /* eslint-disable strict*/ // Disable check, as jQuery global var is being flagged
 
 var React = require('react');
@@ -52878,7 +52897,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":229,"react":223,"react-router":35}],228:[function(require,module,exports){
+},{"./common/header":230,"react":223,"react-router":35}],229:[function(require,module,exports){
 var React = require('react');
 
 
@@ -52901,7 +52920,7 @@ var fileInput = React.createClass({displayName: "fileInput",
 
 module.exports = fileInput
 
-},{"react":223}],229:[function(require,module,exports){
+},{"react":223}],230:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52913,7 +52932,9 @@ var Header = React.createClass({displayName: "Header",
 
   getInitialState: function() {
     return {
-      user: {}
+      user: {
+        avatar: "http://placehold.it/30x30"
+      }
     };
   },
 
@@ -52941,18 +52962,25 @@ var Header = React.createClass({displayName: "Header",
 
   render: function() {
 
+    if(this.state.user.avatar === undefined) {
+     var avatarUrl = "images/placeholder-avatar.png";
+    } else {
+      var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
+    }
+
     return (
       
       React.createElement("nav", {className: "navbar navbar-default"}, 
         React.createElement("div", {className: "container-fluid"}, 
           
           React.createElement(Link, {to: "my-profile", className: "navbar-brand"}, 
-            React.createElement("img", {src: this.state.user.avatarSmall})
+            React.createElement("img", {className: "avatar-sm", src: avatarUrl})
           ), 
           
           React.createElement("ul", {className: "nav navbar-nav"}, 
             React.createElement("li", null, React.createElement(Link, {to: "app"}, "Home")), 
-            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload"))
+            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Upload")), 
+            React.createElement("li", null, React.createElement(Link, {to: "upload"}, "Logout"))
           )
         
         )
@@ -52964,7 +52992,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"../../stores/userStore":245,"react":223,"react-router":35}],230:[function(require,module,exports){
+},{"../../stores/userStore":246,"react":223,"react-router":35}],231:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53008,7 +53036,7 @@ var Input = React.createClass({displayName: "Input",
 
 module.exports = Input;
 
-},{"react":223}],231:[function(require,module,exports){
+},{"react":223}],232:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53056,7 +53084,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home;
 
-},{"../stores/imageStore":243,"./image/imageGrid":233,"react":223,"react-router":35}],232:[function(require,module,exports){
+},{"../stores/imageStore":244,"./image/imageGrid":234,"react":223,"react-router":35}],233:[function(require,module,exports){
 var React = require('react');
 var FileInput = require('../common/fileInput');
 var Input = require('../common/textInput');
@@ -53099,7 +53127,7 @@ var ImageForm = React.createClass({displayName: "ImageForm",
 
 module.exports = ImageForm;
 
-},{"../common/fileInput":228,"../common/textInput":230,"react":223}],233:[function(require,module,exports){
+},{"../common/fileInput":229,"../common/textInput":231,"react":223}],234:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53149,7 +53177,7 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
 
 module.exports = ImageGrid;
 
-},{"react":223,"react-router":35}],234:[function(require,module,exports){
+},{"react":223,"react-router":35}],235:[function(require,module,exports){
 var React = require('react');
 var ImageStore = require('../../stores/imageStore');
 var ImageActions = require('../../actions/imageActions');
@@ -53252,7 +53280,7 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
 module.exports = ImageSingle;
 
-},{"../../actions/imageActions":224,"../../stores/imageStore":243,"../../stores/userStore":245,"react":223,"react-router":35}],235:[function(require,module,exports){
+},{"../../actions/imageActions":224,"../../stores/imageStore":244,"../../stores/userStore":246,"react":223,"react-router":35}],236:[function(require,module,exports){
 var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
@@ -53345,7 +53373,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
 
 module.exports = ManageImage; 
 
-},{"../../actions/imageActions":224,"./imageForm":232,"react":223,"react-router":35}],236:[function(require,module,exports){
+},{"../../actions/imageActions":224,"./imageForm":233,"react":223,"react-router":35}],237:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53369,7 +53397,7 @@ var NotFoundPage = React.createClass({displayName: "NotFoundPage",
 
 module.exports = NotFoundPage;
 
-},{"react":223,"react-router":35}],237:[function(require,module,exports){
+},{"react":223,"react-router":35}],238:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -53433,20 +53461,22 @@ var Profile = React.createClass({displayName: "Profile",
 
 module.exports = Profile;
 
-},{"../../stores/profileStore":244,"../../stores/userStore":245,"react":223,"react-router":35}],238:[function(require,module,exports){
-
+},{"../../stores/profileStore":245,"../../stores/userStore":246,"react":223,"react-router":35}],239:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var UserStore = require('../../stores/userStore');
 var FileInput = require('../common/fileInput');
-var ImageActions = require('../../actions/imageActions');
+var UserActions = require('../../actions/userActions');
 
 var UserProfile = React.createClass({displayName: "UserProfile",
 
   getInitialState: function() {
     return {
       user: {
+        avatar: "http://placehold.it/30x30",
+        id: "",
+        userName: ""
       },
       own: false
     };
@@ -53500,15 +53530,13 @@ var UserProfile = React.createClass({displayName: "UserProfile",
   saveAvatar: function(e) {
     e.preventDefault();
     console.log(this.state.user);
-    ImageActions.saveAvatar(this.state.formData);
-    //this.transitionTo('app');
+    UserActions.saveAvatar(this.state.formData);
   },
 
   render: function() {
     return (
       React.createElement("div", null, 
         React.createElement("h1", null, "Hi, ", this.state.user.userName), 
-        React.createElement("p", null, this.state.user.id), 
 
         React.createElement("form", {encType: "multipart/form-data"}, 
           React.createElement(FileInput, {
@@ -53525,7 +53553,7 @@ var UserProfile = React.createClass({displayName: "UserProfile",
 
 module.exports = UserProfile
 
-},{"../../actions/imageActions":224,"../../stores/userStore":245,"../common/fileInput":228,"react":223}],239:[function(require,module,exports){
+},{"../../actions/userActions":226,"../../stores/userStore":246,"../common/fileInput":229,"react":223}],240:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('react/lib/keyMirror');
@@ -53537,17 +53565,19 @@ module.exports = keyMirror({
   INITIALIZE_USER: null,
   CREATE_IMAGE: null,
   DELETE_IMAGE: null,
+  UPDATE_AVATAR: null,
+
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
 	DELETE_AUTHOR: null
 });
 
-},{"react/lib/keyMirror":207}],240:[function(require,module,exports){
+},{"react/lib/keyMirror":207}],241:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":4}],241:[function(require,module,exports){
+},{"flux":4}],242:[function(require,module,exports){
 "use strict";
 
 var React = require('react/addons');
@@ -53561,7 +53591,7 @@ Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
   React.render(React.createElement(Handler, null), document.getElementById('app'));
 });
 
-},{"./actions/initializeActions":225,"./routes":242,"react-router":35,"react/addons":51}],242:[function(require,module,exports){
+},{"./actions/initializeActions":225,"./routes":243,"react-router":35,"react/addons":51}],243:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53600,7 +53630,7 @@ Path:
 the path attribute determines the thext of the URL. If this is not set, it will then default to the 'name' attribute
 */
 
-},{"./components/app":227,"./components/homePage":231,"./components/image/imageSingle":234,"./components/image/manageImagePage":235,"./components/pageNotFound":236,"./components/profile/profilePage":237,"./components/profile/userPage":238,"react":223,"react-router":35}],243:[function(require,module,exports){
+},{"./components/app":228,"./components/homePage":232,"./components/image/imageSingle":235,"./components/image/manageImagePage":236,"./components/pageNotFound":237,"./components/profile/profilePage":238,"./components/profile/userPage":239,"react":223,"react-router":35}],244:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53670,7 +53700,7 @@ Dispatcher.register(function(action){
 
 module.exports = ImageStore;
 
-},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}],244:[function(require,module,exports){
+},{"../constants/actionTypes":240,"../dispatcher/appDispatcher":241,"events":2,"lodash":8,"object-assign":9}],245:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53718,7 +53748,7 @@ Dispatcher.register(function(action){
 
 module.exports = ProfileStore;
 
-},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}],245:[function(require,module,exports){
+},{"../constants/actionTypes":240,"../dispatcher/appDispatcher":241,"events":2,"lodash":8,"object-assign":9}],246:[function(require,module,exports){
 "use strict";
 
 var _ = require('lodash');
@@ -53756,6 +53786,14 @@ Dispatcher.register(function(action){
 			UserStore.emitChange();
 			break;
 
+		case ActionTypes.UPDATE_USER:
+			console.log('update user store')
+      console.log(action.avatar);
+      console.log(_user);
+      _user.avatar = action.avatar;
+			UserStore.emitChange();
+			break;
+
 		default:
 			// no operations
 	}
@@ -53763,4 +53801,4 @@ Dispatcher.register(function(action){
 
 module.exports = UserStore;
 
-},{"../constants/actionTypes":239,"../dispatcher/appDispatcher":240,"events":2,"lodash":8,"object-assign":9}]},{},[241]);
+},{"../constants/actionTypes":240,"../dispatcher/appDispatcher":241,"events":2,"lodash":8,"object-assign":9}]},{},[242]);

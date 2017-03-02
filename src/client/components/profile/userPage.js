@@ -1,16 +1,18 @@
-
 'use strict';
 
 var React = require('react');
 var UserStore = require('../../stores/userStore');
 var FileInput = require('../common/fileInput');
-var ImageActions = require('../../actions/imageActions');
+var UserActions = require('../../actions/userActions');
 
 var UserProfile = React.createClass({
 
   getInitialState: function() {
     return {
       user: {
+        avatar: "http://placehold.it/30x30",
+        id: "",
+        userName: ""
       },
       own: false
     };
@@ -64,15 +66,13 @@ var UserProfile = React.createClass({
   saveAvatar: function(e) {
     e.preventDefault();
     console.log(this.state.user);
-    ImageActions.saveAvatar(this.state.formData);
-    //this.transitionTo('app');
+    UserActions.saveAvatar(this.state.formData);
   },
 
   render: function() {
     return (
       <div>
         <h1>Hi, {this.state.user.userName}</h1>
-        <p>{this.state.user.id}</p>
 
         <form encType="multipart/form-data">
           <FileInput

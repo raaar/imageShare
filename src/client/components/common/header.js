@@ -9,7 +9,9 @@ var Header = React.createClass({
 
   getInitialState: function() {
     return {
-      user: {}
+      user: {
+        avatar: "http://placehold.it/30x30"
+      }
     };
   },
 
@@ -37,18 +39,25 @@ var Header = React.createClass({
 
   render: function() {
 
+    if(this.state.user.avatar === undefined) {
+     var avatarUrl = "images/placeholder-avatar.png";
+    } else {
+      var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
+    }
+
     return (
       
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           
           <Link to="my-profile" className="navbar-brand">
-            <img src={this.state.user.avatarSmall} />
+            <img className="avatar-sm" src={avatarUrl} />
           </Link>
           
           <ul className="nav navbar-nav">
             <li><Link to="app">Home</Link></li>
             <li><Link to="upload">Upload</Link></li>
+            <li><Link to="upload">Logout</Link></li>
           </ul>
         
         </div>

@@ -9,6 +9,8 @@ module.exports = keyMirror({
   INITIALIZE_USER: null,
   CREATE_IMAGE: null,
   DELETE_IMAGE: null,
+  UPDATE_AVATAR: null,
+
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,
 	DELETE_AUTHOR: null

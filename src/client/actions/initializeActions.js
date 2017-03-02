@@ -26,6 +26,7 @@ var InitializeActions = {
 
     Api.get('api/user')
       .then(function(data){
+        console.info('user data: ', data);
         Dispatcher.dispatch({
           actionType: ActionTypes.INITIALIZE_USER,
           userData: data

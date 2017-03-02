@@ -9,3 +9,9 @@
   width: 400px;
   height: auto;
 }
+
+.avatar-sm {
+  width: 30px;
+  height: auto;
+  border-radius: 100%;
+}

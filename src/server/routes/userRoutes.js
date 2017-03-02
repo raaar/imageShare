@@ -29,7 +29,7 @@ var routes = function(Book) {
     // .post(userController.removeItem);
 
   userRouter.route('/avatar')
-    .patch(upload.single('image'),userController.patchAvatar);
+    .patch(upload.single('image'),userController.patch);
     //.post(upload.single('image'),userController.postAvatar) // this might not be needed as patch should be sufficent
    
        
