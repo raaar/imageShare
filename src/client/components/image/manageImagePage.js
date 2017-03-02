@@ -57,7 +57,7 @@ var ManageImage = React.createClass({
           
     formData.append('image', file);
     formData.append('title', this.state.image.title);
-
+    
     reader.onloadend = function(e) {
       _self.setState({
         formData: formData

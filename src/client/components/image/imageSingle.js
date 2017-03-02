@@ -31,9 +31,8 @@ var ImageSingle = React.createClass({
 
     if(imageId) {
       this.setState({
-              image: ImageStore.getImageById(imageId)
+        image: ImageStore.getImageById(imageId)
       });
-
     }
   },
   

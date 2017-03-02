@@ -14,6 +14,7 @@ var ImageGrid = React.createClass({
 
     var createImageTile = function(image) {
       
+/*
       if (image.image === undefined) {
         console.log('image is undefined'); 
 
@@ -24,7 +25,7 @@ var ImageGrid = React.createClass({
           }
         }
       }       
-
+*/
       var src = "uploads/" + image.image.thumb;
 
       return (

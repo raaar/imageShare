@@ -52974,14 +52974,10 @@ var Header = React.createClass({displayName: "Header",
 	},
 
   logOut: function(data, e) {
-    console.log(e);
     e.preventDefault();
 
-    var _self = this;
     UserActions.logOut(function(){
-      //location.reload();
       location.href="/";
-
     });
   },
 
@@ -53169,6 +53165,7 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
 
     var createImageTile = function(image) {
       
+/*
       if (image.image === undefined) {
         console.log('image is undefined'); 
 
@@ -53179,7 +53176,7 @@ var ImageGrid = React.createClass({displayName: "ImageGrid",
           }
         }
       }       
-
+*/
       var src = "uploads/" + image.image.thumb;
 
       return (
@@ -53236,9 +53233,8 @@ var ImageSingle = React.createClass({displayName: "ImageSingle",
 
     if(imageId) {
       this.setState({
-              image: ImageStore.getImageById(imageId)
+        image: ImageStore.getImageById(imageId)
       });
-
     }
   },
   
@@ -53365,7 +53361,7 @@ var ManageImage = React.createClass({displayName: "ManageImage",
           
     formData.append('image', file);
     formData.append('title', this.state.image.title);
-
+    
     reader.onloadend = function(e) {
       _self.setState({
         formData: formData
