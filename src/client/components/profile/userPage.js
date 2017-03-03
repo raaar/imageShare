@@ -72,7 +72,7 @@ var UserProfile = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Hi, {this.state.user.userName}</h1>
+        <h1>Hello {this.state.user.userName}</h1>
 
         <form encType="multipart/form-data">
           <FileInput

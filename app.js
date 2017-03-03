@@ -13,7 +13,7 @@ var session = require('express-session');
 
 var app = express();
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 7777;
 
 app.use(express.static('public')); // define where all static (CSS, JS) files come from
 app.use(bodyParser.urlencoded({encoded: true}));

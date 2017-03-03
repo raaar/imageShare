@@ -7,12 +7,14 @@
     "axios": "^0.15.3",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.5",
+    "browser-sync": "^2.18.8",
     "browserify": "^11.0.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "flux": "^2.0.3",
+    "gulp-live-server": "0.0.30",
     "gulp-mocha": "^3.0.1",
     "history": "^4.5.1",
     "jquery": "^2.1.4",
@@ -38,7 +40,8 @@
     "gulp-connect": "^2.2.0",
     "gulp-eslint": "^0.15.0",
     "gulp-open": "^1.0.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "run-sequence": "^1.2.2"
   },
   "scripts": {
     "start": "gulp",
