@@ -65,13 +65,16 @@ var UserProfile = React.createClass({
 
   saveAvatar: function(e) {
     e.preventDefault();
-    console.log(this.state.user);
     UserActions.saveAvatar(this.state.formData);
   },
 
   render: function() {
+    var avatarUrl = 'uploads/avatar/' + this.state.user.avatar;
     return (
       <div>
+        <img className="avatar-lg" src={avatarUrl} />
+
+
         <h1>Hello {this.state.user.userName}</h1>
 
         <form encType="multipart/form-data">
