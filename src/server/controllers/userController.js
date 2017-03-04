@@ -19,6 +19,15 @@ var userController = function() {
             }
           });
       })
+      .then(function(metadata) {
+        return image
+          .resize(130, 130)
+          .toFile('public/uploads/avatar/' + 'lg-' + req.file.filename , function (err, info) {
+            if (err) {
+              return err;
+            }
+          });
+      })
       .then(function(data) {
         mongodb.connect(dbUrl, function(err, db){
           var collection = db.collection('users');
@@ -32,7 +41,12 @@ var userController = function() {
               { upsert: true }
             )
             res.status(201); // 201: item created
-            res.send(req.file.filename); 
+
+            res.send({
+              userName: req.user.username,
+              id: req.user._id,
+              avatar: req.file.filename 
+            });
         });   // data contains a WebP image half the width and height of the original JPEG
       });
   };

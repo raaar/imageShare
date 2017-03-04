@@ -69,11 +69,11 @@ var UserProfile = React.createClass({
   },
 
   render: function() {
-    var avatarUrl = 'uploads/avatar/' + this.state.user.avatar;
+    var avatarLg = './uploads/avatar/lg-' + this.state.user.avatar;
+
     return (
       <div>
-        <img className="avatar-lg" src={avatarUrl} />
-
+        <img className="avatar-lg" src={avatarLg} />
 
         <h1>Hello {this.state.user.userName}</h1>
 

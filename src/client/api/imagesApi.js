@@ -18,7 +18,6 @@ var ImagesApi = {
   post: function(url, data) {
      console.info('post: ',  data);
 
-          
      return new Promise(function(success,error){
        $.ajax({
          type: "POST",
@@ -63,11 +62,10 @@ var ImagesApi = {
          contentType: false,
          success: success,
          error: error
-       }).done(function(){
-          // TODO: success callback will be deprecated in jQuery3. Use done instead
        });
      }); 
   },
+
   put: function(url, data) {
      console.info('put url: ', url);
      console.info('put data: ', data);

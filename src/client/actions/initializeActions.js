@@ -7,11 +7,31 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
 var _ = require('lodash');
-// var axios = require('axios');
 
-// http://www.thedreaming.org/2015/03/14/react-ajax/
+
 var InitializeActions = {
 	initApp: function() {
+
+    var _userData;
+
+    var userDataDispatch = function(data) {
+      Dispatcher.dispatch({
+        actionType: ActionTypes.INITIALIZE_USER,
+          userData: data
+       })
+    };
+
+    if (sessionStorage.UserStore) {
+      _userData = JSON.parse(sessionStorage.UserStore);
+      userDataDispatch(_userData);
+    } else {
+      _userData =  null;
+      Api.get('api/user')
+        .then(function(data){
+          userDataDispatch(_userData);
+        });
+    }
+
 
     Api.get('api/images')
       .then(function(data){
@@ -23,15 +43,6 @@ var InitializeActions = {
         });
       });
 
-
-    Api.get('api/user')
-      .then(function(data){
-        console.info('user data: ', data);
-        Dispatcher.dispatch({
-          actionType: ActionTypes.INITIALIZE_USER,
-          userData: data
-        })
-      });
   /*
     // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
     axios.get('api/images')

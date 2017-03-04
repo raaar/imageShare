@@ -32,9 +32,12 @@ Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_USER:
 			_user = action.userData;
+      sessionStorage.UserStore = JSON.stringify(_user);
+
 			UserStore.emitChange();
 			break;
 
+    /*
 		case ActionTypes.UPDATE_USER:
 			console.log('update user store')
       console.log(action.avatar);
@@ -42,6 +45,7 @@ Dispatcher.register(function(action){
       _user.avatar = action.avatar;
 			UserStore.emitChange();
 			break;
+    */
 
 		default:
 			// no operations
