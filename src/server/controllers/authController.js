@@ -16,8 +16,6 @@ var authController = function() {
   };
   
   var register = function(req, res) {
-    var url = dbConfig.url;
-
     mongodb.connect(url, function(err, db) {
       var collection = db.collection('users');
       var user = {
