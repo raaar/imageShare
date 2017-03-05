@@ -1,6 +1,6 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
-var dbConfig = require('../config/db');
+var dbUrl = require('../config/db');
 
 var authController = function() {
   var logOut = function(req, res) {
@@ -16,7 +16,7 @@ var authController = function() {
   };
   
   var register = function(req, res) {
-    mongodb.connect(url, function(err, db) {
+    mongodb.connect(dbUrl, function(err, db) {
       var collection = db.collection('users');
       var user = {
         username: req.body.userName,
