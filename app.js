@@ -12,13 +12,11 @@ var passport = require('passport');
 var session = require('express-session');
 
 var mongodb = require("mongodb");
-var dbConfig = require('./src/server/config/db');
-var dbUrl = dbConfig.url;
+var dbUrl = require('./src/server/config/db');
 
 var app = express();
 
 var port = process.env.PORT || 7777;
-var dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/bookREST"; 
 //var port = 7777;
 //console.log(process.env.PORT);
 

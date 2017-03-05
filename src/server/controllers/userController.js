@@ -1,12 +1,12 @@
 var mongodb = require('mongodb').MongoClient;
 var sharp = require('sharp'); // image processing library
-var dbConfig = require('../config/db');
-var dbUrl = dbConfig.url;
+var dbUrl = require('../config/db');
 
 var userController = function() {
  
   var patch = function(req, res) {
     var image = sharp('public/uploads/avatar/' + req.file.filename);
+    console.log(dbUrl);
 
     image
       .metadata()

@@ -4,9 +4,7 @@ var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
 var sharp = require('sharp'); // image processing library
-
-var dbConfig = require('../config/db');
-var dbUrl = dbConfig.url;
+var dbUrl = require('../config/db');
 
 // Reveal model pattern
 var imageController = function() {
