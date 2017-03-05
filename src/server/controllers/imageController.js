@@ -82,9 +82,9 @@ var imageController = function() {
           }
 
           // process image
-          sharp('public/uploads/' + req.file.filename)
+          sharp('public/uploads/images/' + req.file.filename)
             .resize(300, 300)
-            .toFile('public/uploads/' + 'thumb-' + req.file.filename , function (err, info) {
+            .toFile('public/uploads/images/' + 'thumb-' + req.file.filename , function (err, info) {
               if (err) {
                 return err;
               }
@@ -228,6 +228,10 @@ var imageController = function() {
     // fetch and delete DB entry...
     function destroyItem(next) {
       collection.findOne({_id : id}, function(err, image) {
+        if (err) {
+          console.log(err);
+        }
+
         console.info('author: ', image.author );
         console.info('user: ', req.user.username);
         if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
@@ -235,6 +239,9 @@ var imageController = function() {
           collection.deleteOne(
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {
+            if (err) {
+              console.log(err);
+            }
             next(image);
           });
         } else {
@@ -248,7 +255,7 @@ var imageController = function() {
     // ...now we can delete residue files from the uploads folder
     destroyItem(function(image) {
       // console.log('destroy item ' + image.image.full);
-      var files = ["public/uploads/" + image.image.full, "public/uploads/" + image.image.thumb];
+      var files = ["public/uploads/images/" + image.image.full, "public/uploads/images/" + image.image.thumb];
       files.forEach( function( fileName ) {
         fs.unlinkSync(fileName);
       });

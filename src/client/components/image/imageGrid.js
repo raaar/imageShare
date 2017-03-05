@@ -26,7 +26,7 @@ var ImageGrid = React.createClass({
         }
       }       
 */
-      var src = "uploads/" + image.image.thumb;
+      var src = "uploads/images/" + image.image.thumb;
 
       return (
         <div key={image._id}>

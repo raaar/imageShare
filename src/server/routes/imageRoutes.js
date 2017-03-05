@@ -6,7 +6,7 @@ var multer  = require('multer');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log('upload storage');
-    cb(null, 'public/uploads');
+    cb(null, 'public/uploads/images');
   },
   filename: function (req, file, cb) {
     var fileTyle = file.mimetype;
