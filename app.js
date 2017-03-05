@@ -18,6 +18,7 @@ var dbUrl = dbConfig.url;
 var app = express();
 
 var port = process.env.PORT || 7777;
+var dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/bookREST"; 
 //var port = 7777;
 //console.log(process.env.PORT);
 
@@ -83,10 +84,12 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
   Deployment and Mlab setup:
   https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
 
-  MONGODB_URI_IMAGESHARE (mlab url variable
-heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
+  MONGODB_URI_IMAGESHARE (mlab url variable:
+  heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
 
  HEROKU
  Pushing: 
  git push -f heroku react:master
+
+ URL: https://frozen-caverns-72254.herokuapp.com/#/
 */
