@@ -45,7 +45,7 @@
     "run-sequence": "^1.2.2"
   },
   "scripts": {
-    "start": "gulp",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

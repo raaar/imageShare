@@ -53,7 +53,7 @@ var Header = React.createClass({
   render: function() {
 
     if(this.state.user.avatar === undefined) {
-     var avatarUrl = "images/placeholder-avatar.png";
+      var avatarUrl = "images/placeholder-avatar.png";
     } else {
       var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
     }

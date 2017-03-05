@@ -23,6 +23,7 @@ var UserActions = {
   logOut: function(cb) {
     Api.post('auth/logout', {} )
       .catch(function(rejected){
+        sessionStorage.clear();
         cb();
       });
   }

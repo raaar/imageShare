@@ -2,15 +2,17 @@ var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongodb = require('mongodb').MongoClient;
 
+var dbConfig = require('../db');
+var dbUrl = dbConfig.url;
+
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
       usernameField: 'signInUserName', // corresponds to the name on our index.ejs template
       passwordField: 'signInPassword'
     },
     function(username, password, done) {
-        var url = 'mongodb://localhost:27017/bookREST';
 
-        mongodb.connect(url, function (err, db) {
+        mongodb.connect(dbUrl, function (err, db) {
             var collection = db.collection('users');
 
             collection.findOne({

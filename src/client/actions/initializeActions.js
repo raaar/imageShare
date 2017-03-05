@@ -18,8 +18,9 @@ var InitializeActions = {
       Dispatcher.dispatch({
         actionType: ActionTypes.INITIALIZE_USER,
           userData: data
-       })
+       }); 
     };
+
 
     if (sessionStorage.UserStore) {
       _userData = JSON.parse(sessionStorage.UserStore);
@@ -28,7 +29,7 @@ var InitializeActions = {
       _userData =  null;
       Api.get('api/user')
         .then(function(data){
-          userDataDispatch(_userData);
+          userDataDispatch(data);
         });
     }
 

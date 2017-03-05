@@ -11,6 +11,10 @@ var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 
+var mongodb = require("mongodb");
+var dbConfig = require('./src/server/config/db');
+var dbUrl = dbConfig.url;
+
 var app = express();
 
 var port = process.env.PORT || 7777;
@@ -46,16 +50,38 @@ app.get('/', function(req , res) {
 });
 
 
-app.listen(port, function(req, res){
-  console.log('server running on port ' + port);
+var db;
+
+
+// Connect to the database before starting the application server.
+mongodb.MongoClient.connect( dbUrl , function (err, database) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+
+  // Save database object from the callback for reuse.
+  db = database;
+  console.log("Database connection ready");
+
+  // Initialize the app.
+  app.listen(port, function(req, res){
+    console.log('server running on port ' + port);
+  });
 });
-
-
 
 /*
   TODO:
-  
   remember me
-  profile
   comments on images
+*/
+
+/*
+ *
+  Deployment and Mlab setup:
+  https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
+
+  MONGODB_URI_IMAGESHARE (mlab url variable
+heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
+
 */

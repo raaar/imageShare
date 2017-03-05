@@ -69,13 +69,17 @@ var UserProfile = React.createClass({
   },
 
   render: function() {
-    var avatarLg = './uploads/avatar/lg-' + this.state.user.avatar;
+
+    if(this.state.user.avatar === undefined) {
+      var avatarLg = "images/placeholder-avatar.png";
+    } else {
+      var avatarLg = './uploads/avatar/lg-' + this.state.user.avatar;
+    }
 
     return (
       <div>
         <img className="avatar-lg" src={avatarLg} />
 
-        <h1>Hello {this.state.user.userName}</h1>
 
         <form encType="multipart/form-data">
           <FileInput
