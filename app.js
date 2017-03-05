@@ -17,7 +17,9 @@ var dbUrl = dbConfig.url;
 
 var app = express();
 
-var port = process.env.PORT || 7777;
+//var port = process.env.PORT || 7777;
+var port = 7777;
+console.log(process.env.PORT);
 
 app.use(express.static('public')); // define where all static (CSS, JS) files come from
 app.use(bodyParser.urlencoded({encoded: true}));
