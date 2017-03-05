@@ -57,9 +57,15 @@ var imageController = function() {
       size: 171938
       */
       //console.info('image title: ', req.body.title);
-    
+      var reqTitle = req.body.title;
+      if(reqTitle ) {
+        reqTitle = req.body.title;
+      } else {
+        reqTitle = "Untitled";
+      }
+
       var image = {
-        title: req.body.title,
+        title: reqTitle,
         author: req.user.username,
         image: {
           id: req.file.filename,
@@ -164,6 +170,10 @@ var imageController = function() {
     var id = new objectId(req.params.id);
 
     mongodb.connect(dbUrl, function(err, db){
+      if(err) {
+        throw err;
+      }
+
       var collection = db.collection('images');
       removeImage(req, res, collection, id);
     });
@@ -194,7 +204,6 @@ var imageController = function() {
         body : req.body.author,
         id: id
       };
-      
       
       var isDelete = req.body.delete_button !== undefined;
       
@@ -227,7 +236,7 @@ var imageController = function() {
     function destroyItem(next) {
       collection.findOne({_id : id}, function(err, image) {
         if (err) {
-          console.log(err);
+          throw err
         }
 
         console.info('author: ', image.author );
@@ -238,8 +247,9 @@ var imageController = function() {
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {
             if (err) {
-              console.log(err);
+              throw err
             }
+
             next(image);
           });
         } else {
@@ -252,12 +262,16 @@ var imageController = function() {
     
     // ...now we can delete residue files from the uploads folder
     destroyItem(function(image) {
-      // console.log('destroy item ' + image.image.full);
       var files = ["public/uploads/images/" + image.image.full, "public/uploads/images/" + image.image.thumb];
-      files.forEach( function( fileName ) {
-        fs.unlinkSync(fileName);
-      });
-  
+
+      if(files) {
+        files.forEach( function( fileName ) {
+          if (fs.existsSync(fileName)) {
+            fs.unlinkSync(fileName);
+          }
+        });
+      }
+ 
       res.json('Item deleted');
       console.log('item deleted');
     });

@@ -72,8 +72,8 @@ var ImageSingle = React.createClass({
     var url = "uploads/images/" + this.state.image.image.full;
     var authorUrl = "profile/" + this.state.image.author;
 
-    console.info("id: ", this.state.image._id);
-    console.info(this.state.user.userName);
+//    console.info("id: ", this.state.image._id);
+//    console.info(this.state.user.userName);
 
     var deleteButton = function() {
       if(_self.state.image.author === _self.state.user.userName) {

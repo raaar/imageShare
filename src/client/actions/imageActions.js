@@ -40,14 +40,6 @@ var ImageActions = {
          id: id
 		   });
      });
-    /*      
-		AuthorApi.deleteAuthor(id);
-		Dispatcher.dispatch({
-			actionType: ActionTypes.DELETE_AUTHOR,
-			id: id
-		});
-    */
-    console.info('Deleting: ', id );
   }
 }
 
