@@ -4,6 +4,10 @@ var React = require('react');
 var UserStore = require('../../stores/userStore');
 var FileInput = require('../common/fileInput');
 var UserActions = require('../../actions/userActions');
+var ImageActions = require('../../actions/imageActions');
+var ImageStore = require('../../stores/imageStore');
+var ImageGrid = require('../image/imageGrid');
+
 
 var UserProfile = React.createClass({
 
@@ -14,31 +18,47 @@ var UserProfile = React.createClass({
         id: "",
         userName: ""
       },
-      own: false
+      images: [
+      ],
+      own: false,
+      userLoaded: false
     };
   },
 
+
   componentDidMount: function() {
-    var user = UserStore.getUser(); // logged in user
+    var userStore = JSON.parse(sessionStorage.UserStore);
+    ImageActions.userImages(userStore.userName);
 
     if(this.isMounted()) {
       this.setState({
-        user: UserStore.getUser(),
+        images: ImageStore.getUserImages(),
+        user: UserStore.getUser()
       });
     }
   },
 
+
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
 		UserStore.addChangeListener(this._onChange);
+		ImageStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
+		ImageStore.removeChangeListener(this._onChange);
+    this.setState({
+      userLoaded: false,
+    });
 	},
 
 	_onChange: function() {
-    this.setState({user: UserStore.getUser() });
+    this.setState({
+      user: UserStore.getUser(),
+      userLoaded: true,
+      images: ImageStore.getUserImages()
+    });
 	},
 
   handleFile: function(e) {
@@ -49,7 +69,8 @@ var UserProfile = React.createClass({
     var reader = new FileReader();
     var formData = new FormData();
 
-    // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
+    // the 'image' attribute should be the same name as defined by the upload input component,
+    // and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);
     formData.append('user', this.state.user);
@@ -69,6 +90,23 @@ var UserProfile = React.createClass({
   },
 
   render: function() {
+    var _self = this;
+    var userLoaded = function() {
+      if(_self.state.images.length > 0) {
+        return (
+          <div>
+            <ImageGrid images={_self.state.images} />
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            Loading
+          </div>
+        )
+      }
+    };
+
 
     if(this.state.user.avatar === undefined) {
       var avatarLg = "images/placeholder-avatar.png";
@@ -76,10 +114,12 @@ var UserProfile = React.createClass({
       var avatarLg = './uploads/avatar/lg-' + this.state.user.avatar;
     }
 
+
     return (
       <div>
         <img className="avatar-lg" src={avatarLg} />
 
+        <p>{this.state.user.userName}</p>
 
         <form encType="multipart/form-data">
           <FileInput
@@ -89,6 +129,8 @@ var UserProfile = React.createClass({
 
           <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
         </form>
+
+        {userLoaded()} 
       </div>
     );
   }

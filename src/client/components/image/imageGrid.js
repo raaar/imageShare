@@ -10,6 +10,17 @@ var ImageGrid = React.createClass({
     images: React.PropTypes.array.isRequired
   },
 
+// set initial state here
+  getInitialState: function() {
+    return {
+      image: {
+        image: {
+          avatar: ""
+        }         
+      }   
+    }
+  },
+
   render: function() {
 
     var createImageTile = function(image) {

@@ -1,11 +1,13 @@
 var express = require('express');
 var multer  = require('multer');
 
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log('upload storage');
     cb(null, 'public/uploads/avatar');
   },
+
   filename: function (req, file, cb) {
     var fileTyle = file.mimetype;
     var ext = fileTyle.split('/');
@@ -14,8 +16,8 @@ var storage = multer.diskStorage({
 });
 
 
-
 var upload = multer({ storage: storage });
+
 
 var routes = function(Book) {
   var userRouter = express.Router();
@@ -23,16 +25,10 @@ var routes = function(Book) {
 
   userRouter.route('/')
     .get(userController.get);
-    // .post(userController.post);
 
-  // TODO: the archive/get path could be replaced by api/Books/
-  userRouter.route('/archive')
-    .get(userController.get);
-    // .post(userController.removeItem);
 
   userRouter.route('/avatar')
     .patch(upload.single('image'),userController.patch);
-    //.post(upload.single('image'),userController.postAvatar) // this might not be needed as patch should be sufficent
    
        
     // .patch(function(req, res) {

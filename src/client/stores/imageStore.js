@@ -8,6 +8,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _images = [];
+var _userImages = [];
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
@@ -31,6 +32,9 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 		return _images;
 	},
 
+  getUserImages: function() {
+    return _userImages;
+  }
 });
 
 Dispatcher.register(function(action){
@@ -40,23 +44,25 @@ Dispatcher.register(function(action){
 			ImageStore.emitChange();
 			break;
 
+    case ActionTypes.GET_USER_IMAGES: 
+			_userImages = action.gallery;
+			ImageStore.emitChange();
+			break;
+
     case ActionTypes.CREATE_IMAGE: 
 			_images.push(action.image);
 			ImageStore.emitChange();
 			break;
 
     case ActionTypes.DELETE_IMAGE: 
-			console.log('delete image, do something in the image store');
-      //console.log(action);
-                  
-      console.info('before: ', _images.length);            
 			_.remove(_images, function(image){
-		//		console.log(image._id);
-		//		console.info("action:" , action.id);
         return image._id === action.id;
 			});
       
-      console.info('after: ', _images.length);            
+			_.remove(_userImages, function(image){
+        return image._id === action.id;
+			});
+
 			ImageStore.emitChange();
 			break;
 		default:

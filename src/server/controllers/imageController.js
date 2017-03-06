@@ -106,6 +106,8 @@ var imageController = function() {
     var id = new objectId(req.params.id);
     var query = {};
 
+    // http://localhost:9001/api/images?author=5@5.com
+
     if('title' in req.query) {
       query.title = req.query.title;
     }
@@ -215,8 +217,6 @@ var imageController = function() {
     });
   };
   
-
-
   
   function updateImage(req, res, collection, id, image) {
     collection.update({_id: objectId.createFromHexString(req.params.id)},
@@ -230,6 +230,7 @@ var imageController = function() {
     });
   }
   
+
   function removeImage (req, res, collection, id) {
     
     // fetch and delete DB entry...

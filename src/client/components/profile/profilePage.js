@@ -4,6 +4,9 @@ var React = require('react');
 var ProfileStore = require('../../stores/profileStore');
 var UserStore = require('../../stores/userStore');
 var Router = require('react-router');
+var ImageActions = require('../../actions/imageActions');
+var ImageGrid = require('../image/imageGrid');
+var ImageStore = require('../../stores/imageStore');
 
 var Profile = React.createClass({
 
@@ -13,8 +16,9 @@ var Profile = React.createClass({
 
   getInitialState: function() {
     return {
-      profile: {
-      }
+      profile: {},
+      gallery: [], 
+      images: []
     };
   },
         
@@ -22,40 +26,57 @@ var Profile = React.createClass({
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
 
+    ImageActions.userImages(author);
 
     if(this.isMounted()) {
-      
-      this.setState({
-        profile: ProfileStore.getProfile(author),
-      });
-
       if(user.userName === author) {
         this.transitionTo('my-profile')
       }
+
+      this.setState({
+        images: ImageStore.getUserImages(),
+        profile: author 
+      });
     }
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
 		ProfileStore.addChangeListener(this._onChange);
+		ImageStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		ProfileStore.removeChangeListener(this._onChange);
+		ImageStore.removeChangeListener(this._onChange);
 	},
 
 	_onChange: function() {
-    this.setState({profile: ProfileStore.getProfile(author) });
+    this.setState({
+     // profile: ProfileStore.getProfile(author),
+      images: ImageStore.getUserImages()
+    });
 	},
 
   render: function() {
+    var _self = this;
+    var userLoaded = function() {
+      return (
+        <div>
+          <ImageGrid images={_self.state.images} />
+        </div>
+      )
+    };
 
     return (
-        <div>
-          <h1>{this.state.profile}</h1>
-          User profile
-        </div>
-      );
+      <div>
+        <h1>{this.state.profile}</h1>
+
+        User profile
+
+        <ImageGrid images={this.state.images} />
+      </div>
+    );
   }
 });
 
