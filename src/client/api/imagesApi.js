@@ -16,8 +16,6 @@ var ImagesApi = {
   },
 
   post: function(url, data) {
-     console.info('post: ',  data);
-
      return new Promise(function(success,error){
        $.ajax({
          type: "POST",
@@ -31,9 +29,6 @@ var ImagesApi = {
   },
 
   postImage: function(url, data) {
-     console.info('url: ', url);
-     console.info('data: ', data);
-
      return new Promise(function(success,error){
        $.ajax({
          method: "POST",

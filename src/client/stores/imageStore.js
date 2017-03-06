@@ -34,8 +34,14 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 
   getUserImages: function() {
     return _userImages;
+  },
+
+
+  clearUserImages: function() {
+    _userImages = [];
   }
 });
+
 
 Dispatcher.register(function(action){
 	switch(action.actionType) {

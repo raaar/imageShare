@@ -7,7 +7,6 @@ var ActionTypes = require('../constants/actionTypes');
 var ImageActions = {
 
   userImages: function(user) {
-    console.info('user: ', user );
     Api.get('api/images?author=' + user ) 
       .then(function(data) {
         Dispatcher.dispatch({
@@ -31,7 +30,6 @@ var ImageActions = {
 
 	createImage: function(image) {
     Api.postImage('api/images', image)
-      // render the data that was posted to the server
       .then(function(data){
         Dispatcher.dispatch({
 			    actionType: ActionTypes.CREATE_IMAGE,

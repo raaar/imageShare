@@ -33,7 +33,6 @@ var Home = React.createClass({
 
 	_onChange: function() {
 		this.setState({images: ImageStore.getAllImages() });
-    console.info('on change ', this.state.images );
 	},
 
   render: function() {

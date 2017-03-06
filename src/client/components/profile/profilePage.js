@@ -17,7 +17,6 @@ var Profile = React.createClass({
   getInitialState: function() {
     return {
       profile: {},
-      gallery: [], 
       images: []
     };
   },
@@ -34,8 +33,7 @@ var Profile = React.createClass({
       }
 
       this.setState({
-        images: ImageStore.getUserImages(),
-        profile: author 
+        images: ImageStore.getUserImages()
       });
     }
   },
@@ -53,26 +51,16 @@ var Profile = React.createClass({
 
 	_onChange: function() {
     this.setState({
-     // profile: ProfileStore.getProfile(author),
       images: ImageStore.getUserImages()
     });
 	},
 
   render: function() {
-    var _self = this;
-    var userLoaded = function() {
-      return (
-        <div>
-          <ImageGrid images={_self.state.images} />
-        </div>
-      )
-    };
-
     return (
       <div>
         <h1>{this.state.profile}</h1>
 
-        User profile
+        Author profile
 
         <ImageGrid images={this.state.images} />
       </div>

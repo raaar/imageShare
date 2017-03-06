@@ -89,5 +89,8 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
  Pushing: 
  git push -f heroku react:master
 
+ Logs:
+ heroku logs --tail:
+
  URL: https://frozen-caverns-72254.herokuapp.com/#/
 */
