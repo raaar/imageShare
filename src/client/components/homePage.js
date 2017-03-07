@@ -37,7 +37,7 @@ var Home = React.createClass({
 
   render: function() {
     return (
-        <ImageGrid images={this.state.images} />
+        <ImageGrid images={this.state.images} gridSize="large" />
       );
   }
 });

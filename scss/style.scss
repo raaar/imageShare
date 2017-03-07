@@ -1,7 +1,7 @@
 body {
 }
 
-$nav-height: 60px;
+$nav-height: 70px;
 
 .nav-clear {
   height: $nav-height;
@@ -42,14 +42,21 @@ $nav-height: 60px;
   align-items: center;
   justify-content: center;
   float: right;
-  height: 60px;
+  height: $nav-height;
 }
 
 .tile {
   display: inline-block;
   float: left;
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
+}
+
+.tile--lg {
+  display: inline-block;
+  float: left;
+  width: 280px;
+  height: 280px;
 }
 
 .image {
@@ -58,7 +65,7 @@ $nav-height: 60px;
 }
 
 .avatar-sm {
-  width: 30px;
+  width: 40px;
   height: auto;
   border-radius: 100%;
 }

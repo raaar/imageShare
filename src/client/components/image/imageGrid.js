@@ -38,11 +38,16 @@ var ImageGrid = React.createClass({
       }       
 */
       var src = "uploads/images/" + image.image.thumb;
+      var tileClass = "tile";
 
+      if(this.props.gridSize === "large") {
+        tileClass = "tile--lg";
+      }
+           
       return (
         <div key={image._id}>
           <Link to="image" params={{id: image._id}} >
-            <img className="tile" src={src} />
+            <img className={tileClass} src={src} />
           </Link>
         </div>
       );

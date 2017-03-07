@@ -54,6 +54,10 @@ var Header = React.createClass({
     this.setState({
       user: UserStore.getUser(),
       searchQuery: SearchStore.getQuery()
+    }, function(){
+      if(this.state.searchQuery && this.state.searchQuery.length > 0) {
+        this.transitionTo('search');
+      }
     });
 	},
 
@@ -93,9 +97,6 @@ var Header = React.createClass({
       var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
     }
 
-    if(this.state.searchQuery && this.state.searchQuery.length > 0) {
-      this.transitionTo('search');
-    }
 
     return (
       <div className="nav-clear"> 
