@@ -6,6 +6,10 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ImageActions = {
 
+  get: function(query) {
+    console.info('get images: ', query);
+  },
+
   userImages: function(user) {
     Api.get('api/images?author=' + user ) 
       .then(function(data) {
