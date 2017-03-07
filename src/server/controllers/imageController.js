@@ -67,13 +67,19 @@ var imageController = function() {
       var image = {
         title: reqTitle,
         author: req.user.username,
+              // TODO: react complains about nested objects
         image: {
           id: req.file.filename,
           full: req.file.filename,
           thumb: 'thumb-' + req.file.filename,
           originalname: req.file.originalname,
           size: req.file.size
-        }
+        },
+        id: req.file.filename,
+        full: req.file.filename,
+        thumb: 'thumb-' + req.file.filename,
+        originalname: req.file.originalname,
+        size: req.file.size
       };
       
       mongodb.connect(dbUrl, function(err, db) {

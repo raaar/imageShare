@@ -10,6 +10,8 @@ module.exports = keyMirror({
   CREATE_IMAGE: null,
   DELETE_IMAGE: null,
   UPDATE_AVATAR: null,
+  SHOW_MODAL: null,
+  HIDE_MODAL: null,
   SEARCH_IMAGES: null,
   SEARCH_RESULTS: null,
 

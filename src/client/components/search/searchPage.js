@@ -63,7 +63,7 @@ var Search = React.createClass({
     if(!st.searchQuery) {
       return (
         <div>
-          <h2>Type your search query</h2>
+          <h2>Type a search term</h2>
         </div>
       )
     } else {

@@ -3,6 +3,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var ModalActions = require('../../actions/modalActions');
 
 var ImageGrid = React.createClass({
   
@@ -19,6 +20,11 @@ var ImageGrid = React.createClass({
         }         
       }   
     }
+  },
+
+  openImage: function(image, e) {
+    e.preventDefault();
+    ModalActions.showModal(image);
   },
 
   render: function() {
@@ -43,12 +49,16 @@ var ImageGrid = React.createClass({
       if(this.props.gridSize === "large") {
         tileClass = "tile--lg";
       }
-           
-      return (
-        <div key={image._id}>
+          /* 
           <Link to="image" params={{id: image._id}} >
             <img className={tileClass} src={src} />
           </Link>
+          */
+      return (
+        <div key={image._id} >
+          <a href="#" onClick={this.openImage.bind(this, image)} >
+            <img className={tileClass} src={src} />
+          </a>
         </div>
       );
     }

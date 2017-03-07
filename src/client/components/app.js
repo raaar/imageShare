@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Header = require('./common/header');
+var ModalGallery = require('./common/modalGallery');
 var RouteHandler = require('react-router').RouteHandler;
 // $ = jQuery = require('jquery');
 
@@ -14,6 +15,7 @@ var App = React.createClass({
         <div className="container-fluid">
            <RouteHandler />
         </div>
+        <ModalGallery />
       </div>
       );
   }
