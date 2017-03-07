@@ -1,6 +1,50 @@
 body {
 }
 
+$nav-height: 60px;
+
+.nav-clear {
+  height: $nav-height;
+}
+.nav {
+  position: fixed;
+  background: #222222;
+  width: 100%;
+  height: $nav-height;
+}
+
+.nav__item {
+  display: flex;
+  padding: 0 20px;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  height: $nav-height;
+}
+
+.nav__item--avatar {
+  float: left;
+  padding: 15px 20px;
+}
+
+.nav__item--form {
+  display: flex;
+  float: left;
+  padding: 0 20px;
+  align-items: center;
+  justify-content: center;
+  height: $nav-height;
+}
+
+.nav__item--logout {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  height: 60px;
+}
+
 .tile {
   display: inline-block;
   float: left;

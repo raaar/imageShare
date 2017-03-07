@@ -16,29 +16,19 @@ var Search = React.createClass({
 
   getInitialState: function() {
     return {
-      query: "",
+      searchQuery: "",
       images: []
     } 
   },
 
   componentDidMount: function() {
-    _query = JSON.parse(sessionStorage.SearchQuery);
-    SearchActions.search(_query);
-
     if(this.isMounted()) {
       this.setState({
-        searchQuery: SearchStore.getQuery(),
-        images: SearchActions.search(_query)
+        searchQuery: SearchStore.getQuery()
       })
     }
   },
   
-  componentWillReceiveProps: function(nextProps) {
-    console.log('will receive props');
-    this.setState({
-      // set something 
-    });
-  },
 
 	componentWillMount: function() {
 		SearchStore.addChangeListener(this._onChange);
@@ -53,52 +43,42 @@ var Search = React.createClass({
     this.setState({
       searchQuery: SearchStore.getQuery(),
       images: SearchStore.getResults()
-    }, function(){
-//      _query = JSON.parse(sessionStorage.SearchQuery);
-//      SearchActions.search(_query)
     });
-
-          //setState(nextState, callback)
-   /* var _self = this;
-
-    var queryState = new Promise(function(resolve, reject){
-      _self.setState({
-        searchQuery: SearchStore.getQuery()
-      });
-
-      resolve("success");
-    });
-
- 
-    queryState.then(function(successMessage){
-      console.log('then');
-      if(_self.receivedQuery === true) {
-        _self.setState({
-          images: SearchActions.search(_self.state.searchQuery)
-       });
-      }
-    });
-    */
 	},
   
 
   searchResults: function() {
-    console.log(this.state.images);
     if(this.state.images !== undefined) {
       return (
         <div>
           <ImageGrid images={this.state.images} />
-          {this.state.images}
         </div>
       );
     }
   },
 
+  searchText: function() {
+    var st = this.state;
+
+    if(!st.searchQuery) {
+      return (
+        <div>
+          <h2>Type your search query</h2>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2>Searching for {st.searchQuery}</h2>
+        </div>
+      )
+    }
+  },
 
   render: function() {
     return (
       <div>
-        <h2>Searching for: {this.state.searchQuery}</h2>
+        {this.searchText()}
         {this.searchResults()} 
       </div>
     );

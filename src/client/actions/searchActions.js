@@ -6,30 +6,21 @@ var ActionTypes = require('../constants/actionTypes');
 
 var SearchActions = {
   query: function(query) {
-    console.info('search action query: ', query);
+          
     Dispatcher.dispatch({
-	    actionType: ActionTypes.SEARCH_IMAGES,
+	    actionType: ActionTypes.SEARCH_QUERY,
 		  query: query 
 	  });
-  },
-
-  search: function(query) {
-    console.info('get images: ', query);
-    if(query.length >= 2) {
-      console.log(query);
-
+    
+    if(query.length >= 1) {
       Api.get('api/images?title=' + query ) 
         .then(function(data) {
-          console.info('search data: ', data);
-                
           Dispatcher.dispatch({
-			      actionType: ActionTypes.SEARCH_RESULTS,
+			      actionType: ActionTypes.SEARCH_QUERY,
 		      	results: data,
-            query: query
+		        query: query 
 	      	});
-          
         });
-        
     }
   }
 }

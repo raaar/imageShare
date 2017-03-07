@@ -92,7 +92,7 @@ var UserProfile = React.createClass({
   render: function() {
     var _self = this;
     var userLoaded = function() {
-      if(_self.state.images.length > 0) {
+      if(_self.state.images != undefined && _self.state.images.length > 0) {
         return (
           <div>
             <ImageGrid images={_self.state.images} />

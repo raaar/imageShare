@@ -55,12 +55,6 @@ var Header = React.createClass({
       user: UserStore.getUser(),
       searchQuery: SearchStore.getQuery()
     });
-
-    // Automatically navigate to search page
-    var currentRoute = _.last(this.context.router.getCurrentRoutes());
-    if(currentRoute.path !== '/search') {
-      this.transitionTo('search');
-    } 
 	},
 
   logOut: function(data, e) {
@@ -99,33 +93,28 @@ var Header = React.createClass({
       var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
     }
 
-/*
-    if(this.state.searchQuery.length > 1) {
-      console.info('render query: ', this.state.searchQuery);
+    if(this.state.searchQuery && this.state.searchQuery.length > 0) {
       this.transitionTo('search');
     }
-*/
 
     return (
-      <div> 
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
+      <div className="nav-clear"> 
+        <nav className="nav">
+          <Link to="my-profile" className="nav__item--avatar">
+            <img className="avatar-sm" src={avatarUrl}  />
+          </Link>
           
-            <Link to="my-profile" className="navbar-brand">
-              <img className="avatar-sm" src={avatarUrl} onClick={this.navigateAway} />
-            </Link>
-          
-            <ul className="nav navbar-nav">
-              <li><Link to="app">Home</Link></li>
-              <li><Link to="upload">Upload</Link></li>
-              <li><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></li>
-            </ul>
-        
+          <Link to="app" className="nav__item">Home</Link>
+          <Link to="upload" className="nav__item">Upload</Link>
+
+          <div className="nav__item--form"> 
             <SearchForm
               query={this.state.query}
               onChange={this.setSearchState}    
             />
           </div>
+
+          <a href="#" className="nav__item--logout" onClick={this.logOut.bind(null, this)} >Logout</a>
        </nav>
      </div>
     );
