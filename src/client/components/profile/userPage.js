@@ -89,6 +89,14 @@ var UserProfile = React.createClass({
     UserActions.saveAvatar(this.state.formData);
   },
 
+  logOut: function(data, e) {
+    e.preventDefault();
+
+    UserActions.logOut(function(){
+      location.href="/";
+    });
+  },
+
   render: function() {
     var _self = this;
     var userLoaded = function() {
@@ -117,20 +125,34 @@ var UserProfile = React.createClass({
 
     return (
       <div>
-        <img className="avatar-lg" src={avatarLg} />
+        <div className="l-split">
+          <div className="l-split__sidebar">
+            
+            <div className="sparrow">
+              <div className="sparrow__img">
+                <img className="avatar-lg" src={avatarLg} />
+                <p>{this.state.user.userName}</p>
+                <p><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></p>
+              </div>
+            </div>
 
-        <p>{this.state.user.userName}</p>
+            <form encType="multipart/form-data">
+              <FileInput
+                onChange={this.handleFile}
+                name="image"
+              />
 
-        <form encType="multipart/form-data">
-          <FileInput
-            onChange={this.handleFile}
-            name="image"
-          />
+              <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
+            </form>
 
-          <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
-        </form>
+          </div>
+          <div className="l-split__main">
+            {userLoaded()} 
+          </div>
+        </div>
 
-        {userLoaded()} 
+
+
       </div>
     );
   }

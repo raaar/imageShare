@@ -10,7 +10,7 @@ var SearchForm = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className="search-box">
         <input
           type="text" 
           className="form-control" 
@@ -18,6 +18,7 @@ var SearchForm = React.createClass({
           onChange={this.props.onChange}
           value={this.props.query}
         />
+        <button type="submit" className="btn btn-default" onClick={this.props.onSearch}>Search</button>
       </div>
     );  
   }

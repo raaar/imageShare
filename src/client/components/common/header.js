@@ -22,8 +22,8 @@ var Header = React.createClass({
       user: {
         avatar: "http://placehold.it/30x30"
       },
-      searchQuery: ""
-
+      searchQuery: "",
+      menuOpen: false
     };
   },
 
@@ -61,6 +61,8 @@ var Header = React.createClass({
     });
 	},
 
+  // moving this function in profile page
+  /*
   logOut: function(data, e) {
     e.preventDefault();
 
@@ -68,25 +70,28 @@ var Header = React.createClass({
       location.href="/";
     });
   },
+  */
   
   setSearchState: function(e) {
     SearchActions.query(e.target.value);
   },
 
-
-  navigateAway: function() {
-    var currentRoute = _.last(this.context.router.getCurrentRoutes());
-    console.info('current route: ', currentRoute.path);
-
-    if(currentRoute.path !== '/search') {
-      console.log('we are not on the search page');
-      SearchActions.query("");
+  toggleMenu: function() {
+    if(this.state.menuOpen) {
       this.setState({
-        searchQuery: "" 
-      }); 
+        menuOpen:false 
+      });
     } else {
-      console.log('we are on the search page');
+      this.setState({
+        menuOpen:true 
+      });
     }
+  },
+
+  closeMenu: function() {
+    this.setState({
+      menuOpen: false
+    })
   },
 
   render: function() {
@@ -97,25 +102,33 @@ var Header = React.createClass({
       var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
     }
 
+    var hamburgerClass = this.state.menuOpen ? 'hamburger is-active' : 'hamburger';  
+    var navClass = this.state.menuOpen ? 'nav is-active' : 'nav';  
 
     return (
       <div className="nav-clear"> 
-        <nav className="nav">
-          <Link to="my-profile" className="nav__item--avatar">
-            <img className="avatar-sm" src={avatarUrl}  />
-          </Link>
-          
-          <Link to="app" className="nav__item">Home</Link>
-          <Link to="upload" className="nav__item">Upload</Link>
-
-          <div className="nav__item--form"> 
-            <SearchForm
-              query={this.state.query}
-              onChange={this.setSearchState}    
-            />
+        <nav className={navClass}>
+          <div className="nav__item--menu" onClick={this.toggleMenu} >
+            <div className={hamburgerClass}>
+		          <div className="hamburger__bar"></div>
+	          </div>
           </div>
+          <div className="nav__group">
+            <Link to="my-profile" className="nav__item--avatar" onClick={this.closeMenu}>
+              <img className="avatar-sm" src={avatarUrl}  />
+            </Link>
+          
+            <Link to="app" className="nav__item" onClick={this.closeMenu}>Home</Link>
+            <Link to="upload" className="nav__item" onClick={this.closeMenu}>Upload</Link>
 
-          <a href="#" className="nav__item--logout" onClick={this.logOut.bind(null, this)} >Logout</a>
+            <div className="nav__item--form"> 
+              <SearchForm
+                query={this.state.query}
+                onChange={this.setSearchState}    
+                onSearch={this.closeMenu}    
+              />
+            </div>
+          </div>
        </nav>
      </div>
     );

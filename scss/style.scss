@@ -1,27 +1,198 @@
+@import "../node_modules/compass-mixins/lib/_compass";
+@import "./tools/_vars";
+@import "./tools/_media-queries";
+@import "./components/_all";
+
+
+
+/*!
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+$bootstrap-path: "../node_modules/bootstrap-sass/assets/stylesheets/";
+
+// Core variables and mixins
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+//@import "bootstrap/glyphicons";
+
+// Core CSS
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/code";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+
+/*
+// Components
+@import "bootstrap/component-animations";
+@import "bootstrap/dropdowns";
+@import "bootstrap/button-groups";
+@import "bootstrap/input-groups";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
+@import "bootstrap/labels";
+@import "bootstrap/badges";
+@import "bootstrap/jumbotron";
+@import "bootstrap/thumbnails";
+@import "bootstrap/alerts";
+@import "bootstrap/progress-bars";
+@import "bootstrap/media";
+@import "bootstrap/list-group";
+@import "bootstrap/panels";
+@import "bootstrap/responsive-embed";
+@import "bootstrap/wells";
+@import "bootstrap/close";
+
+// Components w/ JavaScript
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
+@import "bootstrap/carousel";
+
+*/
+// Utility classes
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+
+
 body {
+  font-family: 'Raleway', sans-serif;
+  @include mq(sm) {
+  }
 }
 
-$nav-height: 70px;
+
+
+
+.l-split {
+
+}
+
+.l-split__sidebar {
+  height: 100%;
+  background: lightgrey;
+  padding: 30px 20px 20px;
+
+  @include mq(sm) {
+    position: fixed;
+    float: left;
+    width: 340px;
+  }
+}
+
+.l-split__main {
+  @include mq(sm) {
+    padding-left: 340px;
+  }
+}
+
+
+.sparrow {
+  text-align: center;
+
+  p {
+    margin-top: 30px;
+  }
+}
+
+.sparrow__img {
+  margin: 0 auto;
+}
+
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  
+  button {
+    margin-left: 15px;
+  }
+}
 
 .nav-clear {
-  height: $nav-height;
+  height: $nav-height-sm;
+
+  @include mq(sm) {
+    height: $nav-height;
+  }
 }
+
 .nav {
   position: fixed;
   background: #222222;
   width: 100%;
-  height: $nav-height;
+  height: $nav-height-sm;
+
+  @include mq(sm) {
+    height: $nav-height;
+  }
+
+
+  &.is-active {
+    .nav__group {
+      display: block;
+    }
+  }
+}
+
+
+.nav__group {
+
+  @include mq(xs-down) {
+    background: #222222; 
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+    padding: 70px 0 15px;
+  }
+
+  @include mq(md) {
+    display: block;
+  }
 }
 
 .nav__item {
   display: flex;
   padding: 0 20px;
   align-items: center;
-  justify-content: center;
-  float: left;
-  height: $nav-height;
+  //justify-content: center;
+  //float: left;
   cursor: pointer;
+  height: $nav-height-sm;
+  width: 100%;
+
+  text-decoration: none;
+  color: white;
+  font-weight: 900;
+  font-size: 22px;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  @include mq(sm) {
+    height: $nav-height;
+    width: auto;
+    float: left;
+  }
+
 }
+
 
 .nav__item--avatar {
   float: left;
@@ -33,8 +204,13 @@ $nav-height: 70px;
   float: left;
   padding: 0 20px;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
   height: $nav-height;
+  width: 100%;
+
+  @include mq(sm) {
+    width: auto;
+  }
 }
 
 .nav__item--logout {
@@ -44,6 +220,23 @@ $nav-height: 70px;
   justify-content: center;
   float: right;
   height: $nav-height;
+}
+
+
+.nav__item--menu {
+  width: $hamburger-width;
+  height: $nav-height-sm;
+  position: relative;
+  z-index: 100;
+  left: 15px; 
+
+  @include mq(sm) {
+    display: none;
+  }
+
+  .hamburger {
+    top: 18px;
+  }
 }
 
 .tile {
@@ -75,72 +268,4 @@ $nav-height: 70px;
   width: 120px;
   height: auto;
   border-radius: 100%;
-}
-
-
-.modalReact {
-  display: block;
-  overflow: hidden;
-  clear: both;
-}
-
-
-.modalReact {
-  position: fixed;
-  z-index: 1000;
-  display: none;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #252525;
-
-  &.is-visible {
-    display: block;
-  }
-}
-
-
-.modal__img {
-  display: block;
-  max-height: 100vh;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.modal__nav {
-  height: $nav-height;
-  width: 340px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 5;
-  color: white;
-  background: rgba(14, 14, 14, 0.85);
-  display: flex;
-  justify-content: flex-end;
-}
-
-
-.modal__nav__item {
-
-}
-
-.modal__aside {
-  width: 340px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  padding: 90px 20px 20px 20px;
-  color: white;
-  background: rgba(14, 14, 14, 0.85);
-}
-
-.modal__content {
-  position: relative;
-  width: calc(100% - 340px);
-  height: 100%;
-  display: flex;
-  align-items: center;
 }
