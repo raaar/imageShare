@@ -74,12 +74,7 @@ var imageController = function() {
           thumb: 'thumb-' + req.file.filename,
           originalname: req.file.originalname,
           size: req.file.size
-        },
-        id: req.file.filename,
-        full: req.file.filename,
-        thumb: 'thumb-' + req.file.filename,
-        originalname: req.file.originalname,
-        size: req.file.size
+        }
       };
       
       mongodb.connect(dbUrl, function(err, db) {

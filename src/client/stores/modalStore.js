@@ -9,7 +9,12 @@ var CHANGE_EVENT = 'change';
 
 var _visible = false;
 var _modalTitle = "";
-var _modalData = {};
+var _modalData = {
+  image: {
+    full: ""
+  }
+};
+
 
 var ModalStore = assign({}, EventEmitter.prototype, {
       
@@ -34,7 +39,13 @@ var ModalStore = assign({}, EventEmitter.prototype, {
   },
 
   getModalData: function() {
-    return _modalData;
+    var isEmpty = _.isEmpty(_modalData); // true
+    if(!isEmpty) {
+      console.log(isEmpty);
+      return _modalData;
+    } else {
+      return;
+    }
   }
 
 });
