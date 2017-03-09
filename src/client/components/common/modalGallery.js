@@ -18,6 +18,7 @@ var GalleryModal = React.createClass({
   getInitialState: function() {
     return {
       visible: false,
+      sidebarOpen: false,
       data: {
         title: "",
         author: "",
@@ -53,9 +54,10 @@ var GalleryModal = React.createClass({
 	_onChange: function() {
     this.setState({
       visible: ModalStore.isModalVisible(),
+      sidebarOpen: ModalStore.getModalSidebar(),
       data: ModalStore.getModalData()
     });
-    console.info('onChange: ', this.state.visible);
+    console.info('onChange sidebar: ', this.state.sidebarOpen);
 	},
 
   closeModal: function() {
@@ -70,6 +72,12 @@ var GalleryModal = React.createClass({
     this.transitionTo('app');
   },
 
+
+  toggleSidebar: function(e) {
+    console.log('toggle sidebar');
+    ModalActions.toggleSidebar();
+    e.preventDefault();
+  },
 
   _authorLink: function() {
     if(this.state.data.author) {
@@ -106,19 +114,30 @@ var GalleryModal = React.createClass({
   },
 
 
+
+
   render: function() {
-    var modalClass = this.state.visible ? 'modalReact is-visible' : 'modalReact';  
+    var modalClass;
+
+    if(this.state.visible && this.state.sidebarOpen) {
+      modalClass = 'modalReact is-visible is-expanded'; 
+    } else if (this.state.visible) {
+      modalClass = 'modalReact is-visible';
+    } else {
+      modalClass = 'modalReact';
+    }
+
     var authorUrl = "profile/" + this.state.data.author;
 
     return (
       <div>
         <div className={modalClass}>
           <div className="modal__nav">
-            <div className="nav__item">
+            <div className="nav__item" onClick={this.toggleSidebar} >
               Info
             </div>
-            <div className="nav__item">
-              <span className="modal__close" onClick={this.closeModal}>Close</span>
+            <div className="nav__item" onClick={this.closeModal}>
+              <span className="modal__close">Close</span>
             </div>
           </div>
           <div className="modal__content">

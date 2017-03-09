@@ -23,6 +23,14 @@ var ModalActions = {
     Dispatcher.dispatch({
       actionType: ActionTypes.HIDE_MODAL
     });
+  },
+
+  toggleSidebar: function() {
+    console.log('action hide modal');
+
+    Dispatcher.dispatch({
+      actionType: ActionTypes.TOGGLE_MODAL_SIDEBAR
+    });
   }
 }
 

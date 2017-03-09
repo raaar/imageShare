@@ -8,6 +8,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _visible = false;
+var _sidebarVisible = false;
 var _modalTitle = "";
 var _modalData = {
   image: {
@@ -46,7 +47,13 @@ var ModalStore = assign({}, EventEmitter.prototype, {
     } else {
       return;
     }
+  },
+
+  getModalSidebar: function() {
+    console.info('get sidebar: ', _sidebarVisible);
+    return _sidebarVisible;  
   }
+     
 
 });
 
@@ -55,7 +62,6 @@ Dispatcher.register(function(action) {
 	switch(action.actionType) {
 
 		case ActionTypes.SHOW_MODAL:
-      console.log('modal store show');
       _visible = true;
       _modalTitle = action.modalTitle;
       _modalData = action.image;
@@ -63,12 +69,15 @@ Dispatcher.register(function(action) {
 			break;
 
 		case ActionTypes.HIDE_MODAL:
-      console.log('modal store hide');
       _visible = false;
       _modalTitle = action.modalTitle;
       ModalStore.emitChange();
 			break;
 
+		case ActionTypes.TOGGLE_MODAL_SIDEBAR:
+      _sidebarVisible = _sidebarVisible ? false : true;
+      ModalStore.emitChange();
+			break;
 		default:
 			// no operations
 	}

@@ -131,19 +131,23 @@ var UserProfile = React.createClass({
             <div className="sparrow">
               <div className="sparrow__img">
                 <img className="avatar-lg" src={avatarLg} />
-                <p>{this.state.user.userName}</p>
-                <p><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></p>
+                <div className="sparrow__title">{this.state.user.userName}</div>
+                <div className="sparrow__item">
+                  <a href="#">Edit avatar</a>
+                  <div className="sparrow__item__section">
+                    <form encType="multipart/form-data">
+                      <FileInput
+                        onChange={this.handleFile}
+                        name="image"
+                      />
+                      <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
+                    </form>
+                  </div>
+                </div>
+                <div className="sparrow__item"><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></div>
               </div>
             </div>
 
-            <form encType="multipart/form-data">
-              <FileInput
-                onChange={this.handleFile}
-                name="image"
-              />
-
-              <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
-            </form>
 
           </div>
           <div className="l-split__main">

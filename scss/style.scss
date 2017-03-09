@@ -1,9 +1,6 @@
 @import "../node_modules/compass-mixins/lib/_compass";
 @import "./tools/_vars";
 @import "./tools/_media-queries";
-@import "./components/_all";
-
-
 
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -11,10 +8,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-$bootstrap-path: "../node_modules/bootstrap-sass/assets/stylesheets/";
 
 // Core variables and mixins
-@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "./tools/_vars-bootstrap";
 @import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
@@ -67,13 +63,15 @@ $bootstrap-path: "../node_modules/bootstrap-sass/assets/stylesheets/";
 @import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
 
 
-body {
-  font-family: 'Raleway', sans-serif;
-  @include mq(sm) {
-  }
+
+// Custom components 
+@import "./components/_all";
+
+a {
+  color: $link-color;
+  font-weight: 700;
+  text-decoration: none !important;
 }
-
-
 
 
 .l-split {
@@ -82,7 +80,7 @@ body {
 
 .l-split__sidebar {
   height: 100%;
-  background: lightgrey;
+  background: #f5f5f5;
   padding: 30px 20px 20px;
 
   @include mq(sm) {
@@ -111,13 +109,30 @@ body {
   margin: 0 auto;
 }
 
+.sparrow__title {
+  margin-top: 20px;
+  font-size: $font-size-h3;
+}
+
+.sparrow__item {
+  margin-top: 15px;
+}
+
 .search-box {
   display: flex;
   width: 100%;
   max-width: 500px;
   
   button {
-    margin-left: 15px;
+    min-width: 110px;
+
+    @include mq(sm) {
+      display: none;
+    }
+  }
+
+  .form-control {
+    height: 40px;
   }
 }
 
@@ -131,7 +146,7 @@ body {
 
 .nav {
   position: fixed;
-  background: #222222;
+  background: $dark;
   width: 100%;
   height: $nav-height-sm;
 
@@ -139,10 +154,12 @@ body {
     height: $nav-height;
   }
 
-
   &.is-active {
     .nav__group {
+      @include transform(translateX(0));
       display: block;
+      //opacity: 1;
+      //visibility: visible;
     }
   }
 }
@@ -151,14 +168,17 @@ body {
 .nav__group {
 
   @include mq(xs-down) {
-    background: #222222; 
+    @include transform(translateX(-101%));
+    background: $dark; 
     position: fixed;
     height: 100%;
     width: 100%;
     top: 0;
     left: 0;
-    display: none;
     padding: 70px 0 15px;
+    //visibility: hidden;
+    //opacity: 0;
+    transition: visibility 0s, transform 0.3s cubic-bezier(.8,0,0,1);
   }
 
   @include mq(md) {
@@ -181,14 +201,18 @@ body {
   font-weight: 900;
   font-size: 22px;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     text-decoration: none;
+    color: $link-color;
   }
 
   @include mq(sm) {
     height: $nav-height;
     width: auto;
     float: left;
+    padding: 0 25px; 
   }
 
 }
@@ -210,6 +234,13 @@ body {
 
   @include mq(sm) {
     width: auto;
+    min-width: 260px;
+  }
+
+  .form-control {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.6);
+    color: white;
   }
 }
 
