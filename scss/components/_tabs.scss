@@ -1,0 +1,47 @@
+.tab {
+    overflow: hidden;
+}
+
+.tab--2 {
+  button {
+    width: 50%;
+    float: left;
+    display: block;
+  }
+}
+
+.tab__btn {
+    display: block;
+    text-decoration: none;
+    padding: 15px;
+    color: white;
+    background: rgba(160, 179, 176, 0.25);
+    font-size: 20px;
+    font-weight: normal;
+    float: left;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: .5s ease;
+    transition: .5s ease;
+
+    &:focus {
+      color: white;
+    }
+
+    &:hover,
+    &.active:hover {
+      background: #179b77;
+      color: #ffffff;
+    }
+
+    &.active {
+      background: $link-color; 
+      background: #1ab188;
+    }
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 0;
+}

@@ -77,12 +77,18 @@ var ManageImage = React.createClass({
 
     return (
       <div>
-        <ImageForm 
-          title={this.state.title}
-          onChange={this.setImageState}    
-          onFileChange={this.handleFile}
-          onSave={this.saveImage}
-        />        
+        <div className="container-fluid">
+          <div className="row">
+            <div className="l-center">
+              <ImageForm 
+                title={this.state.title}
+                onChange={this.setImageState}    
+                onFileChange={this.handleFile}
+                onSave={this.saveImage}
+              />        
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

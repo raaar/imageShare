@@ -90,11 +90,18 @@ var GalleryModal = React.createClass({
   },
         
 
+  _getSize: function() {
+    if(this.state.data.size) {
+      return (
+        <p>{this.state.data.size}kb</p>
+      ); 
+    }
+  },
+
   _deleteButton: function() {
     if(this.state.data.author === this.state.user.userName) {
       return (
         <div>
-          <p>{this.state.data.size}kb</p>
 			    <a href="#" onClick={this.deleteImage.bind(this, this.state.data._id)}>Delete</a>
         </div>
       ) 
@@ -112,8 +119,6 @@ var GalleryModal = React.createClass({
       ) 
     }
   },
-
-
 
 
   render: function() {
@@ -146,6 +151,7 @@ var GalleryModal = React.createClass({
           <div className="modal__aside">
             <h3>{this.state.data.title}</h3>
             {this._authorLink()}
+            {this._getSize()}
             {this._deleteButton()}
           </div>
         </div>

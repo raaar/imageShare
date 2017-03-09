@@ -177,8 +177,8 @@ $btn-link-disabled-color:        $gray-light !default;
 
 // Allows for customizing button radius independently from global border radius
 $btn-border-radius-base:         0 !default;
-$btn-border-radius-large:        $border-radius-large !default;
-$btn-border-radius-small:        $border-radius-small !default;
+$btn-border-radius-large:        0 !default;
+$btn-border-radius-small:        0 !default;
 
 
 //== Forms

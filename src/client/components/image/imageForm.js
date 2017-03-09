@@ -13,7 +13,7 @@ var ImageForm = React.createClass({
   render: function() {
 
     return (
-      <div>
+      <div className="uploader form">
         <form encType="multipart/form-data">
           <Input
             name="title"
@@ -30,7 +30,9 @@ var ImageForm = React.createClass({
             onChange={this.props.onFileChange}
           />
         
-          <input type="submit" className="btn btn-default" value="Submit" onClick={this.props.onSave} />
+          <div className="form__submit">
+            <input type="submit" className="btn btn-lg btn-default" value="Submit" onClick={this.props.onSave} />
+          </div>
         </form>
       </div>
     )

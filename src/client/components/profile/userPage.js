@@ -8,6 +8,8 @@ var ImageActions = require('../../actions/imageActions');
 var ImageStore = require('../../stores/imageStore');
 var ImageGrid = require('../image/imageGrid');
 var $ = require('jquery');
+var toastr = require('toastr');
+
 
 var UserProfile = React.createClass({
 
@@ -29,6 +31,10 @@ var UserProfile = React.createClass({
   componentDidMount: function() {
     var userStore = JSON.parse(sessionStorage.UserStore);
     ImageActions.userImages(userStore.userName);
+
+    toastr.options = {
+      "positionClass": "toast-bottom-right" 
+    };
 
     if(this.isMounted()) {
       this.setState({
@@ -100,6 +106,7 @@ var UserProfile = React.createClass({
     };
 
     UserActions.saveAvatar(this.state.formData);
+    toastr.success('Uploading avatar');
   },
 
   logOut: function(data, e) {
@@ -122,7 +129,7 @@ var UserProfile = React.createClass({
       } else {
         return (
           <div>
-            Loading
+          {/* <!--  Loading --> */}
           </div>
         )
       }
@@ -159,14 +166,11 @@ var UserProfile = React.createClass({
               </div>
             </div>
 
-
           </div>
           <div className="l-split__main">
             {userLoaded()} 
           </div>
         </div>
-
-
 
       </div>
     );
