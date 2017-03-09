@@ -7,7 +7,7 @@ var UserActions = require('../../actions/userActions');
 var ImageActions = require('../../actions/imageActions');
 var ImageStore = require('../../stores/imageStore');
 var ImageGrid = require('../image/imageGrid');
-
+var $ = require('jquery');
 
 var UserProfile = React.createClass({
 
@@ -79,13 +79,26 @@ var UserProfile = React.createClass({
       _self.setState({
         formData: formData
       });
+      
+      _self.saveAvatar();
     }
 
-    reader.readAsDataURL(file);
+    if(file) {
+      reader.readAsDataURL(file);
+    }
+  },
+
+
+  avatarUpload: function(e) {
+    e.preventDefault();
+    $("input[type='file']").trigger('click');
   },
 
   saveAvatar: function(e) {
-    e.preventDefault();
+    if(e) {
+      e.preventDefault();
+    };
+
     UserActions.saveAvatar(this.state.formData);
   },
 
@@ -133,16 +146,14 @@ var UserProfile = React.createClass({
                 <img className="avatar-lg" src={avatarLg} />
                 <div className="sparrow__title">{this.state.user.userName}</div>
                 <div className="sparrow__item">
-                  <a href="#">Edit avatar</a>
-                  <div className="sparrow__item__section">
-                    <form encType="multipart/form-data">
-                      <FileInput
-                        onChange={this.handleFile}
-                        name="image"
-                      />
-                      <input type="submit" className="btn btn-default" value="Submit" onClick={this.saveAvatar} />
-                    </form>
-                  </div>
+                  <a href="#" className="js-edit-avatar" onClick={this.avatarUpload}>Edit avatar</a>
+                  <form className="visually-hidden" encType="multipart/form-data">
+                    <FileInput
+                      onChange={this.handleFile}
+                      name="image"
+                    />
+                    <input type="submit" className="btn btn-default visually-hidden" value="Submit" onClick={this.saveAvatar} />
+                  </form>
                 </div>
                 <div className="sparrow__item"><a href="#" onClick={this.logOut.bind(null, this)} >Logout</a></div>
               </div>

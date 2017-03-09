@@ -4,51 +4,48 @@ var dbUrl = require('../config/db');
 
 var userController = function() {
  
-  var patch = function(req, res) {
+  var _handleImages = function(req, res) {
     var image = sharp('public/uploads/avatar/' + req.file.filename);
-    console.log(dbUrl);
-
-    image
-      .metadata()
-      .then(function(metadata) {
-        return image
-          .resize(70, 70)
-          .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
-            if (err) {
-              return err;
-            }
-          });
+    image.resize(70, 70)
+      .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
+        if (err) {
+          return err;
+        }
       })
-      .then(function(metadata) {
-        return image
-          .resize(130, 130)
-          .toFile('public/uploads/avatar/' + 'lg-' + req.file.filename , function (err, info) {
-            if (err) {
-              return err;
-            }
-          });
+      .resize(130, 130)
+      .toFile('public/uploads/avatar/' + 'lg-' + req.file.filename , function (err, info) {
+        if (err) {
+          return err;
+        }
+
+        res.status(201); // 201: item created
+        res.send({
+          userName: req.user.username,
+          id: req.user._id,
+          avatar: req.file.filename 
+        });
       })
-      .then(function(data) {
-        mongodb.connect(dbUrl, function(err, db){
-          var collection = db.collection('users');
+  };
 
-          collection.update(
-            { username: req.user.username },
-            { $set: {
-              avatar: req.file.filename
-            }
-            },
-              { upsert: true }
-            )
-            res.status(201); // 201: item created
+  var patch = function(req, res) {
+    mongodb.connect(dbUrl, function(err, db){
+      var collection = db.collection('users');
 
-            res.send({
-              userName: req.user.username,
-              id: req.user._id,
-              avatar: req.file.filename 
-            });
-        });   // data contains a WebP image half the width and height of the original JPEG
-      });
+      if (err) {
+        return err;
+      }
+
+      collection.update(
+        { username: req.user.username },
+        { $set: {
+            avatar: req.file.filename
+          }
+        },
+        { upsert: true }
+      )
+                
+       _handleImages(req, res);
+     });   // data contains a WebP image half the width and height of the original JPEG
   };
 
   var get = function(req, res) {
