@@ -23,7 +23,8 @@ var UserProfile = React.createClass({
       images: [
       ],
       own: false,
-      userLoaded: false
+      userLoaded: false,
+      error: ""
     };
   },
 
@@ -105,8 +106,11 @@ var UserProfile = React.createClass({
       e.preventDefault();
     };
 
-    UserActions.saveAvatar(this.state.formData);
-    toastr.success('Uploading avatar');
+    UserActions.saveAvatar(this.state.formData, function(err){
+      toastr.error(err);
+    });
+
+    toastr.warning('Uploading avatar');
   },
 
   logOut: function(data, e) {
@@ -118,6 +122,7 @@ var UserProfile = React.createClass({
   },
 
   render: function() {
+          
     var _self = this;
     var userLoaded = function() {
       if(_self.state.images != undefined && _self.state.images.length > 0) {

@@ -40,6 +40,7 @@ var ManageImage = React.createClass({
   },
 
   setImageState: function(e) {
+          console.log('setImageState');
    // this.setState({dirty: true}); // the form has been modified
     var field = event.target.name;
     var value = event.target.value;
@@ -53,9 +54,12 @@ var ManageImage = React.createClass({
   handleFile: function(e) {
     e.preventDefault();
 
+    var reader = new FileReader();
+    var formData = new FormData();
     var _self = this;
     var file = e.target.files[0];
     
+
     if(file && file.type != 'image/jpeg') {
       toastr.error('File is not an image');
       this.setState({
@@ -63,9 +67,6 @@ var ManageImage = React.createClass({
       });
       return;
     }
-
-    var reader = new FileReader();
-    var formData = new FormData();
 
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
@@ -83,28 +84,34 @@ var ManageImage = React.createClass({
   },
 
   saveImage: function(e) {
+    var _self = this;
+
     if(this.state.complete) {
       e.preventDefault();
-      ImageActions.createImage(this.state.formData);
-      this.transitionTo('app');
+
+      ImageActions.createImage(this.state.formData,
+        function(err){
+          toastr.error(err);
+        }, 
+        function() {
+          _self.transitionTo('app');
+        }
+      );
     }
   },
         
   render: function() {
-
     return (
-      <div>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="l-center">
-              <ImageForm 
-                title={this.state.title}
-                onChange={this.setImageState}    
-                onFileChange={this.handleFile}
-                onSave={this.saveImage}
-                complete={this.state.complete}
-              />        
-            </div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="l-center">
+            <ImageForm 
+              title={this.state.title}
+              onChange={this.setImageState}    
+              onFileChange={this.handleFile}
+              onSave={this.saveImage}
+              complete={this.state.complete}
+            />        
           </div>
         </div>
       </div>

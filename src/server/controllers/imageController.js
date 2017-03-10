@@ -55,6 +55,13 @@ var imageController = function() {
       size: 171938
       */
 
+      if(req.file.size >= 1000000) {
+        res.send({
+          error: "Max file size is 1MB"
+        });
+        return;
+      }
+
       if(req.file.mimetype !== 'image/jpeg') {
         console.error('File is not an image');
         return
@@ -64,13 +71,13 @@ var imageController = function() {
       if(reqTitle ) {
         reqTitle = req.body.title;
       } else {
-        reqTitle = "Untitled";
+        reqTitle = req.file.filename;
       }
 
       var image = {
         title: reqTitle,
         author: req.user.username,
-              // TODO: react complains about nested objects
+        // TODO: react complains about nested objects
         image: {
           id: req.file.filename,
           full: req.file.filename,
@@ -280,7 +287,9 @@ var imageController = function() {
       res.json('Item deleted');
       console.log('item deleted');
     });
-  }
+  };
+
+
 
   return {
     get: get,

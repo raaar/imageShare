@@ -7,6 +7,7 @@ module.exports = keyMirror({
 	INITIALIZE: null,
   INITIALIZE_PROFILE: null,
   INITIALIZE_USER: null,
+  USER_ERROR: null,
   CREATE_IMAGE: null,
   DELETE_IMAGE: null,
   UPDATE_AVATAR: null,

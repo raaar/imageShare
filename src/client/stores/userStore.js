@@ -8,6 +8,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _user = [];
+var _error = "";
 
 var UserStore = assign({}, EventEmitter.prototype, {
 
@@ -26,12 +27,13 @@ var UserStore = assign({}, EventEmitter.prototype, {
   getUser: function() {
     return _user;
   }
+
 });
 
 Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_USER:
-			_user = action.userData;
+		 _user = action.userData;
       sessionStorage.UserStore = JSON.stringify(_user);
 
 			UserStore.emitChange();

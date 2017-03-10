@@ -29,8 +29,7 @@ var userController = function() {
       })
       
       
-      // TODO: do some form of cleanup of old avatars
-      
+      // cleanup of old avatars
       var oldFiles = [
         "public/uploads/avatar/" + oldAvatar, 
         "public/uploads/avatar/xs-" + oldAvatar,
@@ -48,6 +47,13 @@ var userController = function() {
   };
 
   var patch = function(req, res) {
+    if(req.file.size >= 500000) {
+      res.send({
+        error: "Avatar file is too big, 0.5mb max"
+      });
+      return;
+    }
+
     mongodb.connect(dbUrl, function(err, db){
       var collection = db.collection('users');
       var oldAvatarFile;      

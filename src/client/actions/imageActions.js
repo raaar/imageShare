@@ -3,6 +3,7 @@
 var Dispatcher = require('../dispatcher/appDispatcher');
 var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
+var toastr = require('toastr');
 
 var ImageActions = {
 
@@ -19,7 +20,7 @@ var ImageActions = {
 	    	});
       });
   },
-        
+  /* 
   saveAvatar: function(data) {
     Api.patch('api/user/avatar', data)
       .then(function(data){
@@ -31,14 +32,20 @@ var ImageActions = {
 	    	});
       });
   },
+  */
 
-	createImage: function(image) {
+	createImage: function(image, error, success) {
     Api.postImage('api/images', image)
       .then(function(data){
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.CREATE_IMAGE,
-		    	image: data 
-	    	});
+        if(data.error && data.error.length) {
+          return error(data.error);
+        } else {
+          success();  
+          Dispatcher.dispatch({
+			      actionType: ActionTypes.CREATE_IMAGE,
+		        image: data 
+	        });
+        }
       });
 	},
 

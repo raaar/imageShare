@@ -73,6 +73,10 @@
     padding: 0 25px; 
   }
 
+  &.is-active {
+    background: rgba(26, 177, 136, 0.1);
+    color: $link-color;
+  }
 }
 
 

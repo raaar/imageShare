@@ -114,12 +114,12 @@ var Header = React.createClass({
 	          </div>
           </div>
           <div className="nav__group">
-            <Link to="my-profile" className="nav__item--avatar" onClick={this.closeMenu}>
+            <Link to="my-profile" className="nav__item nav__item--avatar" activeClassName="is-active" onClick={this.closeMenu}>
               <img className="avatar-sm" src={avatarUrl}  />
             </Link>
           
-            <Link to="app" className="nav__item" onClick={this.closeMenu}>Home</Link>
-            <Link to="upload" className="nav__item" onClick={this.closeMenu}>Upload</Link>
+            <Link to="home" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Home</Link>
+            <Link to="upload" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Upload</Link>
 
             <div className="nav__item--form"> 
               <SearchForm

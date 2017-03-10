@@ -3,20 +3,20 @@
 var Dispatcher = require('../dispatcher/appDispatcher');
 var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
-
+var toastr = require('toastr');
 
 var UserActions = {
-  saveAvatar: function(data) {
+  saveAvatar: function(data, cb) {
     
     Api.patch('api/user/avatar', data)
       .then(function(data){
-        var avatarData = data;
-        console.info('patch avatar data: ', avatarData);
+        if(data.error.length)
+          return cb(data.error);
 
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.INITIALIZE_USER,
-          userData: avatarData
-	    	});
+          Dispatcher.dispatch({
+			      actionType: ActionTypes.INITIALIZE_USER,
+            userData: data
+	    	  });
       });
   },
 
