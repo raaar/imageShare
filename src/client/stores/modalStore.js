@@ -42,7 +42,6 @@ var ModalStore = assign({}, EventEmitter.prototype, {
   getModalData: function() {
     var isEmpty = _.isEmpty(_modalData); // true
     if(!isEmpty) {
-      console.log(isEmpty);
       return _modalData;
     } else {
       return;

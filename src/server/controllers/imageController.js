@@ -40,12 +40,10 @@ var imageController = function() {
       res.redirect('/?message=Missing+information');
 
       console.error('status 400, missing required form information:');
-      console.info('title: ', req.body.title);
-      console.info('file: ', req.file);
-      console.info('image: ', req.body.image);
+//      console.info('title: ', req.body.title);
+//      console.info('file: ', req.file);
+//      console.info('image: ', req.body.image);
     } else {
-      //console.info(req.file);
-      //console.info(req.body);
       /* Data object passed by uploader
       fieldname: 'image',
       originalname: 'beach.jpg',
@@ -56,7 +54,12 @@ var imageController = function() {
       path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
       size: 171938
       */
-      //console.info('image title: ', req.body.title);
+
+      if(req.file.mimetype !== 'image/jpeg') {
+        console.error('File is not an image');
+        return
+      };
+
       var reqTitle = req.body.title;
       if(reqTitle ) {
         reqTitle = req.body.title;

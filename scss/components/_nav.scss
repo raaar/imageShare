@@ -8,6 +8,7 @@
 
 .nav {
   position: fixed;
+  z-index: map-get($z-index, navigation);
   background: $dark;
   width: 100%;
   height: $nav-height-sm;

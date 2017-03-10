@@ -1,11 +1,13 @@
+var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var sharp = require('sharp'); // image processing library
 var dbUrl = require('../config/db');
 
 var userController = function() {
  
-  var _handleImages = function(req, res) {
+  var _handleImages = function(req, res, oldAvatar) {
     var image = sharp('public/uploads/avatar/' + req.file.filename);
+    console.log(oldAvatar);
     image.resize(70, 70)
       .toFile('public/uploads/avatar/' + 'xs-' + req.file.filename , function (err, info) {
         if (err) {
@@ -25,26 +27,52 @@ var userController = function() {
           avatar: req.file.filename 
         });
       })
+      
+      
+      // TODO: do some form of cleanup of old avatars
+      
+      var oldFiles = [
+        "public/uploads/avatar/" + oldAvatar, 
+        "public/uploads/avatar/xs-" + oldAvatar,
+        "public/uploads/avatar/lg-" + oldAvatar
+      ];
+
+      if(oldFiles) {
+        oldFiles.forEach( function( fileName ) {
+          if (fs.existsSync(fileName)) {
+            fs.unlinkSync(fileName);
+          }
+        });
+      }
+
   };
 
   var patch = function(req, res) {
     mongodb.connect(dbUrl, function(err, db){
       var collection = db.collection('users');
+      var oldAvatarFile;      
 
       if (err) {
         return err;
       }
 
-      collection.update(
+      collection.findOneAndUpdate(
         { username: req.user.username },
         { $set: {
             avatar: req.file.filename
           }
         },
-        { upsert: true }
+        { upsert: true },
+
+        function(err ,data) {
+          if(err){
+            console.log("Something wrong when updating data!");
+          }
+          oldAvatarFile =  data.value.avatar;
+          _handleImages(req, res, oldAvatarFile);
+        }
       )
                 
-       _handleImages(req, res);
      });   // data contains a WebP image half the width and height of the original JPEG
   };
 

@@ -14,3 +14,15 @@ $bar-spacing: 10px;
 $hamburger-width: 40px;
 $hamburger-height: 4px;
 $hamburger-spacing: 10px;
+
+
+// Z-index
+$z-index: (
+  modal              : 200,
+  navigation         : 100
+//  footer             : 90,
+//  triangle           : 60,
+//  navigation-rainbow : 50,
+//  share-type         : 41,
+//  share              : 40,
+);

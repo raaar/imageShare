@@ -125,11 +125,11 @@ var GalleryModal = React.createClass({
     var modalClass;
 
     if(this.state.visible && this.state.sidebarOpen) {
-      modalClass = 'modalReact is-visible is-expanded'; 
+      modalClass = 'modal is-visible is-expanded'; 
     } else if (this.state.visible) {
-      modalClass = 'modalReact is-visible';
+      modalClass = 'modal is-visible';
     } else {
-      modalClass = 'modalReact';
+      modalClass = 'modal';
     }
 
     var authorUrl = "profile/" + this.state.data.author;

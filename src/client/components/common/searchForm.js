@@ -18,7 +18,7 @@ var SearchForm = React.createClass({
           onChange={this.props.onChange}
           value={this.props.query}
         />
-        <button type="submit" className="btn btn-default" onClick={this.props.onSearch}>Search</button>
+        <button type="submit" className="btn" onClick={this.props.onSearch}>Search</button>
       </div>
     );  
   }

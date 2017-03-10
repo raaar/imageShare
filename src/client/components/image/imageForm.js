@@ -12,6 +12,8 @@ var ImageForm = React.createClass({
 
   render: function() {
 
+    var isDisabled = this.props.complete ? '' : 'disabled';
+
     return (
       <div className="uploader form">
         <form encType="multipart/form-data">
@@ -31,7 +33,7 @@ var ImageForm = React.createClass({
           />
         
           <div className="form__submit">
-            <input type="submit" className="btn btn-lg btn-default" value="Submit" onClick={this.props.onSave} />
+            <button className="btn btn--lg" disabled={isDisabled} onClick={this.props.onSave}>Submit</button>
           </div>
         </form>
       </div>

@@ -1,0 +1,106 @@
+$default-color:    $link-color;
+$info-color:       #3498db;
+$positive-color:   #27ae60;
+$negative-color:   #c0392b;
+$warning-color:    #e67e22;
+
+// social
+$facebook-color:   #3b5998;
+$twitter-color:    #55acee;
+$google-color:     #dd4b39;
+$pinterest-color:  #c8232c;
+$linkedin-color:   #0e76a8;
+$instagram-color:  #3f729b;
+$rss-color:        #ee802f;
+
+$default-ratio: 4%;
+
+@mixin button-states($color, $ratio: $default-ratio, $prop: 'background') {
+  #{$prop}-color: $color;
+  &:hover { #{$prop}-color: darken($color, $ratio); }
+  &:active { #{$prop}-color: darken($color, $ratio); }
+  &:disabled {
+    #{$prop}-color: desaturate(
+      lighten($color, $ratio*3), $ratio*4
+    );
+  }
+}
+
+.btn {
+
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font: inherit;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  overflow: visible;
+  padding: .75em 1.25em;
+  text-decoration: none;
+  transition: all 50ms linear;
+  color: #fff;
+
+  @include button-states($default-color);
+
+
+  /* sizes */
+  &--sm { font-size: .75em; }
+  &--lg { font-size: 1.25em; }
+
+
+  /* colors */
+  &--info      { @include button-states($info-color); }
+//  &--positive  { @include button-states($positive-color); }
+//  &--negative  { @include button-states($negative-color); }
+//  &--warning   { @include button-states($warning-color); }
+
+  /* social */
+//  &--facebook  { @include button-states($facebook-color); }
+//  &--twitter   { @include button-states($twitter-color); }
+//  &--google    { @include button-states($google-color); }
+//  &--pinterest { @include button-states($pinterest-color); }
+//  &--linkedin  { @include button-states($linkedin-color); }
+//  &--instagram { @include button-states($instagram-color); }
+//  &--rss       { @include button-states($rss-color); }
+
+
+  /* styles */
+  &--full {
+    width: 100%;
+    text-align: center;
+  }
+
+  &--pill {
+    border-radius: 100em;
+  }
+
+  &--round {
+    border-radius: .4em;
+  }
+
+  &--raised {
+    box-shadow: inset 0 -3px 0 rgba(black, .15);
+    &:active {
+      transform: translateY(1px);
+      box-shadow: inset 0 2px 0 rgba(black, .15);
+    }
+  }
+
+  &--hollow {
+
+  }
+
+  &--dropdown {
+    &:after {
+      content: '\f0d7';
+      font-family: 'FontAwesome';
+      margin-left: 1em;
+    }
+  }
+
+}
+
+
+
+

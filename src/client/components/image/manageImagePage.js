@@ -2,7 +2,12 @@ var React = require('react');
 var ImageForm = require('./imageForm');
 var ImageActions = require('../../actions/imageActions');
 var Router = require('react-router');
+var toastr = require('toastr');
 
+
+toastr.options = {
+  "positionClass": "toast-bottom-right" 
+};
 
 var ManageImage = React.createClass({
   mixins: [
@@ -29,13 +34,13 @@ var ManageImage = React.createClass({
         } 
       },
       errors: {},
-      dirty: false
+      dirty: false,
+      complete: false
     };
   },
 
   setImageState: function(e) {
    // this.setState({dirty: true}); // the form has been modified
- 
     var field = event.target.name;
     var value = event.target.value;
     this.state.image[field] = value;
@@ -50,6 +55,15 @@ var ManageImage = React.createClass({
 
     var _self = this;
     var file = e.target.files[0];
+    
+    if(file && file.type != 'image/jpeg') {
+      toastr.error('File is not an image');
+      this.setState({
+        complete: false
+      });
+      return;
+    }
+
     var reader = new FileReader();
     var formData = new FormData();
 
@@ -60,7 +74,8 @@ var ManageImage = React.createClass({
     
     reader.onloadend = function(e) {
       _self.setState({
-        formData: formData
+        formData: formData,
+        complete: true
       });
     }
 
@@ -68,9 +83,11 @@ var ManageImage = React.createClass({
   },
 
   saveImage: function(e) {
-    e.preventDefault();
-    ImageActions.createImage(this.state.formData);
-    this.transitionTo('app');
+    if(this.state.complete) {
+      e.preventDefault();
+      ImageActions.createImage(this.state.formData);
+      this.transitionTo('app');
+    }
   },
         
   render: function() {
@@ -85,6 +102,7 @@ var ManageImage = React.createClass({
                 onChange={this.setImageState}    
                 onFileChange={this.handleFile}
                 onSave={this.saveImage}
+                complete={this.state.complete}
               />        
             </div>
           </div>
