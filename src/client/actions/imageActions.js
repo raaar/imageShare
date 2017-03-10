@@ -7,9 +7,9 @@ var toastr = require('toastr');
 
 var ImageActions = {
 
-  get: function(query) {
-    console.info('get images: ', query);
-  },
+//  get: function(query) {
+//    console.info('get images: ', query);
+//  },
 
   userImages: function(user) {
     Api.get('api/images?author=' + user ) 
@@ -20,19 +20,6 @@ var ImageActions = {
 	    	});
       });
   },
-  /* 
-  saveAvatar: function(data) {
-    Api.patch('api/user/avatar', data)
-      .then(function(data){
-        var avatarFileName = data;
-
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.UPDATE_USER,
-		    	avatar: avatarFileName
-	    	});
-      });
-  },
-  */
 
 	createImage: function(image, error, success) {
     Api.postImage('api/images', image)

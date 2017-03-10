@@ -53,8 +53,6 @@ app.get('/', function(req , res) {
 
 var db;
 
-
-// Connect to the database before starting the application server.
 mongodb.MongoClient.connect( dbUrl , function (err, database) {
   if (err) {
     console.log(err);

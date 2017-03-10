@@ -9,11 +9,13 @@ var dbUrl = require('../config/db');
 // Reveal model pattern
 var imageController = function() {
 
+
   var middleware = function(req, res, next){
     console.log('middleware going...');
     next();
   };
   
+
   var middlewareFetchSingle = function(req, res, next) {
     var id = new objectId(req.params.id);
 
@@ -34,15 +36,13 @@ var imageController = function() {
     });
   };
 
+
   var post = function(req , res) {
     if(/* !req.body.title || */  !req.file) {
       res.status(400);
       res.redirect('/?message=Missing+information');
 
       console.error('status 400, missing required form information:');
-//      console.info('title: ', req.body.title);
-//      console.info('file: ', req.file);
-//      console.info('image: ', req.body.image);
     } else {
       /* Data object passed by uploader
       fieldname: 'image',
@@ -108,7 +108,6 @@ var imageController = function() {
             });
         });
       });
-      
     }
   };
 
@@ -130,8 +129,8 @@ var imageController = function() {
     mongodb.connect(dbUrl, function(err, db) {
       if(err) {
         res.status(500).send(err);
-      } else {
       }
+
       var collection = db.collection('images');
 
       collection.find(query).toArray(function(err, images) {
@@ -141,6 +140,73 @@ var imageController = function() {
   };
   
   
+  var destroyImage = function(req, res) {
+    var id = new objectId(req.params.id);
+
+    mongodb.connect(dbUrl, function(err, db){
+      if(err) {
+        throw err;
+      }
+
+      var collection = db.collection('images');
+      removeImage(req, res, collection, id);
+    });
+  }
+
+
+  function removeImage (req, res, collection, id) {
+    
+    // fetch and delete DB entry...
+    function destroyItem(next) {
+      collection.findOne({_id : id}, function(err, image) {
+        if (err) {
+          throw err
+        }
+
+        if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
+          collection.deleteOne(
+          {_id: objectId.createFromHexString(req.params.id)},
+          function(err, result) {
+            if (err) {
+              throw err
+            }
+
+            next(image);
+          });
+        } else {
+          console.log('You don\'t have permission to delete this file' );
+          res.json('You don\t have permission to delete this file');
+          return;
+        }
+      });
+    }
+    
+    // ...now we can delete residue files from the uploads folder
+    destroyItem(function(image) {
+      var files = ["public/uploads/images/" + image.image.full, "public/uploads/images/" + image.image.thumb];
+
+      if(files) {
+        files.forEach( function( fileName ) {
+          if (fs.existsSync(fileName)) {
+            fs.unlinkSync(fileName);
+          }
+        });
+      }
+ 
+      res.json('Item deleted');
+      console.log('item deleted');
+    });
+  };
+
+
+  return {
+    get: get,
+    post: post,
+    destroyImage: destroyImage,
+    middleware: middleware,
+    middlewareFetchSingle: middlewareFetchSingle
+  }
+
   // var remove = function(req, res) {
   //   var url = dbConfig.url;
   //   var id = new objectId(req.params.id);
@@ -179,19 +245,8 @@ var imageController = function() {
   //   });
   // }
 
-  var destroyImage = function(req, res) {
-    var id = new objectId(req.params.id);
 
-    mongodb.connect(dbUrl, function(err, db){
-      if(err) {
-        throw err;
-      }
-
-      var collection = db.collection('images');
-      removeImage(req, res, collection, id);
-    });
-  }
-  
+  /*
   var edit = function(req, res) {
       var url = dbConfig.url;
       var id = new objectId(req.params.id);
@@ -204,8 +259,8 @@ var imageController = function() {
         });
       });
     };
-   
-
+  */
+  /*
   var update = function(req, res) {
     var url = dbConfig.url;
     var id = new objectId(req.params.id);
@@ -227,8 +282,8 @@ var imageController = function() {
       }
     });
   };
-  
-  
+  */
+ /* 
   function updateImage(req, res, collection, id, image) {
     collection.update({_id: objectId.createFromHexString(req.params.id)},
       {$set: image }, function(err, updated) {
@@ -240,66 +295,8 @@ var imageController = function() {
       res.redirect('/archive');
     });
   }
-  
+  */
 
-  function removeImage (req, res, collection, id) {
-    
-    // fetch and delete DB entry...
-    function destroyItem(next) {
-      collection.findOne({_id : id}, function(err, image) {
-        if (err) {
-          throw err
-        }
-
-        console.info('author: ', image.author );
-        console.info('user: ', req.user.username);
-        if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
-          console.log('author is the user');
-          collection.deleteOne(
-          {_id: objectId.createFromHexString(req.params.id)},
-          function(err, result) {
-            if (err) {
-              throw err
-            }
-
-            next(image);
-          });
-        } else {
-          console.log('You don\'t have permission to delete this file' );
-          res.json('You don\t have permission to delete this file');
-          return;
-        }
-      });
-    }
-    
-    // ...now we can delete residue files from the uploads folder
-    destroyItem(function(image) {
-      var files = ["public/uploads/images/" + image.image.full, "public/uploads/images/" + image.image.thumb];
-
-      if(files) {
-        files.forEach( function( fileName ) {
-          if (fs.existsSync(fileName)) {
-            fs.unlinkSync(fileName);
-          }
-        });
-      }
- 
-      res.json('Item deleted');
-      console.log('item deleted');
-    });
-  };
-
-
-
-  return {
-    get: get,
-    post: post,
-    edit: edit,
-    update: update,
-    destroyImage: destroyImage,
-    middleware: middleware,
-    middlewareFetchSingle: middlewareFetchSingle
-  }
 }
 
 

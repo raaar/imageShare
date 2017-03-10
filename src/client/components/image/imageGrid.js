@@ -31,29 +31,14 @@ var ImageGrid = React.createClass({
 
     var createImageTile = function(image) {
       
-/*
-      if (image.image === undefined) {
-        console.log('image is undefined'); 
-
-        var image = {
-          _id: "666",
-          image: {
-            thumb: "placeholder.jpeg"
-          }
-        }
-      }       
-*/
       var src = "uploads/images/" + image.image.thumb;
       var tileClass = "tile";
 
       if(this.props.gridSize === "large") {
         tileClass = "tile--lg";
       }
-          /* 
-          <Link to="image" params={{id: image._id}} >
-            <img className={tileClass} src={src} />
-          </Link>
-          */
+
+
       return (
         <div key={image._id} >
           <a href="#" onClick={this.openImage.bind(this, image)} >

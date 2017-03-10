@@ -86,7 +86,7 @@ var ImagesApi = {
   delete: function(url, id) {
      return new Promise(function(success,error){
        $.ajax({
-           method: "POST",
+           method: "DELETE",
            url: url,
            data: {
              id: id

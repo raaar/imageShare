@@ -33,7 +33,7 @@ var GalleryModal = React.createClass({
 
   componentDidMount: function() {
     var user = UserStore.getUser(); // logged in user
-    console.info('get initial state data: ', this.state.data );
+
     if(this.isMounted()) {
       this.setState({
         visible: ModalStore.isModalVisible(),
