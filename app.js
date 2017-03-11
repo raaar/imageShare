@@ -15,7 +15,9 @@ var mongodb = require("mongodb");
 var dbUrl = require('./src/server/config/db');
 
 var app = express();
+var aws = require('aws-sdk');
 
+var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 var port = process.env.PORT || 7777;
 //var port = 7777;
 //console.log(process.env.PORT);
@@ -49,6 +51,34 @@ app.set('view engine', 'ejs');
 app.get('/', function(req , res) {
   res.render('index');
 });
+
+app.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
+
+
 
 
 var db;

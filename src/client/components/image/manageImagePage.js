@@ -40,7 +40,6 @@ var ManageImage = React.createClass({
   },
 
   setImageState: function(e) {
-          console.log('setImageState');
    // this.setState({dirty: true}); // the form has been modified
     var field = event.target.name;
     var value = event.target.value;
@@ -76,7 +75,8 @@ var ManageImage = React.createClass({
     reader.onloadend = function(e) {
       _self.setState({
         formData: formData,
-        complete: true
+        complete: true,
+        file: file
       });
     }
 
@@ -89,7 +89,7 @@ var ManageImage = React.createClass({
     if(this.state.complete) {
       e.preventDefault();
 
-      ImageActions.createImage(this.state.formData,
+      ImageActions.createImage(this.state.formData, this.state.file,
         function(err){
           toastr.error(err);
         }, 

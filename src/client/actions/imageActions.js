@@ -21,6 +21,12 @@ var ImageActions = {
       });
   },
 
+	createImage: function(image,file, error, success) {
+    console.log(image);
+    getSignedRequest(file);
+	},
+
+/*
 	createImage: function(image, error, success) {
     Api.postImage('api/images', image)
       .then(function(data){
@@ -35,6 +41,7 @@ var ImageActions = {
         }
       });
 	},
+*/
 
   deleteImage: function(id) {
    var url = "api/images/" + id;
@@ -46,6 +53,33 @@ var ImageActions = {
 		   });
      });
   }
+}
+
+function getSignedRequest(file){
+
+  console.info('file name: ', file.name);
+  console.info('file type: ', file.type);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+  xhr.onreadystatechange = () => {
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        console.log(xhr);
+        var response = JSON.parse(xhr.responseText);
+        uploadFile(file, response.signedRequest, response.url);
+      }
+      else{
+        alert('Could not get signed URL.');
+      }
+    }
+  };
+  xhr.send();
+};
+
+function uploadFile(file, res) {
+  console.info('uploadFile file: ', file);
+  console.info('uploadFile url: ', response.url  );
 }
 
 module.exports = ImageActions;

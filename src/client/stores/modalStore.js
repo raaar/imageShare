@@ -49,7 +49,6 @@ var ModalStore = assign({}, EventEmitter.prototype, {
   },
 
   getModalSidebar: function() {
-    console.info('get sidebar: ', _sidebarVisible);
     return _sidebarVisible;  
   }
      

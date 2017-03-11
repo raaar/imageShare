@@ -10,7 +10,7 @@ var UserActions = {
     
     Api.patch('api/user/avatar', data)
       .then(function(data){
-        if(data.error.length)
+        if(data.error &&  data.error.length)
           return cb(data.error);
 
           Dispatcher.dispatch({

@@ -57,7 +57,6 @@ var GalleryModal = React.createClass({
       sidebarOpen: ModalStore.getModalSidebar(),
       data: ModalStore.getModalData()
     });
-    console.info('onChange sidebar: ', this.state.sidebarOpen);
 	},
 
   closeModal: function() {
