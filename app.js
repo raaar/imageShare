@@ -19,6 +19,7 @@ var aws = require('aws-sdk');
 
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 var port = process.env.PORT || 7777;
+
 //var port = 7777;
 //console.log(process.env.PORT);
 
