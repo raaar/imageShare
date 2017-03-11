@@ -5,6 +5,8 @@ var Api = require('../api/imagesApi');
 var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
 
+
+
 var ImageActions = {
 
 //  get: function(query) {
@@ -22,9 +24,27 @@ var ImageActions = {
   },
 
 	createImage: function(image,file, error, success) {
-    console.log(image);
-    getSignedRequest(file);
-	},
+    getSignedRequest(file, function(file, signedRequest, url){
+    
+      console.info('uploadFile file: ', file);
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', signedRequest);
+      xhr.onreadystatechange = () => {
+        if(xhr.readyState === 4){
+          if(xhr.status === 200){
+            success();
+//          document.getElementById('preview').src = url;
+ //         document.getElementById('avatar-url').value = url;
+          }
+          else{
+            alert('Could not upload file.');
+          }
+        }
+      };
+      xhr.send(file);
+    });
+    
+  },
 
 /*
 	createImage: function(image, error, success) {
@@ -55,7 +75,8 @@ var ImageActions = {
   }
 }
 
-function getSignedRequest(file){
+
+function getSignedRequest(file, cb){
 
   console.info('file name: ', file.name);
   console.info('file type: ', file.type);
@@ -67,7 +88,8 @@ function getSignedRequest(file){
       if(xhr.status === 200){
         console.log(xhr);
         var response = JSON.parse(xhr.responseText);
-        uploadFile(file, response.signedRequest, response.url);
+//        uploadFile(file, response.signedRequest, response.url);
+        cb(file, response.signedRequest, response.url);
       }
       else{
         alert('Could not get signed URL.');
