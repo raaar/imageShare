@@ -72,6 +72,7 @@ var ManageImage = React.createClass({
     formData.append('image', file);
     formData.append('title', this.state.image.title);
     
+
     reader.onloadend = function(e) {
       _self.setState({
         formData: formData,
@@ -89,7 +90,7 @@ var ManageImage = React.createClass({
     if(this.state.complete) {
       e.preventDefault();
 
-      ImageActions.createImage(this.state.formData, this.state.file,
+      ImageActions.createImage(this.state.formData, this.state.file, 
         function(err){
           toastr.error(err);
         }, 

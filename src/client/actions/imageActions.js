@@ -24,17 +24,26 @@ var ImageActions = {
   },
 
 	createImage: function(image,file, error, success) {
+    console.log(file);
     getSignedRequest(file, function(file, signedRequest, url){
-    
       console.info('uploadFile file: ', file);
-      const xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();
       xhr.open('PUT', signedRequest);
       xhr.onreadystatechange = () => {
         if(xhr.readyState === 4){
           if(xhr.status === 200){
-            success();
-//          document.getElementById('preview').src = url;
- //         document.getElementById('avatar-url').value = url;
+            Api.postImage('api/images', image)
+              .then(function(data){
+                if(data.error && data.error.length) {
+                  return error(data.error);
+                } else {
+                  success();  
+              //    Dispatcher.dispatch({
+			          //    actionType: ActionTypes.CREATE_IMAGE,
+		            //    image: data 
+	              //  });
+                }
+              });
           }
           else{
             alert('Could not upload file.');
@@ -43,10 +52,8 @@ var ImageActions = {
       };
       xhr.send(file);
     });
-    
   },
-
-/*
+        /*
 	createImage: function(image, error, success) {
     Api.postImage('api/images', image)
       .then(function(data){
@@ -61,7 +68,7 @@ var ImageActions = {
         }
       });
 	},
-*/
+  */
 
   deleteImage: function(id) {
    var url = "api/images/" + id;

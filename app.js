@@ -17,6 +17,7 @@ var dbUrl = require('./src/server/config/db');
 var app = express();
 var aws = require('aws-sdk');
 
+var awsConfig = require('./awsConfig');
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 var port = process.env.PORT || 7777;
 
@@ -52,6 +53,13 @@ app.set('view engine', 'ejs');
 app.get('/', function(req , res) {
   res.render('index');
 });
+
+
+console.info('enviroment: ', process.env.NODE_ENV);
+
+if(process.env.NODE_ENV === undefined ) {
+  aws.config.update(awsConfig);
+}
 
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3();
@@ -122,4 +130,15 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
  heroku logs --tail:
 
  URL: https://frozen-caverns-72254.herokuapp.com/#/
+
+ Heroku local not tarting:
+ try run 'killall node'
+
 */
+
+
+
+/* AS3 Lambda image resize tutorial:
+ * https://aws.amazon.com/blogs/compute/resize-images-on-the-fly-with-amazon-s3-aws-lambda-and-amazon-api-gateway/
+ */
+
