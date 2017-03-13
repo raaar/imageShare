@@ -112,12 +112,41 @@ var imageController = function() {
   };
 
   var postImage = function(req, res) {
-    console.info('post image body: ', req.body);
-    res.send('image'); 
-    //mongodb.connect(dbUrl, function(err, db) {
-    //  var collection = db.collection('images');
-      //collection.insert(image);
-    //});
+/*
+      var image = {
+        title: reqTitle,
+        author: req.user.username,
+        // TODO: react complains about nested objects
+        image: {
+          id: req.file.filename,
+          full: req.file.filename,
+          thumb: 'thumb-' + req.file.filename,
+          originalname: req.file.originalname,
+          size: req.file.size
+        }
+      };
+*/
+    // path: http://imageshareuploads.s3-website-eu-west-1.amazonaws.com
+    var fileName = req.body.id + '.jpeg';
+
+    var imageData = {
+      title: req.body.formData.title,
+      author: req.user.username,
+      image: {
+        id: req.body.id,
+        full: fileName,// TODO: this could be removed
+        file: fileName,
+        size: req.body.size
+      }
+    };
+
+    console.info('image data: ', imageData);
+
+    mongodb.connect(dbUrl, function(err, db) {
+      var collection = db.collection('images');
+      collection.insert(imageData);
+      res.send(imageData); 
+    });
   };
 
   var get = function(req, res){

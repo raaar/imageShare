@@ -42,19 +42,20 @@ var ImageActions = {
               size: file.size
             };
 
+            console.info('upload data: ', uploadData);
+
             Api.post('api/images', uploadData)
               .then(function(data){
+                console.log('api post promise');
                 if(data.error && data.error.length) {
                   return error(data.error);
                 } else {
                   success();  
-                  /*     
+                  console.info('data: ', data);
                   Dispatcher.dispatch({
 			              actionType: ActionTypes.CREATE_IMAGE,
-		                image: data, 
-                    file: file
+		                image: data 
 	                });
-                  */
                 }
               });
           }

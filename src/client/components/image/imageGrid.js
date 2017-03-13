@@ -30,14 +30,13 @@ var ImageGrid = React.createClass({
   render: function() {
 
     var createImageTile = function(image) {
-      
-      var src = "uploads/images/" + image.image.thumb;
+//      var src = "uploads/images/" + image.image.thumb;
+      var src = "http://imageshareuploads.s3-website-eu-west-1.amazonaws.com/280x280/" + image.image.full;
       var tileClass = "tile";
 
       if(this.props.gridSize === "large") {
         tileClass = "tile--lg";
       }
-
 
       return (
         <div key={image._id} >

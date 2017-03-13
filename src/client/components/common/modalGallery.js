@@ -8,6 +8,7 @@ var UserStore = require('../../stores/userStore');
 var Router = require('react-router');
 var Link = Router.Link;
 var _ = require('lodash');
+var config = require('../../../../config');
 
 var GalleryModal = React.createClass({
   
@@ -111,7 +112,8 @@ var GalleryModal = React.createClass({
   _getImage: function() {
     if(this.state.data.image.full) {
       var fileName = this.state.data.image.full;
-      var url = "uploads/images/" + fileName;
+      //var url = "uploads/images/" + fileName;
+      var url = config.bucketUrl  + this.state.data.image.file
 
       return (
         <img className="modal__img" src={url} />
