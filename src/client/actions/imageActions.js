@@ -23,10 +23,35 @@ var ImageActions = {
       });
   },
 
-	createImage: function(image, file, error, success) {
-    //TODO: rename image parameter to formData
-    getSignedRequest(file, function(file, signedRequest, url){
-      console.info('uploadFile file: ', file);
+
+  getSignedRequest: function(file, cb){
+
+    var fileExt;
+    if(file.type === 'image/jpeg') {
+      fileExt = '.jpeg';
+    } else if (file.type === 'image/png' ) {
+      fileExt = '.png'; 
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', `/sign-s3?file-name=${file.id}${fileExt}&file-type=${file.type}`);
+    xhr.onreadystatechange = () => {
+      if(xhr.readyState === 4){
+        if(xhr.status === 200){
+          var response = JSON.parse(xhr.responseText);
+          cb(file, response.signedRequest, response.url);
+        }
+        else{
+          alert('Could not get signed URL.');
+        }
+      }
+    };
+    xhr.send();
+  },
+
+	createImage: function(form, file, error, success) {
+    this.getSignedRequest(file, function(file, signedRequest, url){
+      toastr.warning('Uploading image');
       var xhr = new XMLHttpRequest();
       xhr.open('PUT', signedRequest);
       xhr.onreadystatechange = () => {
@@ -34,7 +59,7 @@ var ImageActions = {
           if(xhr.status === 200){
 
             var uploadData = {
-              formData: image,
+              formData: form,
               id: file.id,
               lastModified: file.lastModified,
               lastModifiedDate: file.lastModifiedDate,
@@ -42,11 +67,8 @@ var ImageActions = {
               size: file.size
             };
 
-            console.info('upload data: ', uploadData);
-
             Api.post('api/images', uploadData)
               .then(function(data){
-                console.log('api post promise');
                 if(data.error && data.error.length) {
                   return error(data.error);
                 } else {
@@ -96,7 +118,7 @@ var ImageActions = {
   }
 }
 
-
+/*
 function getSignedRequest(file, cb){
 
   console.info('file name: ', file.name);
@@ -127,7 +149,7 @@ function getSignedRequest(file, cb){
   };
   xhr.send();
 };
-
+*/
 
 /*
 function uploadFile(file, signedRequest, url) {

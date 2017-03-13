@@ -16,6 +16,7 @@ var GalleryModal = React.createClass({
     Router.Navigation
   ],
 
+
   getInitialState: function() {
     return {
       visible: false,
@@ -32,7 +33,23 @@ var GalleryModal = React.createClass({
     }
   },
 
+
   componentDidMount: function() {
+   
+    var _self = this;
+    document.onkeydown = function(evt) {
+      evt = evt || window.event;
+      var isEscape = false;
+      if ("key" in evt) {
+        isEscape = (evt.key == "Escape" || evt.key == "Esc");
+      } else {
+        isEscape = (evt.keyCode == 27);
+      }
+      if (isEscape) {
+        _self.closeModal();
+      }
+    };
+
     var user = UserStore.getUser(); // logged in user
 
     if(this.isMounted()) {
@@ -44,13 +61,16 @@ var GalleryModal = React.createClass({
     }
   },
 
+
 	componentWillMount: function() {
 		ModalStore.addChangeListener(this._onChange);
 	},
 
+
 	componentWillUnmount: function() {
 		ModalStore.removeChangeListener(this._onChange);
 	},
+
 
 	_onChange: function() {
     this.setState({
@@ -59,6 +79,7 @@ var GalleryModal = React.createClass({
       data: ModalStore.getModalData()
     });
 	},
+
 
   closeModal: function() {
     ModalActions.hideModal();
@@ -79,6 +100,7 @@ var GalleryModal = React.createClass({
     e.preventDefault();
   },
 
+
   _authorLink: function() {
     if(this.state.data.author) {
       return (
@@ -98,6 +120,16 @@ var GalleryModal = React.createClass({
     }
   },
 
+
+  _getDate: function() {
+   if(this.state.data.image.lastModifiedDate) {
+     return (
+       <p>Last modified: {this.state.data.image.lastModifiedDate}</p>
+     )
+   }
+  },
+
+        
   _deleteButton: function() {
     if(this.state.data.author === this.state.user.userName) {
       return (
@@ -110,8 +142,8 @@ var GalleryModal = React.createClass({
 
 
   _getImage: function() {
-    if(this.state.data.image.full) {
-      var fileName = this.state.data.image.full;
+    if(this.state.data.image.file) {
+//      var fileName = this.state.data.image.full;
       //var url = "uploads/images/" + fileName;
       var url = config.bucketUrl  + this.state.data.image.file
 
@@ -153,6 +185,7 @@ var GalleryModal = React.createClass({
             <h3>{this.state.data.title}</h3>
             {this._authorLink()}
             {this._getSize()}
+            {this._getDate()}
             {this._deleteButton()}
           </div>
         </div>

@@ -9,7 +9,6 @@ var dbUrl = require('../config/db');
 // Reveal model pattern
 var imageController = function() {
 
-
   var middleware = function(req, res, next){
     console.log('middleware going...');
     next();
@@ -126,7 +125,6 @@ var imageController = function() {
         }
       };
 */
-    // path: http://imageshareuploads.s3-website-eu-west-1.amazonaws.com
     var fileName = req.body.id + '.jpeg';
 
     var imageData = {
@@ -134,13 +132,12 @@ var imageController = function() {
       author: req.user.username,
       image: {
         id: req.body.id,
-        full: fileName,// TODO: this could be removed
         file: fileName,
-        size: req.body.size
+        size: req.body.size,
+        lastModified: req.body.lastModified,
+        lastModifiedDate: req.body.lastModifiedDate
       }
     };
-
-    console.info('image data: ', imageData);
 
     mongodb.connect(dbUrl, function(err, db) {
       var collection = db.collection('images');

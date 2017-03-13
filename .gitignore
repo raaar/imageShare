@@ -1,3 +1,4 @@
 node_modules
 .env
 awsKey.json
+npm-debug.log
