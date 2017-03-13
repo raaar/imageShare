@@ -28,7 +28,10 @@ var routes = function() {
 
   imageRouter.route('/')
     .get(imageController.get)
-    .post(upload.single('image'), imageController.post);
+    .post(imageController.postImage);
+
+//  Disabling upload, as iages will now be stored on S3        
+//    .post(upload.single('image'), imageController.post);
 
   imageRouter.route('/')
 

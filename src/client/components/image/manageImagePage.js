@@ -67,15 +67,23 @@ var ManageImage = React.createClass({
       return;
     }
 
+    var fileNameStamp = Math.round(+new Date()/1000);
+    console.log(fileNameStamp);
+    file.id = fileNameStamp;
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);
     formData.append('title', this.state.image.title);
     
+    // this object could replace the formData object.
+    // formData might not be needed as uploads are now handled by S3
+    var newFormData = {
+      title: this.state.image.title
+    }
 
     reader.onloadend = function(e) {
       _self.setState({
-        formData: formData,
+        formData: newFormData,
         complete: true,
         file: file
       });

@@ -111,6 +111,14 @@ var imageController = function() {
     }
   };
 
+  var postImage = function(req, res) {
+    console.info('post image body: ', req.body);
+    res.send('image'); 
+    //mongodb.connect(dbUrl, function(err, db) {
+    //  var collection = db.collection('images');
+      //collection.insert(image);
+    //});
+  };
 
   var get = function(req, res){
     var id = new objectId(req.params.id);
@@ -202,6 +210,7 @@ var imageController = function() {
   return {
     get: get,
     post: post,
+    postImage: postImage,
     destroyImage: destroyImage,
     middleware: middleware,
     middlewareFetchSingle: middlewareFetchSingle

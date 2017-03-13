@@ -23,8 +23,8 @@ var ImageActions = {
       });
   },
 
-	createImage: function(image,file, error, success) {
-    console.log(file);
+	createImage: function(image, file, error, success) {
+    //TODO: rename image parameter to formData
     getSignedRequest(file, function(file, signedRequest, url){
       console.info('uploadFile file: ', file);
       var xhr = new XMLHttpRequest();
@@ -32,16 +32,29 @@ var ImageActions = {
       xhr.onreadystatechange = () => {
         if(xhr.readyState === 4){
           if(xhr.status === 200){
-            Api.postImage('api/images', image)
+
+            var uploadData = {
+              formData: image,
+              id: file.id,
+              lastModified: file.lastModified,
+              lastModifiedDate: file.lastModifiedDate,
+              type: file.type,
+              size: file.size
+            };
+
+            Api.post('api/images', uploadData)
               .then(function(data){
                 if(data.error && data.error.length) {
                   return error(data.error);
                 } else {
                   success();  
-              //    Dispatcher.dispatch({
-			          //    actionType: ActionTypes.CREATE_IMAGE,
-		            //    image: data 
-	              //  });
+                  /*     
+                  Dispatcher.dispatch({
+			              actionType: ActionTypes.CREATE_IMAGE,
+		                image: data, 
+                    file: file
+	                });
+                  */
                 }
               });
           }
@@ -87,9 +100,17 @@ function getSignedRequest(file, cb){
 
   console.info('file name: ', file.name);
   console.info('file type: ', file.type);
+  console.info('file id: ', file.id);
+  
+  var fileExt;
+  if(file.type === 'image/jpeg') {
+    fileExt = '.jpeg';
+  } else if (file.type === 'image/png' ) {
+    fileExt = '.png'; 
+  }
 
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+  xhr.open('GET', `/sign-s3?file-name=${file.id}${fileExt}&file-type=${file.type}`);
   xhr.onreadystatechange = () => {
     if(xhr.readyState === 4){
       if(xhr.status === 200){
@@ -106,6 +127,8 @@ function getSignedRequest(file, cb){
   xhr.send();
 };
 
+
+/*
 function uploadFile(file, signedRequest, url) {
   console.info('uploadFile file: ', file);
   const xhr = new XMLHttpRequest();
@@ -123,5 +146,5 @@ function uploadFile(file, signedRequest, url) {
   };
   xhr.send(file);
 }
-
+*/
 module.exports = ImageActions;
