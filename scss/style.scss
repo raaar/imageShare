@@ -86,6 +86,10 @@ a {
 }
 
 
+.container-fluid {
+  padding: 0 20px;
+}
+
 .l-center {
   @include make-sm-column(6);
   @include make-md-column(6);
@@ -99,7 +103,7 @@ a {
 
 .l-split__sidebar {
   height: 100%;
-  background: #f5f5f5;
+  background: $light;
   padding: 30px 20px;
 
   @include mq(sm) {
@@ -228,4 +232,7 @@ a {
 }
 
 
-
+.mast {
+  height: 180px;
+  background: $light;
+}

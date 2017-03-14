@@ -2,6 +2,7 @@
 
 var Dispatcher = require('../dispatcher/appDispatcher');
 var Api = require('../api/imagesApi');
+var s3Signature = require('../api/s3Sign');
 var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
 
@@ -24,33 +25,8 @@ var ImageActions = {
   },
 
 
-  getSignedRequest: function(file, cb){
-
-    var fileExt;
-    if(file.type === 'image/jpeg') {
-      fileExt = '.jpeg';
-    } else if (file.type === 'image/png' ) {
-      fileExt = '.png'; 
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', `/sign-s3?file-name=${file.id}${fileExt}&file-type=${file.type}`);
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === 4){
-        if(xhr.status === 200){
-          var response = JSON.parse(xhr.responseText);
-          cb(file, response.signedRequest, response.url);
-        }
-        else{
-          alert('Could not get signed URL.');
-        }
-      }
-    };
-    xhr.send();
-  },
-
 	createImage: function(form, file, error, success) {
-    this.getSignedRequest(file, function(file, signedRequest, url){
+    s3Signature(file, function(file, signedRequest, url){
       toastr.warning('Uploading image');
       var xhr = new XMLHttpRequest();
       xhr.open('PUT', signedRequest);
@@ -89,7 +65,9 @@ var ImageActions = {
       xhr.send(file);
     });
   },
-        /*
+
+
+  /*
 	createImage: function(image, error, success) {
     Api.postImage('api/images', image)
       .then(function(data){
@@ -106,6 +84,7 @@ var ImageActions = {
 	},
   */
 
+
   deleteImage: function(id) {
    var url = "api/images/" + id;
    Api.delete(url, id)
@@ -118,56 +97,5 @@ var ImageActions = {
   }
 }
 
-/*
-function getSignedRequest(file, cb){
 
-  console.info('file name: ', file.name);
-  console.info('file type: ', file.type);
-  console.info('file id: ', file.id);
-  
-  var fileExt;
-  if(file.type === 'image/jpeg') {
-    fileExt = '.jpeg';
-  } else if (file.type === 'image/png' ) {
-    fileExt = '.png'; 
-  }
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', `/sign-s3?file-name=${file.id}${fileExt}&file-type=${file.type}`);
-  xhr.onreadystatechange = () => {
-    if(xhr.readyState === 4){
-      if(xhr.status === 200){
-        console.log(xhr);
-        var response = JSON.parse(xhr.responseText);
-//        uploadFile(file, response.signedRequest, response.url);
-        cb(file, response.signedRequest, response.url);
-      }
-      else{
-        alert('Could not get signed URL.');
-      }
-    }
-  };
-  xhr.send();
-};
-*/
-
-/*
-function uploadFile(file, signedRequest, url) {
-  console.info('uploadFile file: ', file);
-  const xhr = new XMLHttpRequest();
-  xhr.open('PUT', signedRequest);
-  xhr.onreadystatechange = () => {
-    if(xhr.readyState === 4){
-      if(xhr.status === 200){
-//        document.getElementById('preview').src = url;
- //       document.getElementById('avatar-url').value = url;
-      }
-      else{
-        alert('Could not upload file.');
-      }
-    }
-  };
-  xhr.send(file);
-}
-*/
 module.exports = ImageActions;

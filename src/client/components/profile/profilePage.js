@@ -58,10 +58,11 @@ var Profile = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>{this.state.profile}</h1>
-
-        Author profile
-
+        <div className="mast">
+          <div className="container-fluid">
+            <h3>Images by: {this.props.params.author}</h3> 
+          </div>
+        </div>
         <ImageGrid images={this.state.images} />
       </div>
     );

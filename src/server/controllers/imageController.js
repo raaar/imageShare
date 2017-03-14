@@ -125,7 +125,7 @@ var imageController = function() {
         }
       };
 */
-    var fileName = req.body.id + '.jpeg';
+    var fileName = req.body.id;
     var imageTitle = req.body.formData.title;
 
     if(!imageTitle) {

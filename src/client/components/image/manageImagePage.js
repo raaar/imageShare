@@ -67,9 +67,16 @@ var ManageImage = React.createClass({
       return;
     }
 
+    var fileExt;
+    if(file.type === 'image/jpeg') {
+      fileExt = '.jpeg';
+    } else if (file.type === 'image/png' ) {
+      fileExt = '.png'; 
+    }
+
     var fileNameStamp = Math.round(+new Date()/1000);
     console.log(fileNameStamp);
-    file.id = fileNameStamp;
+    file.id = fileNameStamp + fileExt;
     // the 'image' attribute should be the same name  as defined by the upload input component, and by the 'upload.single(''') defined in imageRoutes.js
           
     formData.append('image', file);

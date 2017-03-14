@@ -42,7 +42,7 @@ var UserActions = {
       xhr.send(file);
     });
    
-          /*
+    /*
     Api.patch('api/user/avatar', data)
       .then(function(data){
         if(data.error &&  data.error.length)
@@ -53,7 +53,7 @@ var UserActions = {
             userData: data
 	    	  });
       });
-      */
+    */
   },
 
   logOut: function(cb) {
