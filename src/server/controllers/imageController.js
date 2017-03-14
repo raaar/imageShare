@@ -126,9 +126,14 @@ var imageController = function() {
       };
 */
     var fileName = req.body.id + '.jpeg';
+    var imageTitle = req.body.formData.title;
+
+    if(!imageTitle) {
+      imageTitle = 'untitled';
+    }
 
     var imageData = {
-      title: req.body.formData.title,
+      title: imageTitle,
       author: req.user.username,
       image: {
         id: req.body.id,
@@ -242,95 +247,6 @@ var imageController = function() {
     middlewareFetchSingle: middlewareFetchSingle
   }
 
-  // var remove = function(req, res) {
-  //   var url = dbConfig.url;
-  //   var id = new objectId(req.params.id);
-
-  //   console.log('remove function');
-
-  //   mongodb.connect(url, function(err, db) {
-  //     if(err) {
-  //       res.status(500).send(err);
-  //     } else {
-        
-  //       var collection = db.collection('images');
-    
-  //       var deleteImage = function(next) {
-  //         collection.findOne({_id : id}, function(err, image) {
-  //           if(image.author /*=== req.user.username */) {
-              
-  //             collection.deleteOne(
-  //             {_id: objectId.createFromHexString(req.params.id)},
-  //             function(err, result) {
-  //               console.log('deleted DB entry, prepearing to delete files');
-  //               next(res);
-  //             });
-  //           } else {
-  //             console.log('can\'t delete' );
-  //             return;
-  //           }
-  //         });
-  //       };
-    
-  //       deleteImage(function(res){
-  //         console.log('clean up uploads folder...');
-  //         res.redirect('/archive');
-  //       });
-  //     }
-  //   });
-  // }
-
-
-  /*
-  var edit = function(req, res) {
-      var url = dbConfig.url;
-      var id = new objectId(req.params.id);
-      
-      mongodb.connect(url, function(err, db){
-        var collection = db.collection('images');
-  
-        collection.findOne({_id : id}, function(err, image) {
-          res.render('partials/_editImageForm', { image : image });
-        });
-      });
-    };
-  */
-  /*
-  var update = function(req, res) {
-    var url = dbConfig.url;
-    var id = new objectId(req.params.id);
-    
-    mongodb.connect(url, function(err, db){
-      var collection = db.collection('images');
-      var image = {
-        title : req.body.title,
-        body : req.body.author,
-        id: id
-      };
-      
-      var isDelete = req.body.delete_button !== undefined;
-      
-      if(isDelete) {
-        removeImage(req, res, collection, id);
-      } else {
-        updateImage(req, res, collection, id, image);
-      }
-    });
-  };
-  */
- /* 
-  function updateImage(req, res, collection, id, image) {
-    collection.update({_id: objectId.createFromHexString(req.params.id)},
-      {$set: image }, function(err, updated) {
-
-      if (err) {
-        console.log(err);
-      }
-
-      res.redirect('/archive');
-    });
-  }
-  */
 
 }
 

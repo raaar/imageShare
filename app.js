@@ -15,14 +15,13 @@ var mongodb = require("mongodb");
 var dbUrl = require('./src/server/config/db');
 
 var app = express();
-var aws = require('aws-sdk');
 
-var awsConfig = require('./awsConfig');
-var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 var port = process.env.PORT || 7777;
+console.log(process.env.NODE_ENV);
 
-//var port = 7777;
-//console.log(process.env.PORT);
+
+// S3 setup
+var s3Sign = require('./src/server/routes/s3Routes');
 
 app.use(express.static('public')); // define where all static (CSS, JS) files come from
 app.use(bodyParser.urlencoded({encoded: true}));
@@ -30,7 +29,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({secret: 'library'}));
 
-// by assing 'app', we can use 'app.use' in our passport config file
+// by passing 'app', we can use 'app.use' in our passport config file
 require('./src/server/config/passport')(app);
 
 var imageRouter = require('./src/server/routes/imageRoutes')();
@@ -54,40 +53,7 @@ app.get('/', function(req , res) {
   res.render('index');
 });
 
-
-console.info('enviroment: ', process.env.NODE_ENV);
-
-if(process.env.NODE_ENV === undefined ) {
-  aws.config.update(awsConfig);
-}
-
-app.get('/sign-s3', (req, res) => {
-  const s3 = new aws.S3();
-  const fileName = req.query['file-name'];
-  const fileType = req.query['file-type'];
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: fileName,
-    Expires: 60,
-    ContentType: fileType,
-    ACL: 'public-read'
-  };
-
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if(err){
-      console.log(err);
-      return res.end();
-    }
-    const returnData = {
-      signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-    };
-    res.write(JSON.stringify(returnData));
-    res.end();
-  });
-});
-
-
+app.get('/sign-s3', s3Sign);
 
 
 var db;

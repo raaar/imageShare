@@ -95,7 +95,6 @@ var GalleryModal = React.createClass({
 
 
   toggleSidebar: function(e) {
-    console.log('toggle sidebar');
     ModalActions.toggleSidebar();
     e.preventDefault();
   },
