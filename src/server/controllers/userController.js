@@ -46,17 +46,11 @@ var userController = function() {
 
   };
 
-  var patch = function(req, res) {
-    if(req.file.size >= 500000) {
-      res.send({
-        error: "Avatar file is too big, 0.5mb max"
-      });
-      return;
-    }
+  var post = function(req, res) {
+    // Update avatar
 
     mongodb.connect(dbUrl, function(err, db){
       var collection = db.collection('users');
-      var oldAvatarFile;      
 
       if (err) {
         return err;
@@ -65,21 +59,14 @@ var userController = function() {
       collection.findOneAndUpdate(
         { username: req.user.username },
         { $set: {
-            avatar: req.file.filename
+            avatar: req.body.id
           }
         },
-        { upsert: true },
-
-        function(err ,data) {
-          if(err){
-            console.log("Something wrong when updating data!");
-          }
-          oldAvatarFile =  data.value.avatar;
-          _handleImages(req, res, oldAvatarFile);
-        }
+        { upsert: true }
       )
                 
-     });   // data contains a WebP image half the width and height of the original JPEG
+      res.send(req.body); 
+    }); 
   };
 
   var get = function(req, res) {
@@ -139,7 +126,7 @@ var userController = function() {
 
   return {
     get: get,
-    patch: patch
+    post: post
   };
 };
 

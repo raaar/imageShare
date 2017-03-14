@@ -33,7 +33,8 @@ var UserStore = assign({}, EventEmitter.prototype, {
 Dispatcher.register(function(action){
 	switch(action.actionType) {
 		case ActionTypes.INITIALIZE_USER:
-		 _user = action.userData;
+      console.info('user store: ', action.userData  );
+		  _user = action.userData;
       sessionStorage.UserStore = JSON.stringify(_user);
 
 			UserStore.emitChange();

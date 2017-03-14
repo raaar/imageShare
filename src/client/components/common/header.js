@@ -9,6 +9,7 @@ var SearchForm = require('./searchForm');
 var SearchActions = require('../../actions/searchActions');
 var SearchStore = require('../../stores/searchStore');
 var _ = require('lodash');
+var config = require('../../../../config');
 
 
 var Header = React.createClass({
@@ -99,7 +100,7 @@ var Header = React.createClass({
     if(this.state.user.avatar === undefined) {
       var avatarUrl = "images/placeholder-avatar.png";
     } else {
-      var avatarUrl = "uploads/avatar/xs-" + this.state.user.avatar;
+      var avatarUrl = config.thumbXSmall + this.state.user.avatar;
     }
 
     var hamburgerClass = this.state.menuOpen ? 'hamburger is-active' : 'hamburger';  

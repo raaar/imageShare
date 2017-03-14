@@ -22,7 +22,7 @@ var InitializeActions = {
     };
 
 
-    if (sessionStorage.UserStore) {
+    if (sessionStorage.UserStore && sessionStorage.UserStore !== "undefined") {
       _userData = JSON.parse(sessionStorage.UserStore);
       userDataDispatch(_userData);
     } else {

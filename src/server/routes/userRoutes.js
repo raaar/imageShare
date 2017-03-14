@@ -27,7 +27,8 @@ var routes = function() {
     .get(userController.get);
 
   userRouter.route('/avatar')
-    .patch(upload.single('image'),userController.patch);
+    //.patch(upload.single('image'),userController.patch);
+    .post(userController.post);
    
   return userRouter;
 };

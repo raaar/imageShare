@@ -9,6 +9,7 @@ var ImageStore = require('../../stores/imageStore');
 var ImageGrid = require('../image/imageGrid');
 var $ = require('jquery');
 var toastr = require('toastr');
+var config = require('../../../../config');
 
 
 var UserProfile = React.createClass({
@@ -71,20 +72,33 @@ var UserProfile = React.createClass({
   handleFile: function(e) {
     e.preventDefault();
 
+
     var _self = this;
     var file = e.target.files[0];
     var reader = new FileReader();
-    var formData = new FormData();
-
-    // the 'image' attribute should be the same name as defined by the upload input component,
-    // and by the 'upload.single(''') defined in imageRoutes.js
           
-    formData.append('image', file);
-    formData.append('user', this.state.user);
+    var fileExt;
+    if(file.type === 'image/jpeg') {
+      fileExt = '.jpeg';
+    } else if (file.type === 'image/png' ) {
+      fileExt = '.png'; 
+    } 
+
+    var fileNameStamp = Math.round(+new Date()/1000);
+    var fileN = 'avatar-' + fileNameStamp + fileExt;
+    file.id = fileN;
+
+          
+
+    var newFormData = {
+      fileName: fileN,
+      user: this.state.user
+    };
 
     reader.onloadend = function(e) {
       _self.setState({
-        formData: formData
+        formData: newFormData,
+        file: file 
       });
       
       _self.saveAvatar();
@@ -106,7 +120,7 @@ var UserProfile = React.createClass({
       e.preventDefault();
     };
 
-    UserActions.saveAvatar(this.state.formData, function(err){
+    UserActions.saveAvatar(this.state.formData, this.state.file, function(err){
       toastr.error(err);
     });
 
@@ -144,7 +158,7 @@ var UserProfile = React.createClass({
     if(this.state.user.avatar === undefined) {
       var avatarLg = "images/placeholder-avatar.png";
     } else {
-      var avatarLg = './uploads/avatar/lg-' + this.state.user.avatar;
+      var avatarLg = config.thumbMedium + this.state.user.avatar;
     }
 
 
