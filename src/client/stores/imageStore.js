@@ -9,6 +9,7 @@ var CHANGE_EVENT = 'change';
 
 var _images = [];
 var _userImages = [];
+var _authorImages = [];
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
@@ -36,6 +37,9 @@ var ImageStore = assign({}, EventEmitter.prototype, {
     return _userImages;
   },
 
+  getAuthorImages: function() {
+    return _authorImages;
+  },
 
   clearUserImages: function() {
     _userImages = [];
@@ -52,6 +56,11 @@ Dispatcher.register(function(action){
 
     case ActionTypes.GET_USER_IMAGES: 
 			_userImages = action.gallery;
+			ImageStore.emitChange();
+			break;
+
+    case ActionTypes.GET_AUTHOR_IMAGES: 
+			_authorImages = action.gallery;
 			ImageStore.emitChange();
 			break;
 

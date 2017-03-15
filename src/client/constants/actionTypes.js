@@ -16,6 +16,8 @@ module.exports = keyMirror({
   TOGGLE_MODAL_SIDEBAR: null,
   SEARCH_IMAGES: null,
   SEARCH_RESULTS: null,
+  GET_USER_IMAGES: null,
+  GET_AUTHOR_IMAGES: null,
 
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,

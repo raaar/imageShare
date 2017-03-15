@@ -142,8 +142,6 @@ var GalleryModal = React.createClass({
 
   _getImage: function() {
     if(this.state.data.image.file) {
-//      var fileName = this.state.data.image.full;
-      //var url = "uploads/images/" + fileName;
       var url = config.bucketUrl  + this.state.data.image.file
 
       return (
@@ -155,6 +153,8 @@ var GalleryModal = React.createClass({
 
   render: function() {
     var modalClass;
+    var navInfoClass = this.state.sidebarOpen ? 'nav__item is-active' : 'nav__item';
+    var authorUrl = "profile/" + this.state.data.author;
 
     if(this.state.visible && this.state.sidebarOpen) {
       modalClass = 'modal is-visible is-expanded'; 
@@ -164,13 +164,11 @@ var GalleryModal = React.createClass({
       modalClass = 'modal';
     }
 
-    var authorUrl = "profile/" + this.state.data.author;
-
     return (
       <div>
         <div className={modalClass}>
           <div className="modal__nav">
-            <div className="nav__item" onClick={this.toggleSidebar} >
+            <div className={navInfoClass} onClick={this.toggleSidebar} >
               Info
             </div>
             <div className="nav__item" onClick={this.closeModal}>

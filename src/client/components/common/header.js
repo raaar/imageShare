@@ -119,7 +119,7 @@ var Header = React.createClass({
               <img className="avatar-sm" src={avatarUrl}  />
             </Link>
           
-            <Link to="home" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Home</Link>
+            <Link to="feed" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Feed</Link>
             <Link to="upload" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Upload</Link>
 
             <div className="nav__item--form"> 

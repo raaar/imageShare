@@ -24,8 +24,9 @@ var Profile = React.createClass({
   componentDidMount: function() {
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
+    var currentRoutes = this.context.router.getCurrentRoutes();
 
-    ImageActions.userImages(author);
+    ImageActions.authorImages(author, currentRoutes[1].name);
 
     if(this.isMounted()) {
       if(user.userName === author) {
@@ -33,9 +34,9 @@ var Profile = React.createClass({
       }
 
       this.setState({
-        images: ImageStore.getUserImages()
-      });
-    }
+        images: ImageStore.getAuthorImages() 
+      }); 
+    } 
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
@@ -51,7 +52,7 @@ var Profile = React.createClass({
 
 	_onChange: function() {
     this.setState({
-      images: ImageStore.getUserImages()
+      images: ImageStore.getAuthorImages()
     });
 	},
 

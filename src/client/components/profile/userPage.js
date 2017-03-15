@@ -38,6 +38,7 @@ var UserProfile = React.createClass({
       "positionClass": "toast-bottom-right" 
     };
 
+
     if(this.isMounted()) {
       this.setState({
         images: ImageStore.getUserImages(),
@@ -57,7 +58,7 @@ var UserProfile = React.createClass({
 		UserStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
     this.setState({
-      userLoaded: false,
+      userLoaded: false
     });
 	},
 

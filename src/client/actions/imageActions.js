@@ -7,7 +7,6 @@ var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
 
 
-
 var ImageActions = {
 
 //  get: function(query) {
@@ -19,8 +18,19 @@ var ImageActions = {
       .then(function(data) {
         Dispatcher.dispatch({
 			    actionType: ActionTypes.GET_USER_IMAGES,
-		    	gallery: data 
-	    	});
+		  	  gallery: data 
+	      });
+      });
+  },
+
+
+  authorImages: function(user) {
+    Api.get('api/images?author=' + user ) 
+      .then(function(data) {
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.GET_AUTHOR_IMAGES,
+		  	  gallery: data 
+	     });
       });
   },
 
@@ -49,7 +59,6 @@ var ImageActions = {
                   return error(data.error);
                 } else {
                   success();  
-                  console.info('data: ', data);
                   Dispatcher.dispatch({
 			              actionType: ActionTypes.CREATE_IMAGE,
 		                image: data 

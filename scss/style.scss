@@ -183,8 +183,17 @@ a {
 .tile--lg {
   display: inline-block;
   float: left;
-  width: 280px;
-  height: 280px;
+  height: auto;  
+  max-width: 280px;
+  max-height: 280px;
+
+  @include mq(xs) {
+    width: 50%;
+  }
+
+  @include mq(sm) {
+    width: 100%;
+  }
 }
 
 

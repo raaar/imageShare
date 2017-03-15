@@ -12,7 +12,10 @@ var ImageForm = React.createClass({
 
   render: function() {
 
-    var isDisabled = this.props.complete ? '' : 'disabled';
+    var isDisabled = '';
+    if( !this.props.complete || this.props.processing) {
+      isDisabled = 'disabled'; 
+    }
 
     return (
       <div className="uploader form">

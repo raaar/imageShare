@@ -28,10 +28,10 @@ var ImageGrid = React.createClass({
     ModalActions.showModal(image);
   },
 
+
   render: function() {
 
     var createImageTile = function(image) {
-//      var src = "uploads/images/" + image.image.thumb;
       var src = config.thumbSquareLarge + image.image.file;
       var tileClass = "tile";
 
