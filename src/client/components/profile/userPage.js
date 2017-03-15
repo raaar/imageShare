@@ -73,12 +73,11 @@ var UserProfile = React.createClass({
   handleFile: function(e) {
     e.preventDefault();
 
-
     var _self = this;
     var file = e.target.files[0];
     var reader = new FileReader();
-          
     var fileExt;
+
     if(file.type === 'image/jpeg') {
       fileExt = '.jpeg';
     } else if (file.type === 'image/png' ) {
@@ -88,8 +87,6 @@ var UserProfile = React.createClass({
     var fileNameStamp = Math.round(+new Date()/1000);
     var fileN = 'avatar-' + fileNameStamp + fileExt;
     file.id = fileN;
-
-          
 
     var newFormData = {
       fileName: fileN,
