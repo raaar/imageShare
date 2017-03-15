@@ -10,14 +10,15 @@
 
       <div id="register" class="tabcontent">
         <h1>Sign Up for Free</h1>
-        <form action="/auth/register" method="post">
+        <form action="/auth/register" method="post" >
           <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control form-control--dark" id="exampleInputEmail1" placeholder="Email" name="userName">
+            <label for="registerUsername">Username</label>
+            <input type="text" class="form-control form-control--dark" id="registerUsername" placeholder="Email" name="userName" autocomplete="no"> 
+            <%= registerUsernameMessage %>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control form-control--dark" id="exampleInputPassword1" placeholder="Password" name="password">
+            <label for="registerPassword">Password</label>
+            <input type="password" class="form-control form-control--dark" id="registerPassword" placeholder="Password" name="password" autocomplete="no">
           </div>
           <button type="submit" class="btn btn--lg btn-default">Get started</button>
         </form>
@@ -27,12 +28,13 @@
         <h1>Log in</h1>
         <form action="/auth/signIn" method="post">
           <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control form-control--dark" id="exampleInputEmail1" placeholder="Email" name="signInUserName">
+            <label for="logInUsername">Username</label>
+            <input type="text" class="form-control form-control--dark" id="logInUsername" placeholder="Email" name="signInUserName">
+        <%= message %>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control form-control--dark" id="exampleInputPassword1" placeholder="Password" name="signInPassword">
+            <label for="logInPassword">Password</label>
+            <input type="password" class="form-control form-control--dark" id="logInPassword" placeholder="Password" name="signInPassword">
           </div>
           <button type="submit" class="btn btn--lg btn-default">Log in</button>
         </form>

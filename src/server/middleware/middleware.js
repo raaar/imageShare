@@ -4,7 +4,7 @@ var middleware = function(req, res, next) {
     next();
   } else {
     // console.log('user is logged out');
-    res.redirect('/auth/register');
+    res.redirect('/auth');
   }
 }
 

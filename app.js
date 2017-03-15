@@ -19,6 +19,8 @@ var app = express();
 var port = process.env.PORT || 7777;
 console.log(process.env.NODE_ENV);
 
+var db;
+
 
 // S3 setup
 var s3Sign = require('./src/server/routes/s3Routes');
@@ -56,7 +58,6 @@ app.get('/', function(req , res) {
 app.get('/sign-s3', s3Sign);
 
 
-var db;
 
 mongodb.MongoClient.connect( dbUrl , function (err, database) {
   if (err) {
@@ -74,6 +75,7 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
   });
 });
 
+
 /*
   TODO:
   remember me
@@ -81,24 +83,29 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
 */
 
 /*
- *
+  
+  START PROJECT:
+  heroku local, navigate to http://localhot:5000
+  
+
+  
   Deployment and Mlab setup:
   https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
 
   MONGODB_URI_IMAGESHARE (mlab url variable:
   heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
 
- HEROKU
- Pushing: 
- git push -f heroku react:master
+  HEROKU
+  Pushing: 
+  git push -f heroku react:master
 
- Logs:
- heroku logs --tail:
+  Logs:
+  heroku logs --tail:
 
- URL: https://frozen-caverns-72254.herokuapp.com/#/
+  URL: https://frozen-caverns-72254.herokuapp.com/#/
 
- Heroku local not tarting:
- try run 'killall node'
+  Heroku local not tarting:
+  try run 'killall node'
 
 */
 

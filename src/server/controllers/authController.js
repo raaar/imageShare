@@ -3,6 +3,16 @@ var mongodb = require('mongodb').MongoClient;
 var dbUrl = require('../config/db');
 
 var authController = function() {
+
+
+  var get = function(req, res){
+    res.render('auth', {
+      message: '',
+      registerUsernameMessage: ''
+    });
+  };
+
+
   var logOut = function(req, res) {
     req.session.destroy();
     req.logout();
@@ -11,7 +21,8 @@ var authController = function() {
   
   var signIn =  function(req, res) {
     // Success
-    res.cookie('user', req.user._id, {httpOnly: true}); // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
+    // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
+    res.cookie('user', req.user._id, {httpOnly: true});
     res.redirect('/');
   };
   
@@ -30,8 +41,9 @@ var authController = function() {
         function (err, results) {
           if(err) { return err; }
           if (null !== results) {
-            res.render('register', {
-              message: 'Invalid username!'
+            res.render('auth', {
+              message: '',
+              registerUsernameMessage: 'Invalid username!'
             });
           } else {
             addUser();
@@ -43,7 +55,6 @@ var authController = function() {
       var addUser = function() {
 
         collection.insert(user, function(err, results) {
-          //console.log(results);
           req.login(results.ops[0], function(){
             res.redirect('/');
           });
@@ -53,6 +64,7 @@ var authController = function() {
   }
   
   return {
+    get: get,
     register: register,
     logOut: logOut,
     signIn: signIn

@@ -3,14 +3,14 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-var sharp = require('sharp'); // image processing library
+// var sharp = require('sharp'); // image processing library
 var dbUrl = require('../config/db');
 
-// Reveal model pattern
+
 var imageController = function() {
 
   var middleware = function(req, res, next){
-    console.log('middleware going...');
+    // console.log('example middleware going...');
     next();
   };
   
@@ -36,95 +36,9 @@ var imageController = function() {
   };
 
 
-  var post = function(req , res) {
-    if(/* !req.body.title || */  !req.file) {
-      res.status(400);
-      res.redirect('/?message=Missing+information');
 
-      console.error('status 400, missing required form information:');
-    } else {
-      /* Data object passed by uploader
-      fieldname: 'image',
-      originalname: 'beach.jpg',
-      encoding: '7bit',
-      mimetype: 'image/jpeg',
-      destination: 'public/uploads/',
-      filename: 'e018096c66c2f8f25809e7721dae43ad',
-      path: 'public/uploads/e018096c66c2f8f25809e7721dae43ad',
-      size: 171938
-      */
+  var post = function(req, res) {
 
-      if(req.file.size >= 1000000) {
-        res.send({
-          error: "Max file size is 1MB"
-        });
-        return;
-      }
-
-      if(req.file.mimetype !== 'image/jpeg') {
-        console.error('File is not an image');
-        return
-      };
-
-      var reqTitle = req.body.title;
-      if(reqTitle ) {
-        reqTitle = req.body.title;
-      } else {
-        reqTitle = req.file.filename;
-      }
-
-      var image = {
-        title: reqTitle,
-        author: req.user.username,
-        // TODO: react complains about nested objects
-        image: {
-          id: req.file.filename,
-          full: req.file.filename,
-          thumb: 'thumb-' + req.file.filename,
-          originalname: req.file.originalname,
-          size: req.file.size
-        }
-      };
-      
-      mongodb.connect(dbUrl, function(err, db) {
-        var collection = db.collection('images');
-
-        collection.insert(image, function(err, results) {
-          
-          if(err) {
-            console.log(err);
-          }
-
-          // process image
-          sharp('public/uploads/images/' + req.file.filename)
-            .resize(300, 300)
-            .toFile('public/uploads/images/' + 'thumb-' + req.file.filename , function (err, info) {
-              if (err) {
-                return err;
-              }
-              res.status(201); // 201: item created
-              res.send(image); 
-            });
-        });
-      });
-    }
-  };
-
-  var postImage = function(req, res) {
-/*
-      var image = {
-        title: reqTitle,
-        author: req.user.username,
-        // TODO: react complains about nested objects
-        image: {
-          id: req.file.filename,
-          full: req.file.filename,
-          thumb: 'thumb-' + req.file.filename,
-          originalname: req.file.originalname,
-          size: req.file.size
-        }
-      };
-*/
     var fileName = req.body.id;
     var imageTitle = req.body.formData.title;
 
@@ -150,6 +64,7 @@ var imageController = function() {
       res.send(imageData); 
     });
   };
+
 
   var get = function(req, res){
     var id = new objectId(req.params.id);
@@ -241,7 +156,6 @@ var imageController = function() {
   return {
     get: get,
     post: post,
-    postImage: postImage,
     destroyImage: destroyImage,
     middleware: middleware,
     middlewareFetchSingle: middlewareFetchSingle

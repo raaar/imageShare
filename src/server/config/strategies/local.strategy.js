@@ -1,11 +1,7 @@
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    mongodb = require('mongodb').MongoClient;
-
-//var dbConfig = require('../db');
-//var dbUrl = dbConfig.url;
-
-var dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017/bookREST"; 
+    mongodb = require('mongodb').MongoClient,
+    dbUrl = require('../db');
 
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
@@ -13,6 +9,8 @@ var strategyFunction = function() {
       passwordField: 'signInPassword'
     },
     function(username, password, done) {
+
+        console.info('username: ',username);
 
         mongodb.connect(dbUrl, function (err, db) {
             var collection = db.collection('users');

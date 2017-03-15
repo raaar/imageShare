@@ -1,6 +1,17 @@
 'use strict';
+var axios = require('axios');
 
 module.exports = function(file, cb) {
+
+  axios.get(`/sign-s3?file-name=${file.id}&file-type=${file.type}`)
+  .then(function (response) {
+    cb(file, response.data.signedRequest, response.data.url);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  /*      
   var xhr = new XMLHttpRequest();
   xhr.open('GET', `/sign-s3?file-name=${file.id}&file-type=${file.type}`);
   xhr.onreadystatechange = () => {
@@ -15,4 +26,5 @@ module.exports = function(file, cb) {
     }
   };
   xhr.send();
+  */
 };

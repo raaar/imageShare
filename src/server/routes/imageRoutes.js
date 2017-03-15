@@ -1,6 +1,8 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
+
+/*
 var multer  = require('multer');
 
 var storage = multer.diskStorage({
@@ -16,7 +18,7 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({ storage: storage });
-
+*/
 
 var routes = function() {
 
@@ -28,10 +30,8 @@ var routes = function() {
 
   imageRouter.route('/')
     .get(imageController.get)
-    .post(imageController.postImage);
+    .post(imageController.post);
 
-//  Disabling upload, as iages will now be stored on S3        
-//    .post(upload.single('image'), imageController.post);
 
   imageRouter.route('/')
 
@@ -44,15 +44,6 @@ var routes = function() {
       res.json(req.image);
     })
     .delete(imageController.destroyImage);
-
-  /*
-  imageRouter.route('/:id/edit')
-    .get(imageController.edit);
-
-    
-  imageRouter.route('/:id/update')
-    .post(imageController.update);
-  */
 
   return imageRouter;
 };
