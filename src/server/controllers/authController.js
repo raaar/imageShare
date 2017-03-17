@@ -1,6 +1,7 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
 var dbUrl = require('../config/db');
+var bcrypt = require('bcrypt');
 
 var authController = function() {
 
@@ -28,10 +29,16 @@ var authController = function() {
   
   var register = function(req, res) {
     mongodb.connect(dbUrl, function(err, db) {
+
+      var salt = bcrypt.genSaltSync(10);
+      var passwordToSave = bcrypt.hashSync(req.body.password, salt);
+      
       var collection = db.collection('users');
+
       var user = {
         username: req.body.userName,
-        password: req.body.password
+        password: passwordToSave,
+        salt: salt
       };
       
       // Check if user already exists in DB ...

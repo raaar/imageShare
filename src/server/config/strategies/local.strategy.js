@@ -1,7 +1,8 @@
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongodb = require('mongodb').MongoClient,
-    dbUrl = require('../db');
+    dbUrl = require('../db'),
+    bcrypt = require('bcrypt');
 
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
@@ -11,6 +12,8 @@ var strategyFunction = function() {
     function(username, password, done) {
 
         console.info('username: ',username);
+
+        var pw = password;
 
         mongodb.connect(dbUrl, function (err, db) {
             var collection = db.collection('users');
@@ -22,7 +25,14 @@ var strategyFunction = function() {
                   if(err) { return done(err); }
 
                   if (null !== results) {
-                    if(results.password === password ) {
+
+                    // TODO: some users don't have encrypted passwords
+                    // if password is not encrypted, they are still able to log in
+                    if(results.salt) {
+                      pw =  bcrypt.hashSync(password, results.salt);
+                    }
+
+                    if(results.password === pw ) {
                       var user = results;
                       console.log('Password is correct');
                       done(null, user);
