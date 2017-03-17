@@ -122,8 +122,10 @@ var GalleryModal = React.createClass({
 
   _getDate: function() {
    if(this.state.data.image.lastModifiedDate) {
+     var lastModified = this.state.data.image.lastModifiedDate;
+     var shortDate = lastModified.match(/.+20[0-9]{2}/);
      return (
-       <p>Last modified: {this.state.data.image.lastModifiedDate}</p>
+       <p>Last modified: {shortDate}</p>
      )
    }
   },
