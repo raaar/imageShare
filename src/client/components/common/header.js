@@ -121,6 +121,7 @@ var Header = React.createClass({
           
             <Link to="feed" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Feed</Link>
             <Link to="upload" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Upload</Link>
+            <Link to="network" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Network</Link>
 
             <div className="nav__item--form"> 
               <SearchForm

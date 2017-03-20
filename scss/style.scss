@@ -79,6 +79,14 @@
 }
 
 
+.truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 a {
   color: $link-color;
   font-weight: 700;
@@ -244,4 +252,33 @@ a {
 .mast {
   height: 180px;
   background: $light;
+}
+
+
+.media-grid {
+  @include clearfix;
+  max-width: 2000px;
+  margin-top: 30px;
+
+  .media {
+    margin-bottom: 50px;
+  }
+
+  @include mq(xl) {
+    > div {
+      max-width: 400px !important;
+    }
+  }
+}
+
+.media {
+  @include display-flex;
+  @include align-items(center);
+}
+
+.media__img {
+  border-radius: 100%;
+  width: 120px;
+  height: 120px;
+  margin-right: 15px;
 }

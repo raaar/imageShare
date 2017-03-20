@@ -18,6 +18,7 @@ module.exports = keyMirror({
   SEARCH_RESULTS: null,
   GET_USER_IMAGES: null,
   GET_AUTHOR_IMAGES: null,
+  GET_ALL_AUTHORS: null,
 
   CREATE_AUTHOR: null,
 	UPDATE_AUTHOR: null,

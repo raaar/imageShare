@@ -25,6 +25,10 @@ $bp-md: 992px;
 	    @media (min-width: 1200px) { @content; }
 	  }
     
+	  @else if $class == xl {
+	    @media (min-width: 2200px) { @content; }
+	  }
+
     @else if $class == xs-down {
         @media only screen and (max-width: $bp-sm - 1) { @content; }
     }

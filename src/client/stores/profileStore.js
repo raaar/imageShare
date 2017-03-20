@@ -24,7 +24,6 @@ var ProfileStore = assign({}, EventEmitter.prototype, {
 	},
 
   getProfile: function(author) {
-    console.log(author);
     return author;
   }
 

@@ -10,9 +10,11 @@ var ImageStore = require('../../stores/imageStore');
 
 var Profile = React.createClass({
 
+
   mixins: [
     Router.Navigation
   ],
+
 
   getInitialState: function() {
     return {
@@ -21,22 +23,25 @@ var Profile = React.createClass({
     };
   },
         
+
   componentDidMount: function() {
     var author = this.props.params.author;
     var user = UserStore.getUser(); // logged in user
     var currentRoutes = this.context.router.getCurrentRoutes();
 
-    ImageActions.authorImages(author, currentRoutes[1].name);
 
     if(this.isMounted()) {
       if(user.userName === author) {
         this.transitionTo('my-profile')
+        this.setState({
+          images: ImageActions.authorImages() 
+        }); 
+      } else {
+        this.setState({
+          images: ImageActions.authorImages(author, currentRoutes[1].name)
+        }); 
       }
-
-      this.setState({
-        images: ImageStore.getAuthorImages() 
-      }); 
-    } 
+    }       
   },
 
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
@@ -45,18 +50,34 @@ var Profile = React.createClass({
 		ImageStore.addChangeListener(this._onChange);
 	},
 
+
 	componentWillUnmount: function() {
 		ProfileStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
 	},
 
+
 	_onChange: function() {
     this.setState({
       images: ImageStore.getAuthorImages()
     });
+    console.info('state change: ', this.state.images);
 	},
 
+
+  _getGallery: function() {
+
+    if(this.state.images && this.state.images.length > 0) {
+      console.info('get gallery: ', this.state.images);
+      return (
+        <ImageGrid images={this.state.images} />
+      )
+    }
+  },
+
+
   render: function() {
+
     return (
       <div>
         <div className="mast">
@@ -64,7 +85,7 @@ var Profile = React.createClass({
             <h3>Images by: {this.props.params.author}</h3> 
           </div>
         </div>
-        <ImageGrid images={this.state.images} />
+        {this._getGallery()}
       </div>
     );
   }

@@ -30,7 +30,6 @@ var ImageGrid = React.createClass({
 
 
   render: function() {
-
     var createImageTile = function(image) {
       var src = config.thumbSquareLarge + image.image.file;
       var tileClass = "tile";

@@ -24,7 +24,6 @@ var UserProfile = React.createClass({
       images: [
       ],
       own: false,
-      userLoaded: false,
       error: ""
     };
   },
@@ -57,15 +56,11 @@ var UserProfile = React.createClass({
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
-    this.setState({
-      userLoaded: false
-    });
 	},
 
 	_onChange: function() {
     this.setState({
       user: UserStore.getUser(),
-      userLoaded: true,
       images: ImageStore.getUserImages()
     });
 	},

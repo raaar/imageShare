@@ -1,7 +1,7 @@
 var express = require('express');
 var multer  = require('multer');
 
-
+/*
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log('upload storage');
@@ -14,9 +14,9 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + "."+ ext[1] );
   }
 });
+*/
 
-
-var upload = multer({ storage: storage });
+//var upload = multer({ storage: storage });
 
 
 var routes = function() {

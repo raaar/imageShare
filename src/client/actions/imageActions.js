@@ -25,6 +25,7 @@ var ImageActions = {
 
 
   authorImages: function(user) {
+    console.info('author images user: ', user);
     Api.get('api/images?author=' + user ) 
       .then(function(data) {
         Dispatcher.dispatch({

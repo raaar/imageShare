@@ -9,6 +9,7 @@ var s3Signature = require('../api/s3Sign');
 
 var UserActions = {
 
+
   saveAvatar: function(data, file, cb) {
     s3Signature(file, function(file, signedRequest, url){
 

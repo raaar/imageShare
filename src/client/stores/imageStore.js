@@ -61,6 +61,7 @@ Dispatcher.register(function(action){
 
     case ActionTypes.GET_AUTHOR_IMAGES: 
 			_authorImages = action.gallery;
+      console.info('image author store: ', _authorImages);
 			ImageStore.emitChange();
 			break;
 
