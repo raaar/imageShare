@@ -58,21 +58,16 @@ var Search = React.createClass({
   },
 
   searchText: function() {
-    var st = this.state;
+    var txt = this.state.searchQuery ?  "No results found" : "Type a search term"
 
-    if(!st.searchQuery) {
-      return (
-        <div>
-          <h2>Type a search term</h2>
+    return (
+      <div className="mast">
+        <div className="container-fluid">
+          <h3>{txt}</h3>
+          <p>{this.state.searchQuery}</p>
         </div>
-      )
-    } else {
-      return (
-        <div>
-          <h2>Searching for {st.searchQuery}</h2>
-        </div>
-      )
-    }
+      </div>
+    )
   },
 
   render: function() {

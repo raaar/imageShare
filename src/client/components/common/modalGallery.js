@@ -75,14 +75,16 @@ var GalleryModal = React.createClass({
     }
   },
 
+
   getNext: function(){
     ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'next'); 
-    console.log(ModalStore.getNextPrev());        
   },
+
 
   getPrev: function() {
     ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'prev'); 
   },
+
 
 	componentWillMount: function() {
 		ModalStore.addChangeListener(this._onChange);
