@@ -33,7 +33,7 @@ var routes = function() {
     .post(imageController.post);
 
 
-  imageRouter.route('/')
+//  imageRouter.route('/')
 
 
   // Middleware making the request to mongodb
@@ -44,6 +44,10 @@ var routes = function() {
       res.json(req.image);
     })
     .delete(imageController.destroyImage);
+
+
+  imageRouter.route('/:id/next').get(imageController.getNext);
+  imageRouter.route('/:id/prev').get(imageController.getPrev);
 
   return imageRouter;
 };

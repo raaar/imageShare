@@ -4,11 +4,13 @@ var React = require('react');
 var ModalStore = require('../../stores/modalStore');
 var ModalActions = require('../../actions/modalActions');
 var ImageActions = require('../../actions/imageActions');
+var ImageStore = require('../../stores/imageStore');
 var UserStore = require('../../stores/userStore');
 var Router = require('react-router');
 var Link = Router.Link;
 var _ = require('lodash');
 var config = require('../../../../config');
+
 
 var GalleryModal = React.createClass({
   
@@ -19,6 +21,7 @@ var GalleryModal = React.createClass({
 
   getInitialState: function() {
     return {
+      filters: {},
       visible: false,
       sidebarOpen: false,
       data: {
@@ -29,7 +32,8 @@ var GalleryModal = React.createClass({
         }
       },
       user: {
-      }
+      },
+      currentIndex: 0
     }
   },
 
@@ -37,6 +41,8 @@ var GalleryModal = React.createClass({
   componentDidMount: function() {
    
     var _self = this;
+    var user = UserStore.getUser(); // logged in user
+
     document.onkeydown = function(evt) {
       evt = evt || window.event;
       var isEscape = false;
@@ -48,19 +54,35 @@ var GalleryModal = React.createClass({
       if (isEscape) {
         _self.closeModal();
       }
+
+
+      if(evt.keyCode == 39 ) {
+        _self.getNext();
+      }
+      if(evt.keyCode == 37 ) {
+        _self.getPrev();
+      }
     };
 
-    var user = UserStore.getUser(); // logged in user
 
     if(this.isMounted()) {
       this.setState({
-        visible: ModalStore.isModalVisible(),
         data: ModalStore.getModalData(),
-        user: user
+        filters: ImageStore.getFilters(),
+        user: user,
+        visible: ModalStore.isModalVisible()
       })
     }
   },
 
+  getNext: function(){
+    ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'next'); 
+    console.log(ModalStore.getNextPrev());        
+  },
+
+  getPrev: function() {
+    ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'prev'); 
+  },
 
 	componentWillMount: function() {
 		ModalStore.addChangeListener(this._onChange);
@@ -74,9 +96,10 @@ var GalleryModal = React.createClass({
 
 	_onChange: function() {
     this.setState({
-      visible: ModalStore.isModalVisible(),
+      data: ModalStore.getModalData(),
+      filters: ImageStore.getFilters(),
       sidebarOpen: ModalStore.getModalSidebar(),
-      data: ModalStore.getModalData()
+      visible: ModalStore.isModalVisible()
     });
 	},
 
@@ -92,6 +115,8 @@ var GalleryModal = React.createClass({
     ImageActions.deleteImage(id); 
     this.transitionTo('app');
   },
+
+
 
 
   toggleSidebar: function(e) {

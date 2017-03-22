@@ -5,8 +5,8 @@ var ProfileStore = require('../../stores/profileStore');
 var UserStore = require('../../stores/userStore');
 var Router = require('react-router');
 var ImageActions = require('../../actions/imageActions');
-var ImageGrid = require('../image/imageGrid');
 var ImageStore = require('../../stores/imageStore');
+var ImageGrid = require('../image/imageGrid');
 
 var Profile = React.createClass({
 
@@ -29,16 +29,15 @@ var Profile = React.createClass({
     var user = UserStore.getUser(); // logged in user
     var currentRoutes = this.context.router.getCurrentRoutes();
 
-
     if(this.isMounted()) {
+      ImageActions.setImageFilters({author: author});
+
       if(user.userName === author) {
         this.transitionTo('my-profile')
-        this.setState({
-          images: ImageActions.authorImages() 
-        }); 
       } else {
         this.setState({
-          images: ImageActions.authorImages(author, currentRoutes[1].name)
+          images: ImageActions.authorImages(author, currentRoutes[1].name),
+          filters: ImageStore.getFilters()
         }); 
       }
     }       
@@ -59,7 +58,8 @@ var Profile = React.createClass({
 
 	_onChange: function() {
     this.setState({
-      images: ImageStore.getAuthorImages()
+      images: ImageStore.getAuthorImages(),
+      filters: ImageStore.getFilters()
     });
     console.info('state change: ', this.state.images);
 	},
@@ -70,7 +70,7 @@ var Profile = React.createClass({
     if(this.state.images && this.state.images.length > 0) {
       console.info('get gallery: ', this.state.images);
       return (
-        <ImageGrid images={this.state.images} />
+        <ImageGrid images={this.state.images}  />
       )
     }
   },

@@ -10,6 +10,7 @@ var CHANGE_EVENT = 'change';
 var _images = [];
 var _userImages = [];
 var _authorImages = [];
+var _filters = {};
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
@@ -43,7 +44,12 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 
   clearUserImages: function() {
     _userImages = [];
+  },
+
+  getFilters: function() {
+    return _filters; 
   }
+
 });
 
 
@@ -81,6 +87,12 @@ Dispatcher.register(function(action){
 
 			ImageStore.emitChange();
 			break;
+
+    case ActionTypes.SET_IMAGE_FILTERS:
+      _filters = action.filters;
+			ImageStore.emitChange();
+      break;
+
 		default:
 			// no operations
 	}

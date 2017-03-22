@@ -24,7 +24,33 @@ var ModalActions = {
     Dispatcher.dispatch({
       actionType: ActionTypes.TOGGLE_MODAL_SIDEBAR
     });
-  }
+  },
+  
+  getNextPrev: function(id, q, direction) {
+    var _id = id;
+    var query = "";
+
+    for( var key in q) {
+      if( key === "author") {
+        query = "?author=" + q.author    
+      }
+    };
+
+    Api.get('api/images/' + _id + '/' + direction + query)
+      .then(function(data) {
+
+        if(typeof data !== 'undefined' && data.length > 0) {
+          Dispatcher.dispatch({
+            actionType: ActionTypes.GET_NEXT_PREV,
+            data: data
+          });
+        }
+      });
+  },
+
+
+
+
 }
 
 

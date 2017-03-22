@@ -14,7 +14,7 @@ var profileController = function() {
 
       var collection = db.collection('users');
 
-      collection.find(query).toArray(function(err, results) {
+      collection.find(query).sort({ username: 1 }).toArray(function(err, results) {
               
         results.forEach(function (n) {
           delete n.password;

@@ -3,6 +3,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var ImageActions = require('../actions/imageActions');
 var ImageStore = require('../stores/imageStore');
 var ImageGrid = require('./image/imageGrid');
 var ModalGallery = require('./common/modalGallery');
@@ -11,15 +12,19 @@ var Home = React.createClass({
   
   getInitialState: function() {
     return {
-     images: []
+     images: [],
+     filters: {}
     };
   },
 
   componentDidMount: function() {
+    ImageActions.setImageFilters({}); // Filters used by modal. Reset image filters on homepage
+
     if(this.isMounted()) {
-      // this.setState({ authors: AuthorApi.getAllAuthors() });
-			//console.info('authorPage comp did mount: ', ImageStore );
-      this.setState({images: ImageStore.getAllImages() });
+      this.setState({
+        images: ImageStore.getAllImages(),
+        filters: ImageStore.getFilters()
+      });
     }
   },
 
@@ -33,7 +38,10 @@ var Home = React.createClass({
 	},
 
 	_onChange: function() {
-		this.setState({images: ImageStore.getAllImages() });
+		this.setState({
+      images: ImageStore.getAllImages(),
+      filters: ImageStore.getFilters()
+    });
 	},
 
   render: function() {

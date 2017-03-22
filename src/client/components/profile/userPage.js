@@ -43,6 +43,9 @@ var UserProfile = React.createClass({
         images: ImageStore.getUserImages(),
         user: UserStore.getUser()
       });
+   
+      // Tell store that we are viewing Users images
+      ImageActions.setImageFilters({author: userStore.userName});
     }
   },
 
@@ -108,6 +111,7 @@ var UserProfile = React.createClass({
     $("input[type='file']").trigger('click');
   },
 
+
   saveAvatar: function(e) {
     if(e) {
       e.preventDefault();
@@ -120,6 +124,7 @@ var UserProfile = React.createClass({
     toastr.warning('Uploading avatar');
   },
 
+       
   logOut: function(data, e) {
     e.preventDefault();
 
@@ -128,14 +133,15 @@ var UserProfile = React.createClass({
     });
   },
 
+
   render: function() {
-          
     var _self = this;
+
     var userLoaded = function() {
       if(_self.state.images != undefined && _self.state.images.length > 0) {
         return (
           <div>
-            <ImageGrid images={_self.state.images} />
+            <ImageGrid images={_self.state.images} context="raflondon"  />
           </div>
         )
       } else {

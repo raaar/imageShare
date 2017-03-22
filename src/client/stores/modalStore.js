@@ -11,10 +11,13 @@ var _visible = false;
 var _sidebarVisible = false;
 var _modalTitle = "";
 var _modalData = {
+  author: "",
   image: {
     full: ""
   }
 };
+
+var _nextImages = {};
 
 
 var ModalStore = assign({}, EventEmitter.prototype, {
@@ -42,14 +45,18 @@ var ModalStore = assign({}, EventEmitter.prototype, {
   getModalData: function() {
     var isEmpty = _.isEmpty(_modalData); // true
     if(!isEmpty) {
-      return _modalData;
+      return _modalData
     } else {
-      return;
+      return
     }
   },
 
   getModalSidebar: function() {
     return _sidebarVisible;  
+  },
+
+  getNextPrev: function() {
+    return _nextImages;
   }
      
 
@@ -76,6 +83,13 @@ Dispatcher.register(function(action) {
       _sidebarVisible = _sidebarVisible ? false : true;
       ModalStore.emitChange();
 			break;
+
+    case ActionTypes.GET_NEXT_PREV:
+      _nextImages = action.data;
+      _modalData = action.data[0];
+      ModalStore.emitChange();
+      break;
+
 		default:
 			// no operations
 	}

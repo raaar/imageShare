@@ -104,6 +104,16 @@ var ImageActions = {
          id: id
 		   });
      });
+  },
+
+
+
+  setImageFilters: function(filters) {
+    console.log(filters);
+    Dispatcher.dispatch({
+      actionType: ActionTypes.SET_IMAGE_FILTERS,
+      filters: filters
+    });
   }
 }
 

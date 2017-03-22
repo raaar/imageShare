@@ -87,13 +87,56 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      collection.find(query).toArray(function(err, images) {
+      collection.find(query).sort({"_id":-1}).toArray(function(err, images) {
         res.json(images);
       });
     });
   };
   
+
   
+  var _queryNextPrev = function(req, res, direction) {
+    var curId = new objectId(req.params.id);
+    var query = {};
+
+
+    if ('author' in req.query) {
+      query.author = req.query.author;
+    }
+
+    mongodb.connect(dbUrl, function(err, db){
+      var collection = db.collection('images');
+     
+      if(direction === 'next') {
+        // Object assign merges two objects together
+        collection.find(Object.assign( {_id: {$lt: curId}}, query )) .sort({_id: -1 }).limit(5).toArray(function(err, images){
+          if(err)
+            throw err
+
+          res.json(images)
+        });
+      } else {
+        collection.find(Object.assign( {_id: {$gt: curId}}, query )) .sort({_id: 1 }).limit(5).toArray(function(err, images){
+          if(err)
+            throw err
+
+          res.json(images)
+        });
+      }
+    });
+  }
+        
+
+  var getNext = function(req, res){
+    _queryNextPrev(req, res, 'next')
+  };
+
+
+  var getPrev = function(req, res){
+    _queryNextPrev(req, res, 'prev')
+  };
+
+
   var destroyImage = function(req, res) {
     var id = new objectId(req.params.id);
 
@@ -156,6 +199,8 @@ var imageController = function() {
   return {
     get: get,
     post: post,
+    getNext: getNext,
+    getPrev: getPrev,
     destroyImage: destroyImage,
     middleware: middleware,
     middlewareFetchSingle: middlewareFetchSingle
