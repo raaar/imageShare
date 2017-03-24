@@ -33,7 +33,7 @@ var InitializeActions = {
         });
     }
 
-
+/*
     Api.get('api/images')
       .then(function(data){
         Dispatcher.dispatch({
@@ -43,7 +43,7 @@ var InitializeActions = {
           }
         });
       });
-
+*/
   /*
     // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
     axios.get('api/images')

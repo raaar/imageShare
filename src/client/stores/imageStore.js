@@ -42,8 +42,12 @@ var ImageStore = assign({}, EventEmitter.prototype, {
     return _authorImages;
   },
 
-  clearUserImages: function() {
-    _userImages = [];
+  clearuserimages: function() {
+    _userimages = [];
+  },
+
+  clearImages: function() {
+    _images = []; 
   },
 
   getFilters: function() {
@@ -74,8 +78,7 @@ Dispatcher.register(function(action){
 			break;
 
     case ActionTypes.GET_AUTHOR_IMAGES: 
-			_authorImages = action.gallery;
-      console.info('image author store: ', _authorImages);
+      _authorImages = _authorImages.concat(action.gallery);
 			ImageStore.emitChange();
 			break;
 

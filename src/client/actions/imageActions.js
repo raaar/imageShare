@@ -5,23 +5,45 @@ var Api = require('../api/imagesApi');
 var s3Signature = require('../api/s3Sign');
 var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
-
+var ImageStore = require('../stores/imageStore');
 
 var ImageActions = {
 
 
   // TODO: this could be merged with userImages and authorImages and potentially with the initialize images function
   loadMoreImages: function(q) {
-    var query = "";
+    var queryFilters = ImageStore.getFilters();
 
-    for( var key in q) {
-      if( key === "after") {
-        query = "?after=" + q.after    
+
+    var query = "";
+   
+    if(q) {
+    
+      if(Object.keys(q).length > 0) {
+        query += "?"
       }
-    };
+ 
+      for(var key in q) {
+        query += key + "=" + q[key] + "&" ;
+      };
+    }
+
+          /*
+    if(Object.keys(queryFilters).length > 0 ) {
+      for(var k in queryFilters) {
+              console.log(queryFilters[k]);
+        query += k + "=" + queryFilters[k] + "&" ;
+      };
+    }
+    */
+
+    //console.info('query filters: ', queryFilters);
+
+    console.info('load more images query: ', query);
 
     Api.get('api/images/fetch' + query ) 
       .then(function(data) {
+        console.info('load more images data', data );
         Dispatcher.dispatch({
 			    actionType: ActionTypes.GET_IMAGES,
 		  	  gallery: data 
@@ -41,10 +63,26 @@ var ImageActions = {
   },
 
 
-  authorImages: function(user) {
-    console.info('author images user: ', user);
-    Api.get('api/images?author=' + user ) 
+  authorImages: function(q) {
+    console.info('author query: ', q);
+
+    var query = "";
+   
+    if(q) {
+    
+      if(Object.keys(q).length > 0) {
+        query += "?"
+      }
+ 
+      for(var key in q) {
+        query += key + "=" + q[key] + "&" ;
+      };
+    }
+
+
+    Api.get('api/images/fetch' + query ) 
       .then(function(data) {
+        console.info('author query data: ', data);
         Dispatcher.dispatch({
 			    actionType: ActionTypes.GET_AUTHOR_IMAGES,
 		  	  gallery: data 

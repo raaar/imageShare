@@ -20,9 +20,11 @@ var Home = React.createClass({
   componentDidMount: function() {
     ImageActions.setImageFilters({}); // Filters used by modal. Reset image filters on homepage
 
+    console.log('componentDidmount');
     if(this.isMounted()) {
       this.setState({
-        images: ImageStore.getAllImages(),
+//        images: ImageStore.getAllImages(),
+        images: ImageActions.loadMoreImages(),
         filters: ImageStore.getFilters()
       });
     }
@@ -35,6 +37,7 @@ var Home = React.createClass({
 
 	componentWillUnmount: function() {
 		ImageStore.removeChangeListener(this._onChange);
+    ImageStore.clearImages();
 	},
 
 	_onChange: function() {
@@ -44,10 +47,24 @@ var Home = React.createClass({
     });
 	},
 
+
+  galleryLoadMore() {
+    console.log('gallery load more'); 
+  },
+
+
+  getGrid: function() {
+    if(this.state.images && this.state.images.length) {
+      return (
+        <ImageGrid images={this.state.images} gridSize="large" loadMore={this.galleryLoadMore} />
+      )
+    }
+  },
+
   render: function() {
     return (
         <div>
-          <ImageGrid images={this.state.images} gridSize="large" />
+          {this.getGrid()}
         </div>
       );
   }

@@ -36,7 +36,9 @@ var Profile = React.createClass({
         this.transitionTo('my-profile')
       } else {
         this.setState({
-          images: ImageActions.authorImages(author, currentRoutes[1].name),
+          //images: ImageActions.authorImages(author, currentRoutes[1].name),
+          //images: ImageActions.authorImages({author: this.props.params.author  }),
+          images: ImageActions.loadMoreImages({author: this.props.params.author  }),
           filters: ImageStore.getFilters()
         }); 
       }
@@ -53,12 +55,13 @@ var Profile = React.createClass({
 	componentWillUnmount: function() {
 		ProfileStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
+    ImageStore.clearImages();
 	},
 
 
 	_onChange: function() {
     this.setState({
-      images: ImageStore.getAuthorImages(),
+      images: ImageStore.getAllImages(),
       filters: ImageStore.getFilters()
     });
     console.info('state change: ', this.state.images);
@@ -66,11 +69,11 @@ var Profile = React.createClass({
 
 
   _getGallery: function() {
-
+    
     if(this.state.images && this.state.images.length > 0) {
       console.info('get gallery: ', this.state.images);
       return (
-        <ImageGrid images={this.state.images}  />
+        <ImageGrid images={this.state.images} author={this.props.params.author}  />
       )
     }
   },

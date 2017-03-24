@@ -40,11 +40,13 @@ var UserProfile = React.createClass({
 
     if(this.isMounted()) {
       this.setState({
-        images: ImageStore.getUserImages(),
+        images: ImageActions.loadMoreImages({author: userStore.userName  }),
+        //images: ImageStore.getUserImages(),
         user: UserStore.getUser()
       });
    
       // Tell store that we are viewing Users images
+      // TODO
       ImageActions.setImageFilters({author: userStore.userName});
     }
   },
@@ -59,12 +61,13 @@ var UserProfile = React.createClass({
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
+    ImageStore.clearImages();
 	},
 
 	_onChange: function() {
     this.setState({
       user: UserStore.getUser(),
-      images: ImageStore.getUserImages()
+      images: ImageStore.getAllImages()
     });
 	},
 
@@ -141,7 +144,7 @@ var UserProfile = React.createClass({
       if(_self.state.images != undefined && _self.state.images.length > 0) {
         return (
           <div>
-            <ImageGrid images={_self.state.images} context="raflondon"  />
+            <ImageGrid images={_self.state.images} author="raflondon"  />
           </div>
         )
       } else {
