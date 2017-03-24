@@ -60,6 +60,14 @@ Dispatcher.register(function(action){
 			ImageStore.emitChange();
 			break;
 
+		case ActionTypes.GET_IMAGES:
+      // TODO: merge GET_IMAGES with GET_USER_IMAGES and GET_AUTHOR_IMAGES
+      // TODO: once the last image item is loaded, disable the load more button / block infinite scroll
+      // TODO: enable infinite scrolling
+      _images = _images.concat(action.gallery);
+			ImageStore.emitChange();
+			break;
+
     case ActionTypes.GET_USER_IMAGES: 
 			_userImages = action.gallery;
 			ImageStore.emitChange();

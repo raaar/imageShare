@@ -68,7 +68,17 @@ var imageController = function() {
 
   var get = function(req, res){
     var id = new objectId(req.params.id);
-    var query = {};
+
+    console.info('query: ', req.query);
+    console.info('query: ', req.query.after);
+
+    if(req.query.after)
+      id = new objectId(req.query.after);
+                  
+
+    console.info('get images: ', id);
+
+    var query = {_id: {$lt: id}};
 
     // http://localhost:9001/api/images?author=5@5.com
 
@@ -87,7 +97,7 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      collection.find(query).sort({"_id":-1}).toArray(function(err, images) {
+      collection.find(query).sort({"_id":-1}).limit(5).toArray(function(err, images) {
         res.json(images);
       });
     });

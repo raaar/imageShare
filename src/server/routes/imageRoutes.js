@@ -29,9 +29,11 @@ var routes = function() {
 
 
   imageRouter.route('/')
-    .get(imageController.get)
+    .get(imageController.get) // this could be replaced by the more semantic 'fetch'.
     .post(imageController.post);
 
+  imageRouter.route('/fetch')
+    .get(imageController.get);
 
 //  imageRouter.route('/')
 

@@ -9,9 +9,26 @@ var toastr = require('toastr');
 
 var ImageActions = {
 
-//  get: function(query) {
-//    console.info('get images: ', query);
-//  },
+
+  // TODO: this could be merged with userImages and authorImages and potentially with the initialize images function
+  loadMoreImages: function(q) {
+    var query = "";
+
+    for( var key in q) {
+      if( key === "after") {
+        query = "?after=" + q.after    
+      }
+    };
+
+    Api.get('api/images/fetch' + query ) 
+      .then(function(data) {
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.GET_IMAGES,
+		  	  gallery: data 
+	      });
+      });
+  },
+
 
   userImages: function(user) {
     Api.get('api/images?author=' + user ) 
