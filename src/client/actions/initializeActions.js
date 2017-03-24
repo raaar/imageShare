@@ -33,32 +33,6 @@ var InitializeActions = {
         });
     }
 
-/*
-    Api.get('api/images')
-      .then(function(data){
-        Dispatcher.dispatch({
-          actionType: ActionTypes.INITIALIZE,
-          initialData: {
-            images: data
-          }
-        });
-      });
-*/
-  /*
-    // Axios can be used as an alternative for Ajax requests. Use Axios if jQuery is not used in the app
-    axios.get('api/images')
-      .then(function (response) {
-        Dispatcher.dispatch({
-          actionType: ActionTypes.INITIALIZE,
-          initialData: {
-            images: response.data 
-          }
-        });
-     })
-    .catch(function (error) {
-      console.log(error);
-    });
-  */
 	}
 };
 

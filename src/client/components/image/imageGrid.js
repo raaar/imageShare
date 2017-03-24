@@ -6,6 +6,7 @@ var Link = Router.Link;
 var _ = require('lodash');
 var ModalActions = require('../../actions/modalActions');
 var ImageActions = require('../../actions/imageActions');
+var ImageStore = require('../../stores/imageStore');
 var config = require('../../../../config');
 
 var ImageGrid = React.createClass({
@@ -23,9 +24,7 @@ var ImageGrid = React.createClass({
         }         
       },
       end: false,
-      previousPosition: window.pageYOffset,
-      author: "",
-      images: []
+      previousPosition: window.pageYOffset
     }
   },
 
@@ -37,17 +36,20 @@ var ImageGrid = React.createClass({
 
 
   loadMore: function() {
+    // get the search query parameters from store
+    var imageQuery = ImageStore.getImageQuery();
 
     // only make ajax call if there are images available on the DB
     if(!this.state.end) {
       var lastItem = this.props.images[this.props.images.length -1];
       var query = { after : lastItem._id }
       
-      // if we query by author, send the author name
-      if(this.props.author)
-        query.author = this.props.author; 
-
-      ImageActions.loadMoreImages( query );
+      // add any search queries to the request 
+      if(Object.keys(imageQuery).length)
+        Object.assign(query, imageQuery);
+        
+      console.info('the query: ', query);
+      ImageActions.loadImages( query );
     }
   },
 
@@ -129,7 +131,7 @@ var ImageGrid = React.createClass({
     return (
       <div>
 	  		{this.props.images.map(createImageTile, this)}
-        <div className="load-more">
+        <div className="load-more container-fluid">
           <button className={btnClass} onClick={this.loadMore}>Load more</button>
         </div>    
       </div>

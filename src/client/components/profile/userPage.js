@@ -31,7 +31,7 @@ var UserProfile = React.createClass({
 
   componentDidMount: function() {
     var userStore = JSON.parse(sessionStorage.UserStore);
-    ImageActions.userImages(userStore.userName);
+    ImageActions.setImageQuery({author: userStore.userName});
 
     toastr.options = {
       "positionClass": "toast-bottom-right" 
@@ -40,14 +40,9 @@ var UserProfile = React.createClass({
 
     if(this.isMounted()) {
       this.setState({
-        images: ImageActions.loadMoreImages({author: userStore.userName  }),
-        //images: ImageStore.getUserImages(),
+        images: ImageActions.loadImages({author: userStore.userName  }),
         user: UserStore.getUser()
       });
-   
-      // Tell store that we are viewing Users images
-      // TODO
-      ImageActions.setImageFilters({author: userStore.userName});
     }
   },
 
@@ -58,11 +53,13 @@ var UserProfile = React.createClass({
 		ImageStore.addChangeListener(this._onChange);
 	},
 
+        
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
 		ImageStore.removeChangeListener(this._onChange);
     ImageStore.clearImages();
 	},
+
 
 	_onChange: function() {
     this.setState({
@@ -70,6 +67,7 @@ var UserProfile = React.createClass({
       images: ImageStore.getAllImages()
     });
 	},
+
 
   handleFile: function(e) {
     e.preventDefault();
@@ -144,7 +142,7 @@ var UserProfile = React.createClass({
       if(_self.state.images != undefined && _self.state.images.length > 0) {
         return (
           <div>
-            <ImageGrid images={_self.state.images} author="raflondon"  />
+            <ImageGrid images={_self.state.images} />
           </div>
         )
       } else {

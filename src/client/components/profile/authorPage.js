@@ -30,7 +30,7 @@ var Profile = React.createClass({
     var currentRoutes = this.context.router.getCurrentRoutes();
 
     if(this.isMounted()) {
-      ImageActions.setImageFilters({author: author});
+      ImageActions.setImageQuery({author: author});
 
       if(user.userName === author) {
         this.transitionTo('my-profile')
@@ -38,8 +38,8 @@ var Profile = React.createClass({
         this.setState({
           //images: ImageActions.authorImages(author, currentRoutes[1].name),
           //images: ImageActions.authorImages({author: this.props.params.author  }),
-          images: ImageActions.loadMoreImages({author: this.props.params.author  }),
-          filters: ImageStore.getFilters()
+          images: ImageActions.loadImages({author: this.props.params.author  }),
+          filters: ImageStore.getImageQuery()
         }); 
       }
     }       
@@ -62,7 +62,7 @@ var Profile = React.createClass({
 	_onChange: function() {
     this.setState({
       images: ImageStore.getAllImages(),
-      filters: ImageStore.getFilters()
+      filters: ImageStore.getImageQuery()
     });
     console.info('state change: ', this.state.images);
 	},
@@ -73,7 +73,7 @@ var Profile = React.createClass({
     if(this.state.images && this.state.images.length > 0) {
       console.info('get gallery: ', this.state.images);
       return (
-        <ImageGrid images={this.state.images} author={this.props.params.author}  />
+        <ImageGrid images={this.state.images} />
       )
     }
   },

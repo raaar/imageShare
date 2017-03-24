@@ -68,7 +68,7 @@ var GalleryModal = React.createClass({
     if(this.isMounted()) {
       this.setState({
         data: ModalStore.getModalData(),
-        filters: ImageStore.getFilters(),
+        //filters: ImageStore.getFilters(),
         user: user,
         visible: ModalStore.isModalVisible()
       })
@@ -99,7 +99,7 @@ var GalleryModal = React.createClass({
 	_onChange: function() {
     this.setState({
       data: ModalStore.getModalData(),
-      filters: ImageStore.getFilters(),
+      //filters: ImageStore.getFilters(),
       sidebarOpen: ModalStore.getModalSidebar(),
       visible: ModalStore.isModalVisible()
     });

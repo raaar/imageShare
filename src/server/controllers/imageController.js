@@ -92,7 +92,7 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      collection.find(query).sort({"_id":-1}).limit(1).toArray(function(err, images) {
+      collection.find(query).sort({"_id":-1}).limit(5).toArray(function(err, images) {
         res.json(images);
       });
     });

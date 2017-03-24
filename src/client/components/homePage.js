@@ -18,14 +18,14 @@ var Home = React.createClass({
   },
 
   componentDidMount: function() {
-    ImageActions.setImageFilters({}); // Filters used by modal. Reset image filters on homepage
+    ImageActions.setImageQuery({}); // Filters used by modal. Reset image filters on homepage
 
     console.log('componentDidmount');
     if(this.isMounted()) {
       this.setState({
 //        images: ImageStore.getAllImages(),
-        images: ImageActions.loadMoreImages(),
-        filters: ImageStore.getFilters()
+        images: ImageActions.loadImages(),
+        filters: ImageStore.getImageQuery()
       });
     }
   },
@@ -43,7 +43,7 @@ var Home = React.createClass({
 	_onChange: function() {
 		this.setState({
       images: ImageStore.getAllImages(),
-      filters: ImageStore.getFilters()
+      filters: ImageStore.getImageQuery()
     });
 	},
 
