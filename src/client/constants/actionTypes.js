@@ -16,6 +16,6 @@ module.exports = keyMirror({
   SEARCH_RESULTS: null,
   GET_IMAGES: null,
   GET_ALL_AUTHORS: null,
-  GET_NEXT_PREV: null,
+  MODAL_INDEX: null,
   SET_IMAGE_FILTERS: null
 });

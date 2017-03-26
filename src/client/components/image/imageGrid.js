@@ -23,15 +23,15 @@ var ImageGrid = React.createClass({
           avatar: ""
         }         
       },
-      end: false,
+      end: false, // might not need this logic
       previousPosition: window.pageYOffset
     }
   },
 
 
-  openImage: function(image, e) {
+  openImage: function(image, i, e) {
     e.preventDefault();
-    ModalActions.showModal(image);
+    ModalActions.showModal(image, i);
   },
 
 
@@ -54,17 +54,30 @@ var ImageGrid = React.createClass({
   },
 
 
+  loadItemsFirstTime: function() {
+    // Load just enough items to fill the whole page.
+    // Called twice: by componentDidMount and componentDidUpdate
+    var grid = document.getElementById('grid');
+    var gridHeight = grid.offsetHeight;
+    var clientHeight = document.documentElement.clientHeight;
+  
+    if( gridHeight < clientHeight ) {
+      console.info('component did update');
+      this.loadMore(); 
+    }
+  },
+
+
   handleScroll: function(event) {
     var pageHeight = document.documentElement.scrollHeight;
     var clientHeight = document.documentElement.clientHeight;
     var currentPosition = window.pageYOffset;
 
-
     if (this.state.previousPosition > currentPosition) {
       //console.log('scrolling up');
     } else {
       //console.log('scrolling down');
-      if (pageHeight - (currentPosition + clientHeight) < 50) {
+      if (pageHeight - (currentPosition + clientHeight) < 50 ) {
         console.log('update items function');
         this.loadMore();
       }
@@ -87,16 +100,26 @@ var ImageGrid = React.createClass({
     if( oldLastItem && oldLastItem  === newLastItem ) {
       window.removeEventListener("scroll", this.handleScroll);
 
-      this.setState({
-        end: true
-      });
+      //this.setState({
+        //end: true
+      //});
     }
   },
+
+  
   
 
+  componentDidUpdate: function() {
+    this.loadItemsFirstTime(); 
+  },
+
+
   componentDidMount: function() {
+    this.loadItemsFirstTime(); 
     window.addEventListener("scroll", _.debounce(this.handleScroll, 500 ) );
   },
+
+
 
 
   componentWillUnmount: function() {
@@ -105,9 +128,8 @@ var ImageGrid = React.createClass({
 
 
   render: function() {
-    var btnClass = this.state.end ? "btn hide" : "btn" ;
 
-    var createImageTile = function(image) {
+    var createImageTile = function(image, i) {
       if(!image)
         return;
 
@@ -120,7 +142,7 @@ var ImageGrid = React.createClass({
 
       return (
         <div key={image._id} >
-          <a href="#" onClick={this.openImage.bind(this, image)}>
+          <a href="#" onClick={this.openImage.bind(this, image, i)}>
             <img className={tileClass} src={src} />
           </a>
         </div>
@@ -129,11 +151,8 @@ var ImageGrid = React.createClass({
 
 
     return (
-      <div>
+      <div id="grid">
 	  		{this.props.images.map(createImageTile, this)}
-        <div className="load-more container-fluid">
-          <button className={btnClass} onClick={this.loadMore}>Load more</button>
-        </div>    
       </div>
     );
   }

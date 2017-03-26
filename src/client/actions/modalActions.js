@@ -7,10 +7,11 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ModalActions = {
 
-  showModal: function(data) {
+  showModal: function(data, i) {
     Dispatcher.dispatch({
       actionType: ActionTypes.SHOW_MODAL,
-      image: data
+      image: data,
+      index: i
     });
   },
 
@@ -36,6 +37,13 @@ var ModalActions = {
       }
     };
 
+    Dispatcher.dispatch({
+      actionType: ActionTypes.MODAL_INDEX,
+      direction: direction
+    });
+    
+    
+    /*              
     Api.get('api/images/' + _id + '/' + direction + query)
       .then(function(data) {
 
@@ -46,6 +54,7 @@ var ModalActions = {
           });
         }
       });
+    */
   },
 
 

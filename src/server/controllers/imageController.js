@@ -92,7 +92,7 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      collection.find(query).sort({"_id":-1}).limit(5).toArray(function(err, images) {
+      collection.find(query).sort({"_id":-1}).limit(20).toArray(function(err, images) {
         res.json(images);
       });
     });
@@ -114,7 +114,7 @@ var imageController = function() {
      
       if(direction === 'next') {
         // Object assign merges two objects together
-        collection.find(Object.assign( {_id: {$lt: curId}}, query )) .sort({_id: -1 }).limit(5).toArray(function(err, images){
+        collection.find(Object.assign( {_id: {$lt: curId}}, query )) .sort({_id: -1 }).limit(10).toArray(function(err, images){
           if(err)
             throw err
 

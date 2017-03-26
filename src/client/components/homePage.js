@@ -48,18 +48,14 @@ var Home = React.createClass({
 	},
 
 
-  galleryLoadMore() {
-    console.log('gallery load more'); 
-  },
-
-
   getGrid: function() {
     if(this.state.images && this.state.images.length) {
       return (
-        <ImageGrid images={this.state.images} gridSize="large" loadMore={this.galleryLoadMore} />
+        <ImageGrid images={this.state.images} gridSize="large" />
       )
     }
   },
+
 
   render: function() {
     return (

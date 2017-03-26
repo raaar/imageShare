@@ -17,6 +17,7 @@ var _modalData = {
   }
 };
 
+var _modalImageIndex = 0;
 var _nextImages = {};
 
 
@@ -57,19 +58,25 @@ var ModalStore = assign({}, EventEmitter.prototype, {
 
   getNextPrev: function() {
     return _nextImages;
-  }
+  },
      
+  getModalImageIndex: function() {
+    return _modalImageIndex;
+  }
 
 });
+
 
 Dispatcher.register(function(action) {
     //var action = payload.action;
 	switch(action.actionType) {
 
 		case ActionTypes.SHOW_MODAL:
+       console.info('action: ',action);
       _visible = true;
       _modalTitle = action.modalTitle;
       _modalData = action.image;
+      _modalImageIndex = action.index;
       ModalStore.emitChange();
 			break;
 
@@ -84,9 +91,10 @@ Dispatcher.register(function(action) {
       ModalStore.emitChange();
 			break;
 
-    case ActionTypes.GET_NEXT_PREV:
-      _nextImages = action.data;
-      _modalData = action.data[0];
+    case ActionTypes.MODAL_INDEX:
+      //_nextImages = action.data;
+      //_modalData = action.data[0];
+      _modalImageIndex =  _modalImageIndex + action.direction;
       ModalStore.emitChange();
       break;
 

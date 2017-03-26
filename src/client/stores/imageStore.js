@@ -28,10 +28,15 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 		return _.find(_images, {_id: id});
 	},
 
+  // swap for getImages
 	getAllImages: function() {
 		return _images;
 	},
 
+	getImages: function() {
+    console.log('getting images');
+		return _images;
+	},
 
   clearImages: function() {
     _images = []; 
@@ -53,7 +58,11 @@ Dispatcher.register(function(action){
 
 
 		case ActionTypes.GET_IMAGES:
-      _images = _images.concat(action.gallery);
+      //_images = _images.concat(action.gallery);
+      //_images = _.union(_images, action.gallery);
+      _images = _.concat(_images, action.gallery);
+      _images = _.uniqBy(_images, '_id');
+      console.info('Store _images: ', _images);
 			ImageStore.emitChange();
 			break;
 

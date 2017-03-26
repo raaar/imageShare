@@ -21,7 +21,7 @@ var GalleryModal = React.createClass({
 
   getInitialState: function() {
     return {
-      filters: {},
+      imageQuery: {},
       visible: false,
       sidebarOpen: false,
       data: {
@@ -31,9 +31,10 @@ var GalleryModal = React.createClass({
           full: ""
         }
       },
-      user: {
-      },
-      currentIndex: 0
+      user: {},
+      index: 0,
+      images: [],
+      loading: false
     }
   },
 
@@ -67,8 +68,9 @@ var GalleryModal = React.createClass({
 
     if(this.isMounted()) {
       this.setState({
-        data: ModalStore.getModalData(),
-        //filters: ImageStore.getFilters(),
+        imageQuery: ImageStore.getImageQuery(),
+        images: ImageStore.getImages(),
+        index: ModalStore.getModalImageIndex(),
         user: user,
         visible: ModalStore.isModalVisible()
       })
@@ -76,13 +78,56 @@ var GalleryModal = React.createClass({
   },
 
 
+  componentWillReceiveProps: function(nextProps) {
+    console.info('next props: ', nextProps);
+  },
+
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextState.images.length);
+    console.log(this.state.images.length);
+    console.info('is old and new data the same: ', _.isEqual(nextState.images, this.state.images));
+    return true
+  },
+
+
   getNext: function(){
-    ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'next'); 
+
+      if(this.state.index > this.state.images.length - 4 ) {
+
+        var lastImage = {
+          after : this.state.images[this.state.images.length - 1]._id
+        }
+
+        var query = Object.assign(lastImage, this.state.imageQuery);
+        console.info('we are close to the end ',  query );
+        ImageActions.loadImages(query);
+      }
+
+//    if(!this.state.loading) {
+      console.info('array length: ', this.state.images.length);
+          //
+      if(this.state.index < this.state.images.length - 1) {
+        ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, 1 ); 
+      } else {
+        this.setState({
+        
+        });
+
+        this._onChange();
+      }
+//    }
+
+    this.setState({
+      loading: true
+    });
   },
 
 
   getPrev: function() {
-    ModalActions.getNextPrev(this.state.data._id, this.state.filters, 'prev'); 
+    if(this.state.index !== 0 ) {
+      ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, -1 ); 
+    }
   },
 
 
@@ -98,10 +143,16 @@ var GalleryModal = React.createClass({
 
 	_onChange: function() {
     this.setState({
-      data: ModalStore.getModalData(),
-      //filters: ImageStore.getFilters(),
+      images: ImageStore.getImages(),
+      index: ModalStore.getModalImageIndex(),
+      imageQuery: ImageStore.getImageQuery(),
       sidebarOpen: ModalStore.getModalSidebar(),
-      visible: ModalStore.isModalVisible()
+      visible: ModalStore.isModalVisible(),
+      loading: false
+    }, function(){
+      this.setState({
+        data: this.state.images[ this.state.index ]
+      })
     });
 	},
 
@@ -117,8 +168,6 @@ var GalleryModal = React.createClass({
     ImageActions.deleteImage(id); 
     this.transitionTo('app');
   },
-
-
 
 
   toggleSidebar: function(e) {
@@ -192,6 +241,11 @@ var GalleryModal = React.createClass({
     } else {
       modalClass = 'modal';
     }
+
+
+    //modalClass = this.state.loading ? modalClass + ' is-loading' : modalClass; 
+    //console.log(this.state.loading);
+
 
     return (
       <div>
