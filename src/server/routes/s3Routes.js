@@ -1,13 +1,16 @@
 var express = require('express');
 var aws = require('aws-sdk');
-//var awsConfig = require('../../../awsConfig');
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 
+var awsConfig = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || ''  ,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ''
+  //accessKeyId: "AKIAJCLSTMT55AMMQPBA",
+  //secretAccessKey: "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"
+};
+
 if(process.env.NODE_ENV === undefined ) {
-  aws.config.update( 
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  );
+  aws.config.update(awsConfig);
 }
 
 module.exports = (req, res) => {
