@@ -1,6 +1,6 @@
 var express = require('express');
 var aws = require('aws-sdk');
-var awsConfig = require('../../../awsConfig');
+//var awsConfig = require('../../../awsConfig');
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 
 if(process.env.NODE_ENV === undefined ) {
