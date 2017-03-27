@@ -8,7 +8,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _images = [];
-var _imageQuery = {};
+var _imagesQuery = {};
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
@@ -28,13 +28,7 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 		return _.find(_images, {_id: id});
 	},
 
-  // swap for getImages
-	getAllImages: function() {
-		return _images;
-	},
-
 	getImages: function() {
-    console.log('getting images');
 		return _images;
 	},
 
@@ -43,7 +37,7 @@ var ImageStore = assign({}, EventEmitter.prototype, {
   },
 
   getImageQuery: function() {
-    return _imageQuery; 
+    return _imagesQuery; 
   }
 
 });
@@ -58,11 +52,8 @@ Dispatcher.register(function(action){
 
 
 		case ActionTypes.GET_IMAGES:
-      //_images = _images.concat(action.gallery);
-      //_images = _.union(_images, action.gallery);
       _images = _.concat(_images, action.gallery);
       _images = _.uniqBy(_images, '_id');
-      console.info('Store _images: ', _images);
 			ImageStore.emitChange();
 			break;
 
@@ -82,8 +73,8 @@ Dispatcher.register(function(action){
 			break;
 
 
-    case ActionTypes.SET_IMAGE_FILTERS:
-      _imageQuery = action.filters;
+    case ActionTypes.SET_IMAGES_QUERY:
+      _imagesQuery = action.filters;
 			ImageStore.emitChange();
       break;
 

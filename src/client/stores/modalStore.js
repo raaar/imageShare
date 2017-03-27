@@ -10,13 +10,6 @@ var CHANGE_EVENT = 'change';
 var _visible = false;
 var _sidebarVisible = false;
 var _modalTitle = "";
-var _modalData = {
-  author: "",
-  image: {
-    full: ""
-  }
-};
-
 var _modalImageIndex = 0;
 var _nextImages = {};
 
@@ -43,14 +36,6 @@ var ModalStore = assign({}, EventEmitter.prototype, {
     return _modalTitle;
   },
 
-  getModalData: function() {
-    var isEmpty = _.isEmpty(_modalData); // true
-    if(!isEmpty) {
-      return _modalData
-    } else {
-      return
-    }
-  },
 
   getModalSidebar: function() {
     return _sidebarVisible;  
@@ -68,14 +53,12 @@ var ModalStore = assign({}, EventEmitter.prototype, {
 
 
 Dispatcher.register(function(action) {
-    //var action = payload.action;
 	switch(action.actionType) {
 
 		case ActionTypes.SHOW_MODAL:
        console.info('action: ',action);
       _visible = true;
       _modalTitle = action.modalTitle;
-      _modalData = action.image;
       _modalImageIndex = action.index;
       ModalStore.emitChange();
 			break;
@@ -92,8 +75,6 @@ Dispatcher.register(function(action) {
 			break;
 
     case ActionTypes.MODAL_INDEX:
-      //_nextImages = action.data;
-      //_modalData = action.data[0];
       _modalImageIndex =  _modalImageIndex + action.direction;
       ModalStore.emitChange();
       break;

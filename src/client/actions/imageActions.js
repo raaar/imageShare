@@ -24,14 +24,16 @@ var ImageActions = {
       };
     }
 
+    console.log('load images ' + query);
 
     Api.get('api/images/fetch' + query ) 
       .then(function(data) {
-        console.info('load more images data', data );
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.GET_IMAGES,
-		  	  gallery: data 
-	      });
+        if(typeof data !== 'undefined' && data.length > 0) {
+          Dispatcher.dispatch({
+			      actionType: ActionTypes.GET_IMAGES,
+		  	    gallery: data 
+	        });
+        }
       });
   },
 
@@ -90,9 +92,8 @@ var ImageActions = {
 
 
   setImageQuery: function(filters) {
-    console.log(filters);
     Dispatcher.dispatch({
-      actionType: ActionTypes.SET_IMAGE_FILTERS,
+      actionType: ActionTypes.SET_IMAGES_QUERY,
       filters: filters
     });
   }

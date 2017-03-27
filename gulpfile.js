@@ -53,7 +53,7 @@ gulp.task('serve',['bundle','live-server'],function(){
 });
 
 
-gulp.task('default', ['serve'], function() {
+gulp.task('default',/* ['serve'] */ ['bundle'] , function() {
     gulp.watch('src/client/**/*', ['bundle']);
     gulp.watch('scss/**/*.scss', ['scss']);
 });

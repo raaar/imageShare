@@ -7,10 +7,9 @@ var ActionTypes = require('../constants/actionTypes');
 
 var ModalActions = {
 
-  showModal: function(data, i) {
+  showModal: function(i) {
     Dispatcher.dispatch({
       actionType: ActionTypes.SHOW_MODAL,
-      image: data,
       index: i
     });
   },

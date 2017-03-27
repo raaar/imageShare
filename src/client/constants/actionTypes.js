@@ -17,5 +17,5 @@ module.exports = keyMirror({
   GET_IMAGES: null,
   GET_ALL_AUTHORS: null,
   MODAL_INDEX: null,
-  SET_IMAGE_FILTERS: null
+  SET_IMAGES_QUERY: null
 });

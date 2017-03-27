@@ -20,10 +20,8 @@ var Home = React.createClass({
   componentDidMount: function() {
     ImageActions.setImageQuery({}); // Filters used by modal. Reset image filters on homepage
 
-    console.log('componentDidmount');
     if(this.isMounted()) {
       this.setState({
-//        images: ImageStore.getAllImages(),
         images: ImageActions.loadImages(),
         filters: ImageStore.getImageQuery()
       });

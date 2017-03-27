@@ -21,9 +21,6 @@ var GalleryModal = React.createClass({
 
   getInitialState: function() {
     return {
-      imageQuery: {},
-      visible: false,
-      sidebarOpen: false,
       data: {
         title: "",
         author: "",
@@ -31,10 +28,13 @@ var GalleryModal = React.createClass({
           full: ""
         }
       },
-      user: {},
-      index: 0,
+      imageQuery: {},
       images: [],
-      loading: false
+      index: 0,
+      loading: false,
+      sidebarOpen: false,
+      user: {},
+      visible: false
     }
   },
 
@@ -78,45 +78,25 @@ var GalleryModal = React.createClass({
   },
 
 
-  componentWillReceiveProps: function(nextProps) {
-    console.info('next props: ', nextProps);
-  },
-
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextState.images.length);
-    console.log(this.state.images.length);
-    console.info('is old and new data the same: ', _.isEqual(nextState.images, this.state.images));
-    return true
-  },
-
-
   getNext: function(){
 
-      if(this.state.index > this.state.images.length - 4 ) {
+    if(this.state.index > this.state.images.length - 5 ) {
 
-        var lastImage = {
-          after : this.state.images[this.state.images.length - 1]._id
-        }
-
-        var query = Object.assign(lastImage, this.state.imageQuery);
-        console.info('we are close to the end ',  query );
-        ImageActions.loadImages(query);
+      var lastImage = {
+        after : this.state.images[this.state.images.length - 1]._id
       }
 
-//    if(!this.state.loading) {
-      console.info('array length: ', this.state.images.length);
-          //
-      if(this.state.index < this.state.images.length - 1) {
-        ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, 1 ); 
-      } else {
-        this.setState({
-        
-        });
+      var query = Object.assign(lastImage, this.state.imageQuery);
+      ImageActions.loadImages(query);
+    }
 
-        this._onChange();
-      }
-//    }
+
+    if(this.state.index < this.state.images.length - 1) {
+      ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, 1 ); 
+    } else {
+      this._onChange();
+    }
+
 
     this.setState({
       loading: true
@@ -241,10 +221,6 @@ var GalleryModal = React.createClass({
     } else {
       modalClass = 'modal';
     }
-
-
-    //modalClass = this.state.loading ? modalClass + ' is-loading' : modalClass; 
-    //console.log(this.state.loading);
 
 
     return (
