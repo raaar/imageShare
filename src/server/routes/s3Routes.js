@@ -4,7 +4,10 @@ var awsConfig = require('../../../awsConfig');
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 
 if(process.env.NODE_ENV === undefined ) {
-  aws.config.update(awsConfig);
+  aws.config.update( 
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  );
 }
 
 module.exports = (req, res) => {
