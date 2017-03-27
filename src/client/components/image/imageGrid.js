@@ -15,9 +15,10 @@ var ImageGrid = React.createClass({
     images: React.PropTypes.array.isRequired
   },
 
-// set initial state here
+  // set initial state here
   getInitialState: function() {
     return {
+      end: false,
       image: {
         image: {
           avatar: ""
@@ -36,6 +37,8 @@ var ImageGrid = React.createClass({
 
 
   loadMore: function() {
+    var _self = this;
+
     // get the search query parameters from store
     var imageQuery = ImageStore.getImageQuery();
 
@@ -47,7 +50,7 @@ var ImageGrid = React.createClass({
     if(Object.keys(imageQuery).length)
       Object.assign(query, imageQuery);
         
-    ImageActions.loadImages( query );
+    ImageActions.loadImages(query);
   },
 
 
@@ -58,7 +61,7 @@ var ImageGrid = React.createClass({
     var gridHeight = grid.offsetHeight;
     var clientHeight = document.documentElement.clientHeight;
   
-    if( gridHeight < clientHeight ) {
+    if( !this.state.end && gridHeight < clientHeight ) {
       this.loadMore(); 
     } else {
       this.setState({
@@ -79,7 +82,8 @@ var ImageGrid = React.createClass({
       //console.log('scrolling down');
       if (pageHeight - (currentPosition + clientHeight) < clientHeight ) {
 
-        this.loadMore()
+        if(this.isMounted() &&  !this.state.end)
+          this.loadMore()
       }
     }
 
@@ -92,9 +96,11 @@ var ImageGrid = React.createClass({
 
 
   componentDidMount: function() {
+		ImageStore.addChangeListener(this._onChange);
+
     if(this.isMounted()) {
       this.loadItemsFirstTime(); 
-      window.addEventListener("scroll", _.debounce(this.handleScroll, 500 ) );
+      window.addEventListener("scroll", _.debounce(this.handleScroll, 1000 ) );
     }
   },
 
@@ -107,9 +113,17 @@ var ImageGrid = React.createClass({
   },
 
 
-  componentWillUnmount: function() {
+	componentWillUnmount: function() {
+		ImageStore.removeChangeListener(this._onChange);
     window.removeEventListener("scroll", _.debounce(this.handleScroll));
-  },
+	},
+
+
+	_onChange: function() {
+		this.setState({
+      end: ImageStore.imagesEnd(),
+    });
+	},
 
 
   render: function() {

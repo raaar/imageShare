@@ -64,7 +64,7 @@ var UserProfile = React.createClass({
 	_onChange: function() {
     this.setState({
       user: UserStore.getUser(),
-      images: ImageStore.getAllImages()
+      images: ImageStore.getImages()
     });
 	},
 

@@ -29,13 +29,11 @@ var routes = function() {
 
 
   imageRouter.route('/')
-    .get(imageController.get) // this could be replaced by the more semantic 'fetch'.
+//    .get(imageController.get) // this could be replaced by the more semantic 'fetch'.
     .post(imageController.post);
 
   imageRouter.route('/fetch')
     .get(imageController.get);
-
-//  imageRouter.route('/')
 
 
   // Middleware making the request to mongodb
@@ -47,9 +45,6 @@ var routes = function() {
     })
     .delete(imageController.destroyImage);
 
-
-  imageRouter.route('/:id/next').get(imageController.getNext);
-  imageRouter.route('/:id/prev').get(imageController.getPrev);
 
   return imageRouter;
 };

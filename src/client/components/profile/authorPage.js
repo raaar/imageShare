@@ -61,17 +61,15 @@ var Profile = React.createClass({
 
 	_onChange: function() {
     this.setState({
-      images: ImageStore.getAllImages(),
+      images: ImageStore.getImages(),
       filters: ImageStore.getImageQuery()
     });
-    console.info('state change: ', this.state.images);
 	},
 
 
   _getGallery: function() {
     
     if(this.state.images && this.state.images.length > 0) {
-      console.info('get gallery: ', this.state.images);
       return (
         <ImageGrid images={this.state.images} />
       )

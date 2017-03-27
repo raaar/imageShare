@@ -9,35 +9,40 @@ var CHANGE_EVENT = 'change';
 
 var _images = [];
 var _imagesQuery = {};
+var _imagesEnd = false;
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
 	addChangeListener: function(callback) {
-		this.on(CHANGE_EVENT, callback);
+		this.on(CHANGE_EVENT, callback)
 	},
 
 	removeChangeListener: function(callback) {
-		this.removeListener(CHANGE_EVENT, callback);
+		this.removeListener(CHANGE_EVENT, callback)
 	},
 
 	emitChange: function() {
-		this.emit(CHANGE_EVENT);
+		this.emit(CHANGE_EVENT)
 	},
 
 	getImageById: function(id) {
-		return _.find(_images, {_id: id});
+		return _.find(_images, {_id: id})
 	},
 
 	getImages: function() {
-		return _images;
+		return _images
 	},
 
   clearImages: function() {
-    _images = []; 
+    _images = [] 
   },
 
   getImageQuery: function() {
-    return _imagesQuery; 
+    return _imagesQuery 
+  },
+
+  imagesEnd: function() {
+    return _imagesEnd 
   }
 
 });
@@ -52,8 +57,15 @@ Dispatcher.register(function(action){
 
 
 		case ActionTypes.GET_IMAGES:
-      _images = _.concat(_images, action.gallery);
-      _images = _.uniqBy(_images, '_id');
+      if(typeof action.gallery !== undefined && action.gallery.length > 0) {
+        _imagesEnd = false;
+        _images = _.concat(_images, action.gallery);
+        _images = _.uniqBy(_images, '_id');
+      } else {
+        console.log('Image store, end of images');
+        _imagesEnd = true;
+      }
+
 			ImageStore.emitChange();
 			break;
 

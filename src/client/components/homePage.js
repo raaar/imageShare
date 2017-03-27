@@ -40,7 +40,7 @@ var Home = React.createClass({
 
 	_onChange: function() {
 		this.setState({
-      images: ImageStore.getAllImages(),
+      images: ImageStore.getImages(),
       filters: ImageStore.getImageQuery()
     });
 	},

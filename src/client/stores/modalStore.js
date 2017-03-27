@@ -56,7 +56,6 @@ Dispatcher.register(function(action) {
 	switch(action.actionType) {
 
 		case ActionTypes.SHOW_MODAL:
-       console.info('action: ',action);
       _visible = true;
       _modalTitle = action.modalTitle;
       _modalImageIndex = action.index;

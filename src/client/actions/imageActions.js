@@ -28,12 +28,10 @@ var ImageActions = {
 
     Api.get('api/images/fetch' + query ) 
       .then(function(data) {
-        if(typeof data !== 'undefined' && data.length > 0) {
-          Dispatcher.dispatch({
-			      actionType: ActionTypes.GET_IMAGES,
-		  	    gallery: data 
-	        });
-        }
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.GET_IMAGES,
+		     gallery: data 
+	      });
       });
   },
 

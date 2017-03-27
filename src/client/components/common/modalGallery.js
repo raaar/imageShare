@@ -28,6 +28,7 @@ var GalleryModal = React.createClass({
           full: ""
         }
       },
+      end: false,
       imageQuery: {},
       images: [],
       index: 0,
