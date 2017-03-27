@@ -4,6 +4,8 @@
  2: gulp
 */
 
+var dotenv = require('dotenv');
+dotenv.load();
 var express = require('express'),
     bodyParser = require('body-parser');
 
@@ -17,7 +19,7 @@ var dbUrl = require('./src/server/config/db');
 var app = express();
 
 var port = process.env.PORT || 7777;
-console.log(process.env.NODE_ENV);
+console.info('env: ', process.env.NODE_ENV);
 
 var db;
 

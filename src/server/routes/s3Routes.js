@@ -3,15 +3,13 @@ var aws = require('aws-sdk');
 var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
 
 var awsConfig = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || ''  ,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ''
-  //accessKeyId: "AKIAJCLSTMT55AMMQPBA",
-  //secretAccessKey: "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"
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 };
 
-if(process.env.NODE_ENV === undefined ) {
+//if(process.env.NODE_ENV === undefined ) {
   aws.config.update(awsConfig);
-}
+//}
 
 module.exports = (req, res) => {
   const s3 = new aws.S3();
