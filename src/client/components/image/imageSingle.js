@@ -11,6 +11,7 @@ var ImageSingle = React.createClass({
     Router.Navigation
   ],
 
+
   getInitialState: function() {
     return {
      user: {
@@ -26,7 +27,10 @@ var ImageSingle = React.createClass({
     };
   },
 
+
   componentWillMount: function() {
+		ImageStore.addChangeListener(this._onChange);
+
     var imageId = this.props.params.id;
 
     if(imageId) {
@@ -36,6 +40,7 @@ var ImageSingle = React.createClass({
     }
   },
   
+
   componentDidMount: function() {
     var user = UserStore.getUser(); // logged in user
     if(this.isMounted()) {
@@ -47,19 +52,18 @@ var ImageSingle = React.createClass({
     }
   },
 
-	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
-	componentWillMount: function() {
-		ImageStore.addChangeListener(this._onChange);
-	},
+
 
 	componentWillUnmount: function() {
 		ImageStore.removeChangeListener(this._onChange);
 	},
 
+
 	_onChange: function() {
     var imageId = this.props.params.id;
 		this.setState({image: ImageStore.getImageById(imageId) });
 	},
+
 
   deleteImage: function(id, e) {
     e.preventDefault();
@@ -67,23 +71,21 @@ var ImageSingle = React.createClass({
     this.transitionTo('app');
   },
 
-  render: function() {
-    var _self = this;
-    var url = "uploads/images/" + this.state.image.image.full;
-    var authorUrl = "profile/" + this.state.image.author;
 
-//    console.info("id: ", this.state.image._id);
-//    console.info(this.state.user.userName);
-
-    var deleteButton = function() {
-      if(_self.state.image.author === _self.state.user.userName) {
+  _deleteButton: function() {
+      if(this.state.image.author === this.state.user.userName) {
         return (
           <div>
-			      <a href="#" onClick={_self.deleteImage.bind(_self, _self.state.image._id)}>Delete</a>
+			      <a href="#" onClick={this.deleteImage(this.state.image._id)}>Delete</a>
           </div>
         )
       }
-    } 
+  },
+
+
+  render: function() {
+    var url = "uploads/images/" + this.state.image.image.full;
+    var authorUrl = "profile/" + this.state.image.author;
 
     return (
       <div>
@@ -91,7 +93,7 @@ var ImageSingle = React.createClass({
         <p>Title: {this.state.image.title}</p>
         <p>By: <Link to="profile" params={{author: this.state.image.author}}>{this.state.image.author}</Link></p>
         <p>Size: {this.state.image.image.size}</p>
-        {deleteButton()}
+        {this._deleteButton()}
       </div>
     )
   }

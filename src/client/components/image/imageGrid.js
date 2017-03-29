@@ -23,11 +23,12 @@ var ImageGrid = React.createClass({
         image: {
           avatar: ""
         }         
-      },
-      gridFillsPage: false,
-      previousPosition: window.pageYOffset
+      }
     }
   },
+
+
+  previousPosition: window.pageYOffset,
 
 
   openImage: function(image, i, e) {
@@ -37,14 +38,15 @@ var ImageGrid = React.createClass({
 
 
   loadMore: function() {
-    var _self = this;
-
     // get the search query parameters from store
     var imageQuery = ImageStore.getImageQuery();
 
     // only make ajax call if there are images available on the DB
     var lastItem = this.props.images[this.props.images.length -1];
-    var query = { after : lastItem._id }
+    var query = { 
+      after : lastItem._id,
+      limit: 10
+    }
       
     // add any search queries to the request 
     if(Object.keys(imageQuery).length)
@@ -64,9 +66,7 @@ var ImageGrid = React.createClass({
     if( !this.state.end && gridHeight < clientHeight ) {
       this.loadMore(); 
     } else {
-      this.setState({
-        gridFillsPage: true    
-      })    
+      this.gridFillsPage = true    
     }
   },
 
@@ -74,23 +74,17 @@ var ImageGrid = React.createClass({
   handleScroll: function(event) {
     var pageHeight = document.documentElement.scrollHeight;
     var clientHeight = document.documentElement.clientHeight;
-    var currentPosition = window.pageYOffset;
+    this.currentPosition = window.pageYOffset;
 
-    if (this.state.previousPosition > currentPosition) {
+    if (this.previousPosition > this.currentPosition) {
       //console.log('scrolling up');
     } else {
       //console.log('scrolling down');
-      if (pageHeight - (currentPosition + clientHeight) < clientHeight ) {
+      if (pageHeight - (this.currentPosition + clientHeight) < clientHeight ) {
 
         if(this.isMounted() &&  !this.state.end)
           this.loadMore()
       }
-    }
-
-    if(this.isMounted()) {
-      this.setState({
-        previousPosition: currentPosition
-      });
     }
   },
 
@@ -98,16 +92,14 @@ var ImageGrid = React.createClass({
   componentDidMount: function() {
 		ImageStore.addChangeListener(this._onChange);
 
-    if(this.isMounted()) {
-      this.loadItemsFirstTime(); 
-      window.addEventListener("scroll", _.debounce(this.handleScroll, 1000 ) );
-    }
+    this.loadItemsFirstTime(); 
+    window.addEventListener("scroll", _.debounce(this.handleScroll, 1000 ) );
   },
 
 
   componentDidUpdate: function() {
     // check if the grid fills the whole page
-    if(!this.state.gridFillsPage) {
+    if(!this.gridFillsPage) {
       this.loadItemsFirstTime(); 
     }
   },

@@ -76,6 +76,9 @@ var imageController = function() {
     var query = {_id: {$lt: id}};
 
     // http://localhost:9001/api/images?author=5@5.com
+    var limit = req.query.limit ? req.query.limit : 10;
+    console.info('limit: ', limit);
+    console.info('limit: ', typeof limit);
 
     if('title' in req.query) {
       query.title = req.query.title;
@@ -92,7 +95,7 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      collection.find(query).sort({"_id":-1}).limit(20).toArray(function(err, images) {
+      collection.find(query).sort({"_id":-1}).limit(parseInt(limit)).toArray(function(err, images) {
         res.json(images);
       });
     });

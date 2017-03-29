@@ -24,6 +24,8 @@ var ImageActions = {
       };
     }
 
+//          debugger;
+
     console.log('load images ' + query);
 
     Api.get('api/images/fetch' + query ) 

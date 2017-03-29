@@ -42,7 +42,6 @@ var GalleryModal = React.createClass({
 
   componentDidMount: function() {
    
-    var _self = this;
     var user = UserStore.getUser(); // logged in user
 
     document.onkeydown = function(evt) {
@@ -54,17 +53,17 @@ var GalleryModal = React.createClass({
         isEscape = (evt.keyCode == 27);
       }
       if (isEscape) {
-        _self.closeModal();
+        this.closeModal();
       }
 
 
       if(evt.keyCode == 39 ) {
-        _self.getNext();
+        this.getNext();
       }
       if(evt.keyCode == 37 ) {
-        _self.getPrev();
+        this.getPrev();
       }
-    };
+    }.bind(this);
 
 
     if(this.isMounted()) {

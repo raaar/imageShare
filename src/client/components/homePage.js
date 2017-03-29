@@ -12,8 +12,7 @@ var Home = React.createClass({
   
   getInitialState: function() {
     return {
-     images: [],
-     filters: {}
+     images: []
     };
   },
 
@@ -22,8 +21,7 @@ var Home = React.createClass({
 
     if(this.isMounted()) {
       this.setState({
-        images: ImageActions.loadImages(),
-        filters: ImageStore.getImageQuery()
+        images: ImageActions.loadImages({limit: 20})
       });
     }
   },
@@ -40,8 +38,7 @@ var Home = React.createClass({
 
 	_onChange: function() {
 		this.setState({
-      images: ImageStore.getImages(),
-      filters: ImageStore.getImageQuery()
+      images: ImageStore.getImages()
     });
 	},
 
