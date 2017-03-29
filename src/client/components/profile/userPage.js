@@ -6,7 +6,7 @@ var FileInput = require('../common/fileInput');
 var UserActions = require('../../actions/userActions');
 var ImageActions = require('../../actions/imageActions');
 var ImageStore = require('../../stores/imageStore');
-var ImageGrid = require('../image/imageGrid');
+var ImageGridContainer = require('../image/imageGridContainer');
 var $ = require('jquery');
 var toastr = require('toastr');
 var config = require('../../../../config');
@@ -142,7 +142,7 @@ var UserProfile = React.createClass({
       if(_self.state.images != undefined && _self.state.images.length > 0) {
         return (
           <div>
-            <ImageGrid images={_self.state.images} />
+            <ImageGridContainer images={_self.state.images} />
           </div>
         )
       } else {

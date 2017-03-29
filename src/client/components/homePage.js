@@ -5,7 +5,7 @@ var Router = require('react-router');
 var Link = Router.Link;
 var ImageActions = require('../actions/imageActions');
 var ImageStore = require('../stores/imageStore');
-var ImageGrid = require('./image/imageGrid');
+var ImageGridContainer = require('./image/imageGridContainer');
 var ModalGallery = require('./common/modalGallery');
 
 var Home = React.createClass({
@@ -46,7 +46,7 @@ var Home = React.createClass({
   getGrid: function() {
     if(this.state.images && this.state.images.length) {
       return (
-        <ImageGrid images={this.state.images} gridSize="large" />
+        <ImageGridContainer images={this.state.images} gridSize="large" />
       )
     }
   },

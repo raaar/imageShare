@@ -6,7 +6,7 @@ var UserStore = require('../../stores/userStore');
 var Router = require('react-router');
 var ImageActions = require('../../actions/imageActions');
 var ImageStore = require('../../stores/imageStore');
-var ImageGrid = require('../image/imageGrid');
+var ImageGridContainer = require('../image/imageGridContainer');
 
 var Profile = React.createClass({
 
@@ -71,7 +71,7 @@ var Profile = React.createClass({
     
     if(this.state.images && this.state.images.length > 0) {
       return (
-        <ImageGrid images={this.state.images} />
+        <ImageGridContainer images={this.state.images} />
       )
     }
   },
