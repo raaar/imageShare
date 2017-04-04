@@ -1,7 +1,8 @@
 var should = require('should'),
     sinon = require('sinon');
 
-describe('Book Controller Tests:', function(){
+/* TODO: write image controller tests
+describe('Image Controller Tests:', function(){
   describe('Post' , function() {
     it('Should not allow empty title on post', function() {
       var Book = function(book){
@@ -20,7 +21,7 @@ describe('Book Controller Tests:', function(){
         send: sinon.spy()
       };
 
-      var bookController = require('../Controllers/bookController')(Book);
+      var bookController = require('../controllers/imageController')(Book);
 
       bookController.post(req, res);
 
@@ -30,3 +31,4 @@ describe('Book Controller Tests:', function(){
     });
   });
 });
+*/
