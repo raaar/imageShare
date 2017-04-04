@@ -32,7 +32,6 @@ var GalleryModal = React.createClass({
       imageQuery: {},
       images: [],
       index: 0,
-      loading: false,
       sidebarOpen: false,
       user: {},
       visible: false
@@ -96,11 +95,6 @@ var GalleryModal = React.createClass({
     } else {
       this._onChange();
     }
-
-
-    this.setState({
-      loading: true
-    });
   },
 
 
@@ -128,7 +122,6 @@ var GalleryModal = React.createClass({
       imageQuery: ImageStore.getImageQuery(),
       sidebarOpen: ModalStore.getModalSidebar(),
       visible: ModalStore.isModalVisible(),
-      loading: false
     }, function(){
       this.setState({
         data: this.state.images[ this.state.index ]

@@ -3,22 +3,21 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-// var sharp = require('sharp'); // image processing library
 var dbUrl = require('../config/db');
 
 
 var imageController = function() {
 
-  var middleware = function(req, res, next){
-    // console.log('example middleware going...');
-    next();
-  };
-  
 
+  // get single image
   var middlewareFetchSingle = function(req, res, next) {
     var id = new objectId(req.params.id);
 
     mongodb.connect(dbUrl, function(err, db){
+      if(err) {
+        throw err;
+      }
+
       var collection = db.collection('images');
 
       collection.findOne({_id : id}, function(err, image) {
@@ -36,14 +35,15 @@ var imageController = function() {
   };
 
 
-
+  // post new image
   var post = function(req, res) {
 
     var fileName = req.body.id;
     var imageTitle = req.body.formData.title;
 
+    // if untitled
     if(!imageTitle) {
-      imageTitle = 'untitled';
+      imageTitle = fileName;
     }
 
     var imageData = {
@@ -61,11 +61,12 @@ var imageController = function() {
     mongodb.connect(dbUrl, function(err, db) {
       var collection = db.collection('images');
       collection.insert(imageData);
-      res.send(imageData); 
+      res.send(imageData);
     });
   };
 
 
+  // get all images
   var get = function(req, res){
     var id = new objectId(req.params.id);
 
@@ -74,20 +75,14 @@ var imageController = function() {
                   
 
     var query = {_id: {$lt: id}};
-
-    // http://localhost:9001/api/images?author=5@5.com
     var limit = req.query.limit ? req.query.limit : 10;
-    console.info('limit: ', limit);
-    console.info('limit: ', typeof limit);
 
-    if('title' in req.query) {
-      query.title = req.query.title;
-    }
 
     if ('author' in req.query) {
       query.author = req.query.author;
     }
 
+    
     mongodb.connect(dbUrl, function(err, db) {
       if(err) {
         res.status(500).send(err);
@@ -95,14 +90,15 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
+      // "-1" fetches images back in time
       collection.find(query).sort({"_id":-1}).limit(parseInt(limit)).toArray(function(err, images) {
         res.json(images);
       });
     });
   };
   
-
-  var destroyImage = function(req, res) {
+  
+  var deleteImage = function(req, res) {
     var id = new objectId(req.params.id);
 
     mongodb.connect(dbUrl, function(err, db){
@@ -111,21 +107,13 @@ var imageController = function() {
       }
 
       var collection = db.collection('images');
-      removeImage(req, res, collection, id);
-    });
-  }
-
-
-  function removeImage (req, res, collection, id) {
-    
-    // fetch and delete DB entry...
-    function destroyItem(next) {
       collection.findOne({_id : id}, function(err, image) {
         if (err) {
-          throw err
+          throw err;
         }
 
-        if(image.author === req.user.username ) { // TODO: user should only be able to delete his own images
+        // user can only delete his own images
+        if(image.author === req.user.username ) { 
           collection.deleteOne(
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {
@@ -133,7 +121,8 @@ var imageController = function() {
               throw err
             }
 
-            next(image);
+            res.json('Item deleted');
+            console.log('Item deleted');
           });
         } else {
           console.log('You don\'t have permission to delete this file' );
@@ -141,35 +130,16 @@ var imageController = function() {
           return;
         }
       });
-    }
-    
-    // ...now we can delete residue files from the uploads folder
-    destroyItem(function(image) {
-      var files = ["public/uploads/images/" + image.image.full, "public/uploads/images/" + image.image.thumb];
-
-      if(files) {
-        files.forEach( function( fileName ) {
-          if (fs.existsSync(fileName)) {
-            fs.unlinkSync(fileName);
-          }
-        });
-      }
- 
-      res.json('Item deleted');
-      console.log('item deleted');
     });
-  };
+  }
 
 
   return {
     get: get,
     post: post,
-    destroyImage: destroyImage,
-    middleware: middleware,
+    deleteImage: deleteImage,
     middlewareFetchSingle: middlewareFetchSingle
   }
-
-
 }
 
 

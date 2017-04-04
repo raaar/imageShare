@@ -24,13 +24,14 @@ var ImageGridContainer = React.createClass({
       image: {
         image: {
           avatar: ""
-        }         
+        }
       }
     }
   },
 
 
   previousPosition: window.pageYOffset,
+  gridFillsPage: false,
 
 
   openImage: function(i, e) {
@@ -45,12 +46,12 @@ var ImageGridContainer = React.createClass({
 
     // only make ajax call if there are images available on the DB
     var lastItem = this.props.images[this.props.images.length -1];
-    var query = { 
+    var query = {
       after : lastItem._id,
       limit: 10
     }
       
-    // add any search queries to the request 
+    // add any search queries to the request
     if(Object.keys(imageQuery).length)
       Object.assign(query, imageQuery);
         
@@ -66,9 +67,9 @@ var ImageGridContainer = React.createClass({
     var clientHeight = document.documentElement.clientHeight;
   
     if( !this.state.end && gridHeight < clientHeight ) {
-      this.loadMore(); 
+      this.loadMore();
     } else {
-      this.gridFillsPage = true    
+      this.gridFillsPage = true
     }
   },
 
@@ -84,7 +85,7 @@ var ImageGridContainer = React.createClass({
       //console.log('scrolling down');
       if (pageHeight - (this.currentPosition + clientHeight) < clientHeight ) {
 
-        if(this.isMounted() &&  !this.state.end)
+        if(this.isMounted() && !this.state.end)
           this.loadMore()
       }
     }
@@ -93,8 +94,7 @@ var ImageGridContainer = React.createClass({
 
   componentDidMount: function() {
 		ImageStore.addChangeListener(this._onChange);
-
-    this.loadItemsFirstTime(); 
+    this.loadItemsFirstTime();
     window.addEventListener("scroll", _.debounce(this.handleScroll, 500 ) );
   },
 
@@ -102,7 +102,7 @@ var ImageGridContainer = React.createClass({
   componentDidUpdate: function() {
     // check if the grid fills the whole page
     if(!this.gridFillsPage) {
-      this.loadItemsFirstTime(); 
+      this.loadItemsFirstTime();
     }
   },
 

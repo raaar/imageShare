@@ -24,7 +24,6 @@ var ImageActions = {
       };
     }
 
-//          debugger;
 
     console.log('load images ' + query);
 
@@ -32,7 +31,7 @@ var ImageActions = {
       .then(function(data) {
         Dispatcher.dispatch({
 			    actionType: ActionTypes.GET_IMAGES,
-		     gallery: data 
+		      gallery: data 
 	      });
       });
   },
