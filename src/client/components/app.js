@@ -1,10 +1,9 @@
-/* eslint-disable strict*/ // Disable check, as jQuery global var is being flagged
+'use strict';
 
 var React = require('react');
 var Header = require('./common/header');
-var ModalGallery = require('./common/modalGallery');
+var ModalGallery = require('./modal/galleryContainer');
 var RouteHandler = require('react-router').RouteHandler;
-// $ = jQuery = require('jquery');
 
 
 var App = React.createClass({

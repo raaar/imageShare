@@ -45,6 +45,9 @@ var ImageGridContainer = React.createClass({
   componentDidMount: function() {
     this.loadItems();
 
+    // we pass the current query to the store, so that it can be used by the gallery modal
+    ImageActions.setImageQuery(this.props.query);
+
     if(this.isMounted()) {
       this.setState({
         images: ImageActions.loadImages(this.props.query)
@@ -117,22 +120,21 @@ var ImageGridContainer = React.createClass({
       return;  
     }
 
-    var imageQuery = this.props.query; 
-    var query = {};
+    var propsQuery = this.props.query; 
+    var query = {
+      limit: 20
+    };
 
     // If not loading for the first time, setup query for next batch of images 
     if(!this.state.loading) {
       var lastItem = this.state.images[this.state.images.length -1];
-      var query = {
-        after : lastItem._id,
-        limit: 20
-      }
+      query.after = lastItem._id;
     }
       
 
     // add any search queries to the request
-    if(imageQuery && Object.keys(imageQuery).length)
-      Object.assign(query, imageQuery);
+    if(propsQuery && Object.keys(propsQuery).length)
+      Object.assign(query, propsQuery);
        
     ImageActions.loadImages(query);
   },
