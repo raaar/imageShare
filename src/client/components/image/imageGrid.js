@@ -5,8 +5,9 @@ var config = require('../../../../config');
 var ImageGrid = React.createClass({
 
   createImageTile: function(image, i) {
-    if(!image)
+    if(!image) {
       return;
+    }
 
     var src = config.thumbSquareLarge + image.image.file;
     var tileClass = "tile";
@@ -29,7 +30,7 @@ var ImageGrid = React.createClass({
   render: function() {
     return (
       <div id="js-grid" className="grid">
-	  		{this.props.images.map(this.createImageTile, this)}
+			  {this.props.images.map(this.createImageTile, this)}
       </div>
     );
   }

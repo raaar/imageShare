@@ -37,21 +37,6 @@ var UserActions = {
 	    	        });
               });
 
-            /*      
-            axios.post('api/user/avatar', avatarData)
-              .then(function(res){
-                if(res.data.error &&  res.data.error.length)
-                  return cb(res.data.error);
-
-                Dispatcher.dispatch({
-			            actionType: ActionTypes.INITIALIZE_USER,
-                  userData: userData
-	    	        });
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-            */
           } else{
             alert('Could not upload file.');
           }

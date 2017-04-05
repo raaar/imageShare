@@ -6,6 +6,7 @@ var Link = Router.Link;
 var UserStore = require('../../stores/userStore');
 var UserActions = require('../../actions/userActions');
 var SearchForm = require('./searchForm');
+var ImageActions = require('../../actions/imageActions');
 var SearchActions = require('../../actions/searchActions');
 var SearchStore = require('../../stores/searchStore');
 var _ = require('lodash');
@@ -29,10 +30,6 @@ var Header = React.createClass({
   },
 
   componentDidMount: function() {
-    // removing user var, and placing call directly in set state
-    // if errors occur, revert
-    //var user = UserStore.getUser();
- 
     if(this.isMounted()) {
       this.setState({
         user: UserStore.getUser(),
@@ -62,19 +59,14 @@ var Header = React.createClass({
     });
 	},
 
-  // moving this function in profile page
-  /*
-  logOut: function(data, e) {
-    e.preventDefault();
-
-    UserActions.logOut(function(){
-      location.href="/";
-    });
-  },
-  */
   
   setSearchState: function(e) {
+    var query = {
+      title: e.target.value
+    }
+
     SearchActions.query(e.target.value);
+    //ImageActions.loadImages({query});
   },
 
   toggleMenu: function() {
@@ -89,11 +81,13 @@ var Header = React.createClass({
     }
   },
 
+
   closeMenu: function() {
     this.setState({
       menuOpen: false
     })
   },
+
 
   render: function() {
 

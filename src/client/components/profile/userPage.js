@@ -4,8 +4,6 @@ var React = require('react');
 var UserStore = require('../../stores/userStore');
 var FileInput = require('../common/fileInput');
 var UserActions = require('../../actions/userActions');
-var ImageActions = require('../../actions/imageActions');
-var ImageStore = require('../../stores/imageStore');
 var ImageGridContainer = require('../image/imageGridContainer');
 var $ = require('jquery');
 var toastr = require('toastr');
@@ -30,8 +28,6 @@ var UserProfile = React.createClass({
 
 
   componentDidMount: function() {
-    var userStore = JSON.parse(sessionStorage.UserStore);
-    ImageActions.setImageQuery({author: userStore.userName});
 
     toastr.options = {
       "positionClass": "toast-bottom-right" 
@@ -40,7 +36,6 @@ var UserProfile = React.createClass({
 
     if(this.isMounted()) {
       this.setState({
-        images: ImageActions.loadImages({author: userStore.userName  }),
         user: UserStore.getUser()
       });
     }
@@ -50,21 +45,17 @@ var UserProfile = React.createClass({
 	// The following are important lines responsible for page refresh when the data changes. Wothout them, the view would not refresh when we delete an item
 	componentWillMount: function() {
 		UserStore.addChangeListener(this._onChange);
-		ImageStore.addChangeListener(this._onChange);
 	},
 
         
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
-		ImageStore.removeChangeListener(this._onChange);
-    ImageStore.clearImages();
 	},
 
 
 	_onChange: function() {
     this.setState({
       user: UserStore.getUser(),
-      images: ImageStore.getImages()
     });
 	},
 
@@ -136,23 +127,7 @@ var UserProfile = React.createClass({
 
 
   render: function() {
-    var _self = this;
-
-    var userLoaded = function() {
-      if(_self.state.images != undefined && _self.state.images.length > 0) {
-        return (
-          <div>
-            <ImageGridContainer images={_self.state.images} />
-          </div>
-        )
-      } else {
-        return (
-          <div>
-          {/* <!--  Loading --> */}
-          </div>
-        )
-      }
-    };
+    var userData = UserStore.getUser();
 
 
     if(this.state.user.avatar === undefined) {
@@ -187,10 +162,9 @@ var UserProfile = React.createClass({
 
           </div>
           <div className="l-split__main">
-            {userLoaded()} 
+            <ImageGridContainer images={this.state.images} query={{author: userData.userName, limit: 20}}  />
           </div>
         </div>
-
       </div>
     );
   }

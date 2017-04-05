@@ -91,7 +91,7 @@ var GalleryModal = React.createClass({
 
 
     if(this.state.index < this.state.images.length - 1) {
-      ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, 1 ); 
+      ModalActions.getNextPrev(1); 
     } else {
       this._onChange();
     }
@@ -100,7 +100,7 @@ var GalleryModal = React.createClass({
 
   getPrev: function() {
     if(this.state.index !== 0 ) {
-      ModalActions.getNextPrev(this.state.data._id, this.state.imageQuery, -1 ); 
+      ModalActions.getNextPrev(-1); 
     }
   },
 
@@ -232,6 +232,7 @@ var GalleryModal = React.createClass({
           </div>
           <div className="modal__aside">
             <h3>{this.state.data.title}</h3>
+                       
             {this._authorLink()}
             {this._getSize()}
             {this._getDate()}

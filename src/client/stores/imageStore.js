@@ -8,64 +8,69 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _images = [];
-var _imagesQuery = {};
 var _imagesEnd = false;
+var _loading = true;
+var _imagesQuery = "";
 
 var ImageStore = assign({}, EventEmitter.prototype, {
 
 	addChangeListener: function(callback) {
-		this.on(CHANGE_EVENT, callback)
+		this.on(CHANGE_EVENT, callback);
 	},
 
 	removeChangeListener: function(callback) {
-		this.removeListener(CHANGE_EVENT, callback)
+		this.removeListener(CHANGE_EVENT, callback);
 	},
 
 	emitChange: function() {
-		this.emit(CHANGE_EVENT)
+		this.emit(CHANGE_EVENT);
 	},
 
 	getImageById: function(id) {
-		return _.find(_images, {_id: id})
+		return _.find(_images, {_id: id});
 	},
 
 	getImages: function() {
-		return _images
+		return _images;
 	},
 
   clearImages: function() {
-    _images = [] 
+    _images = [];
+  },
+
+  imagesEnd: function() {
+    return _imagesEnd; 
+  },
+
+  loading: function() {
+    return _loading;
   },
 
   getImageQuery: function() {
     return _imagesQuery 
   },
 
-  imagesEnd: function() {
-    return _imagesEnd 
-  }
-
 });
 
 
 Dispatcher.register(function(action){
 	switch(action.actionType) {
-		case ActionTypes.INITIALIZE:
-			_images = action.initialData.images;
-			ImageStore.emitChange();
-			break;
-
 
 		case ActionTypes.GET_IMAGES:
       if(typeof action.gallery !== undefined && action.gallery.length > 0) {
+        // add unique images to store
         _imagesEnd = false;
         _images = _.concat(_images, action.gallery);
         _images = _.uniqBy(_images, '_id');
       } else {
+        // no more images to load
         console.log('Image store, end of images');
         _imagesEnd = true;
       }
 
+      _loading = false;
+
+//      console.info('image store: ', _images);
 			ImageStore.emitChange();
 			break;
 
@@ -89,6 +94,7 @@ Dispatcher.register(function(action){
       _imagesQuery = action.filters;
 			ImageStore.emitChange();
       break;
+
 
 		default:
 			// no operations

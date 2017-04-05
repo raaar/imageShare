@@ -7,7 +7,9 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var reactify = require('reactify');
 var sass = require('gulp-sass');
-
+var uglifyjs = require('uglify-js-harmony'); // can be a git checkout
+var minifier = require('gulp-uglify/minifier');
+var pump = require('pump');
 
 gulp.task('live-server', function(){
   var server = new LiveServer('app.js');
@@ -53,16 +55,29 @@ gulp.task('serve',['bundle','live-server'],function(){
 });
 
 
+
+
+
+gulp.task('compress', function (cb) {
+  // the same options as described above
+  var options = {
+    preserveComments: 'license'
+  };
+
+  pump([
+      gulp.src('public/scripts/*.js'),
+      minifier(options, uglifyjs),
+      gulp.dest('public/')
+    ],
+    cb
+  );
+});
+
+
 gulp.task('default',/* ['serve'] */ ['bundle'] , function() {
     gulp.watch('src/client/**/*', ['bundle']);
     gulp.watch('scss/**/*.scss', ['scss']);
 });
 
 
-          /*
-gulp.task('copy',function(){
-    gulp.src(['app/*.css'])
-    .pipe(gulp.dest('./.tmp'));
-})
-*/
 

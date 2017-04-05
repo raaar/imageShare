@@ -13,7 +13,7 @@ var SearchActions = {
 	  });
     
     if(query.length >= 1) {
-      Api.get('api/images?title=' + query ) 
+      Api.get('api/images/fetch?title=' + query ) 
         .then(function(data) {
           Dispatcher.dispatch({
 			      actionType: ActionTypes.SEARCH_QUERY,

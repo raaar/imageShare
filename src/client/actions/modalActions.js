@@ -26,38 +26,12 @@ var ModalActions = {
     });
   },
   
-  getNextPrev: function(id, q, direction) {
-    var _id = id;
-    var query = "";
-
-    for( var key in q) {
-      if( key === "author") {
-        query = "?author=" + q.author    
-      }
-    };
-
+  getNextPrev: function(direction) {
     Dispatcher.dispatch({
       actionType: ActionTypes.MODAL_INDEX,
       direction: direction
     });
-    
-    
-    /*              
-    Api.get('api/images/' + _id + '/' + direction + query)
-      .then(function(data) {
-
-        if(typeof data !== 'undefined' && data.length > 0) {
-          Dispatcher.dispatch({
-            actionType: ActionTypes.GET_NEXT_PREV,
-            data: data
-          });
-        }
-      });
-    */
   },
-
-
-
 
 }
 

@@ -12,7 +12,6 @@ module.exports = keyMirror({
   SHOW_MODAL: null,
   HIDE_MODAL: null,
   TOGGLE_MODAL_SIDEBAR: null,
-  SEARCH_IMAGES: null,
   SEARCH_RESULTS: null,
   GET_IMAGES: null,
   GET_ALL_AUTHORS: null,

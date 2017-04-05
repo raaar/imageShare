@@ -299,6 +299,14 @@ a {
 
 
 .grid {
+  position: relative;
   display: block;
   overflow: hidden;
+
+  min-height: calc(100vh - 60px );
+
+  @include mq(sm) {
+    min-height: calc(100vh - 70px );
+  }
 }
+
