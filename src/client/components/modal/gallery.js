@@ -43,7 +43,7 @@ var GalleryModal = React.createClass({
     if(this.props.data.author === this.props.user.userName) {
       return (
         <div>
-			    <a href="#" onClick={this.props.deleteImage.bind(this, this.props.data._id)}>Delete</a>
+			    <a href="#" onClick={this.props.deleteImage}>Delete</a>
         </div>
       ) 
     }

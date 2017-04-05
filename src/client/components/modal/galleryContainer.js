@@ -136,10 +136,10 @@ var GalleryModal = React.createClass({
   },
 
 
-  deleteImage: function(id, e) {
+  deleteImage: function(e) {
     e.preventDefault();
     ModalActions.hideModal();
-    ImageActions.deleteImage(id); 
+    ImageActions.deleteImage(this.state.data._id); 
     this.transitionTo('app');
   },
 
