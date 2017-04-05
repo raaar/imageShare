@@ -6,7 +6,7 @@ var Link = require('react-router').Link;
 var NotFoundPage = React.createClass({
   render: function() {
     return (
-        <div>
+        <div className="container-fluid">
           <h1>404</h1>
           
           <p>

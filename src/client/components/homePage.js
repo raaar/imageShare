@@ -9,7 +9,7 @@ var Home = React.createClass({
   render: function() {
     return (
       <div>
-        <ImageGridContainer gridSize="large" query={{limit: 20}} />
+        <ImageGridContainer gridSize="large" />
       </div>
     );
   }

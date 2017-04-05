@@ -20,14 +20,20 @@ var ImageGridContainer = React.createClass({
   getInitialState: function() {
     return {
       end: false,
-      images: [],
-      loading: true
+      loading: true,
+      images: []
     }
   },
 
 
   previousPosition: window.pageYOffset, // determine if scrolling up or down
   gridFillsPage: false,
+
+
+  // Check if images are loaded
+  isLoaded: function() {
+    return this.state.images ? true : false;
+  },
 
 
 	componentWillMount: function() {
@@ -37,10 +43,7 @@ var ImageGridContainer = React.createClass({
 
 
   componentDidMount: function() {
-    // We pass the image query to the store, so that it can be retrieved by the modal.
-    // We must pass the query so that the modal can load more images while navigating with the 
-    // right arrow key
-    ImageActions.setImageQuery(this.props.query);
+    this.loadItems();
 
     if(this.isMounted()) {
       this.setState({
@@ -50,10 +53,25 @@ var ImageGridContainer = React.createClass({
   },
 
 
+  shouldComponentUpdate: function() {
+    // If images are undefined, do not re-render
+    if(typeof this.state.images === undefined) {
+      return false; 
+    } else {
+      return true;
+    }
+  },
+
+
   componentDidUpdate: function() {
-    // check if the grid fills the whole page
-    if(this.state.images && this.state.images.length > 0 && !this.gridFillsPage) {
-      this.initializeItems();
+    // Check if the grid fills the whole page.
+    // Items are initializes only if data has been received
+    if(this.isLoaded() && this.state.images.length > 0 && !this.gridFillsPage) {
+      this.initializeLazyLoad();
+    }
+
+    if(this.state.end) {
+      window.removeEventListener("scroll", this.handleScroll);
     }
   },
 
@@ -80,34 +98,35 @@ var ImageGridContainer = React.createClass({
   },
 
 
-  initializeItems: function() {
+  initializeLazyLoad: function() {
     // Load just enough items to fill the whole page
     var grid = document.getElementById('js-grid');
     var gridHeight = grid.offsetHeight;
     var clientHeight = document.documentElement.clientHeight;
   
     if(!this.state.end && gridHeight < clientHeight ) {
-      this.loadMore();
+      this.loadItems();
     } else {
       this.gridFillsPage = true
     }
   },
 
 
-  loadMore: function() {
-    if(!this.state.images) {
-      return;
+  loadItems: function() {
+    if(this.state.end) {
+      return;  
     }
 
-    // get the search query parameters from store
     var imageQuery = this.props.query; 
+    var query = {};
 
-
-    // only make ajax call if there are images available on the DB
-    var lastItem = this.state.images[this.state.images.length -1];
-    var query = {
-      after : lastItem._id,
-      limit: 20
+    // If not loading for the first time, setup query for next batch of images 
+    if(!this.state.loading) {
+      var lastItem = this.state.images[this.state.images.length -1];
+      var query = {
+        after : lastItem._id,
+        limit: 20
+      }
     }
       
 
@@ -120,55 +139,55 @@ var ImageGridContainer = React.createClass({
 
 
   handleScroll: function(event) {
-    if(this.state.end) {
-      return;
-    }
 
     var pageHeight = document.documentElement.scrollHeight;
     var clientHeight = document.documentElement.clientHeight;
     this.currentPosition = window.pageYOffset;
 
-    if (this.previousPosition > this.currentPosition) {
-      // scrolling up
-    } else {
+    if (this.previousPosition < this.currentPosition) {
       // scrolling down
       if(pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
-        this.loadMore()
+        this.loadItems()
       }
-    }
+    } else { /* scrolling up */ }
   },
 
 
   render: function() {
 
-    var ifNoItems = !this.state.loading && this.state.images && this.state.images.length === 0;
-    var ifItems = this.state.images && this.state.images.length > 0;     
+    // there are no items to load
+    var ifNoItems = this.isLoaded() && this.state.end && !this.state.loading && this.state.images.length === 0;
+    
+    // there are items to load
+    var ifItems = this.isLoaded() && !this.state.loading && this.state.images.length > 0;     
 
-    // check if there are any images to load
-    if(ifNoItems) {
-      return (
-        <div className="container-fluid">
-          <h3>No images to load</h3>
-        </div>
-      );
+    // items are loading
+    var ifLoading = !ifNoItems  && !ifItems;
 
-    } else if(ifItems) {
-      return (
-        <ImageGrid 
-          images={this.state.images} 
-          gridSize={this.props.gridSize} 
-          openImage={this.openImage} 
-          loading={this.state.loading} />
-      );
+    return (
+      <div>
+        {ifNoItems &&
+          <div className="container-fluid">
+            <h3>No images to load</h3>
+          </div> 
+        }
 
-    } else {
-      return (
-        <div className="grid">
-          <Spinner />
-        </div>
-      );
+        {ifItems && 
+          <ImageGrid 
+            images={this.state.images} 
+            gridSize={this.props.gridSize} 
+            openImage={this.openImage} 
+            loading={this.state.loading} />
+        }
 
-    }
+        { ifLoading && 
+          <div className="grid">
+            <Spinner />
+          </div>
+        }
+      </div>
+    );
+
   }
 });
 

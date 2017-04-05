@@ -63,7 +63,7 @@ Dispatcher.register(function(action){
         _images = _.concat(_images, action.gallery);
         _images = _.uniqBy(_images, '_id');
       } else {
-        // no more images to load
+        // no new data received, no more images to load
         console.log('Image store, end of images');
         _imagesEnd = true;
       }

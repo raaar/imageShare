@@ -162,7 +162,7 @@ var UserProfile = React.createClass({
 
           </div>
           <div className="l-split__main">
-            <ImageGridContainer images={this.state.images} query={{author: userData.userName, limit: 20}}  />
+            <ImageGridContainer images={this.state.images} query={{author: userData.userName}}  />
           </div>
         </div>
       </div>
