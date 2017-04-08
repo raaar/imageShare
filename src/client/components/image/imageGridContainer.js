@@ -1,3 +1,15 @@
+/*  Image gallery with lazy load
+ *
+ *  Todo: lazy load triggers a Ajax call on component on componentDidMount.
+ *  A second ajax trigger happens with initializeImages(), the function keeps calling itself until
+ *  the images cover the whole pages and/or until all images are loaded.
+ *
+ *  This causes the get function and the render function to be called twice each time the component is initialized. 
+ *  Ideally only one Ajax call should happen on initialize.
+ */
+
+
+
 'use strict';
 
 var React = require('react');
@@ -20,14 +32,18 @@ var ImageGridContainer = React.createClass({
   getInitialState: function() {
     return {
       end: false,
-      loading: true,
-      images: []
+      loading: true
     }
   },
 
 
   previousPosition: window.pageYOffset, // determine if scrolling up or down
   gridFillsPage: false,
+
+
+  queryDefaults: {
+    limit: 20
+  },
 
 
   // Check if images are loaded
@@ -42,16 +58,40 @@ var ImageGridContainer = React.createClass({
 	},
 
 
-  componentDidMount: function() {
-    this.loadItems();
+  mergeQuery: function() {
 
+    // assign query defaults
+    var query = {};
+    Object.assign(query, this.queryDefaults);
+
+    // assign any queries passed by props
+    if(typeof this.props.query !== 'undefined') {
+      Object.assign(query, this.props.query);
+    }
+
+    // If not loading for the first time, setup query for next batch of images 
+    if(!this.state.loading && this.state.images) {
+      var lastItem = this.state.images[this.state.images.length -1];
+      query.after = lastItem._id;
+    }
+
+    return query;
+
+  },
+
+
+  componentDidMount: function() {
+    var query = this.mergeQuery();
+
+          console.log('component mount query:' , query);
     // we pass the current query to the store, so that it can be used by the gallery modal
     ImageActions.setImageQuery(this.props.query);
 
+
     if(this.isMounted()) {
       this.setState({
-        images: ImageActions.loadImages(this.props.query)
-      });
+        images: ImageActions.loadImages(query)
+      }); 
     }
   },
 
@@ -90,6 +130,7 @@ var ImageGridContainer = React.createClass({
 
 	componentWillUnmount: function() {
 		ImageStore.removeChangeListener(this._onChange);
+    // clear old store data
     ImageStore.clearImages();
     window.removeEventListener("scroll", this.handleScroll);
 	},
@@ -120,27 +161,14 @@ var ImageGridContainer = React.createClass({
       return;  
     }
 
-    var propsQuery = this.props.query; 
-    var query = {
-      limit: 20
-    };
-
-    // If not loading for the first time, setup query for next batch of images 
-    if(!this.state.loading) {
-      var lastItem = this.state.images[this.state.images.length -1];
-      query.after = lastItem._id;
-    }
-      
-
-    // add any search queries to the request
-    if(propsQuery && Object.keys(propsQuery).length)
-      Object.assign(query, propsQuery);
-       
-    ImageActions.loadImages(query);
+    ImageActions.loadImages(this.mergeQuery())
   },
 
 
   handleScroll: function(event) {
+    if(this.state.end) {
+      return;
+    }
 
     var pageHeight = document.documentElement.scrollHeight;
     var clientHeight = document.documentElement.clientHeight;
@@ -148,7 +176,7 @@ var ImageGridContainer = React.createClass({
 
     if (this.previousPosition < this.currentPosition) {
       // scrolling down
-      if(pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
+      if(!this.state.end && pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
         this.loadItems()
       }
     } else { /* scrolling up */ }
@@ -158,13 +186,15 @@ var ImageGridContainer = React.createClass({
   render: function() {
 
     // there are no items to load
-    var ifNoItems = this.isLoaded() && this.state.end && !this.state.loading && this.state.images.length === 0;
+    var ifNoItems = this.state.end && this.state.images &&  this.state.images.length === 0;
     
     // there are items to load
     var ifItems = this.isLoaded() && !this.state.loading && this.state.images.length > 0;     
 
     // items are loading
     var ifLoading = !ifNoItems  && !ifItems;
+
+    console.log('---------------------');
 
     return (
       <div>

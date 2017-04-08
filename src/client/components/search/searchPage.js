@@ -5,7 +5,7 @@ var SearchStore = require('../../stores/searchStore');
 var SearchImageStore = require('../../stores/searchStoreImages');
 var ImageActions = require('../../actions/imageActions');
 var ImageStore = require('../../stores/imageStore');
-var ImageGrid = require('../image/imageGrid');
+var ImageGridContainer = require('../image/imageGridContainer');
 var Api = require('../../api/imagesApi');
 
 var Search = React.createClass({
@@ -32,49 +32,38 @@ var Search = React.createClass({
 
 	componentWillMount: function() {
 		SearchStore.addChangeListener(this._onChange);
+		ImageStore.addChangeListener(this._onChange);
 	},
+
 
 	componentWillUnmount: function() {
 		SearchStore.removeChangeListener(this._onChange);
+		ImageStore.removeChangeListener(this._onChange);
 	},
 
 
 	_onChange: function() {
     this.setState({
-      searchQuery: SearchStore.getQuery(),
-      images: SearchStore.getResults()
+      searchQuery: ImageStore.getImageQuery()
     });
 	},
   
 
-  searchResults: function() {
-    if(this.state.images !== undefined) {
-      return (
-        <div>
-          <ImageGrid images={this.state.images} />
-        </div>
-      );
-    }
-  },
-
-  searchText: function() {
+  render: function() {
     var txt = this.state.searchQuery ?  "No results found" : "Type a search term"
 
     return (
-      <div className="mast">
-        <div className="container-fluid">
-          <h3>{txt}</h3>
-          <p>{this.state.searchQuery}</p>
-        </div>
-      </div>
-    )
-  },
-
-  render: function() {
-    return (
       <div>
-        {this.searchText()}
-        {this.searchResults()} 
+        <div className="mast">
+          <div className="container-fluid">
+            <h3>{txt}</h3>
+            <p>{this.state.searchQuery}</p>
+          </div>
+        </div>
+
+        {this.state.searchQuery &&
+          <ImageGridContainer query={this.state.searchQuery} />
+        }
       </div>
     );
   }

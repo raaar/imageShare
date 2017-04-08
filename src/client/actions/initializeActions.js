@@ -2,7 +2,7 @@
 // TODO: see if this is needed
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var Api = require('../api/imagesApi');
+var axios = require('axios');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
 var $ = require('jquery');
@@ -27,9 +27,12 @@ var InitializeActions = {
       userDataDispatch(_userData);
     } else {
       _userData =  null;
-      Api.get('api/user')
+      axios.get('api/user')
         .then(function(data){
-          userDataDispatch(data);
+          userDataDispatch(data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
     }
 

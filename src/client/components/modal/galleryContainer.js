@@ -82,7 +82,9 @@ var GalleryModal = React.createClass({
 
 
 	componentWillUnmount: function() {
+    console.log('Gallery will unmount');
 		ModalStore.removeChangeListener(this._onChange);
+    ModalStore.clearStore();
 	},
 
 

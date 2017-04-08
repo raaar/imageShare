@@ -100,7 +100,7 @@ var UserProfile = React.createClass({
 
   avatarUpload: function(e) {
     e.preventDefault();
-    $("input[type='file']").trigger('click');
+    this.refs.submitAvatar.getDOMNode(this).click();
   },
 
 
@@ -152,6 +152,7 @@ var UserProfile = React.createClass({
                     <FileInput
                       onChange={this.handleFile}
                       name="image"
+                      ref="submitAvatar"
                     />
                     <input type="submit" className="btn btn-default visually-hidden" value="Submit" onClick={this.saveAvatar} />
                   </form>
@@ -162,7 +163,7 @@ var UserProfile = React.createClass({
 
           </div>
           <div className="l-split__main">
-            <ImageGridContainer images={this.state.images} query={{author: userData.userName}}  />
+            <ImageGridContainer query={{author: userData.userName}}  />
           </div>
         </div>
       </div>

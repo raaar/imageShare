@@ -10,11 +10,14 @@ var GalleryModal = React.createClass({
 
 
   _authorLink: function() {
+    console.log(this.props.data.author)
+    var _self = this;
+
     return (
       <div>
         <p>By: <Link to="profile" 
             params={{author: this.props.data.author}} 
-            onClick={this.closeModal}>{this.props.data.author}</Link>
+            onClick={_self.props.closeModal}>{this.props.data.author}</Link>
         </p>
       </div>
     ); 

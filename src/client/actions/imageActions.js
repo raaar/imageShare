@@ -5,12 +5,32 @@ var Api = require('../api/imagesApi');
 var s3Signature = require('../api/s3Sign');
 var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
+var axios = require('axios');
+var querystring = require('querystring');
+
 
 var ImageActions = {
 
 
   loadImages: function(q) {
 
+    console.info('load image query: ', q);
+
+    axios.get('api/images/fetch', {
+      params: q
+    })
+    .then(function (data) {
+        Dispatcher.dispatch({
+			    actionType: ActionTypes.GET_IMAGES,
+		      gallery: data.data 
+	      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
+        /*
     var query = "";
    
     if(q) {
@@ -22,18 +42,19 @@ var ImageActions = {
       for(var key in q) {
         query += key + "=" + q[key] + "&" ;
       };
-    }
+    };
+*/
+          /*
+    console.info('load image q: ', q);
 
-
-    console.log('load images ' + query);
-
-    Api.get('api/images/fetch' + query ) 
+    Api.get('api/images/fetch?' + query ) 
       .then(function(data) {
         Dispatcher.dispatch({
 			    actionType: ActionTypes.GET_IMAGES,
 		      gallery: data 
 	      });
       });
+      */
   },
 
 
@@ -55,6 +76,22 @@ var ImageActions = {
               size: file.size
             };
 
+            var config = {};
+
+            axios.post('api/images', uploadData, config)
+              .then(function (data) {
+                success();  
+                Dispatcher.dispatch({
+			            actionType: ActionTypes.CREATE_IMAGE,
+		              image: data.data 
+	              });
+              })
+              .catch(function (error) {
+                console.log(error);
+                return error(error);
+              });
+
+              /*
             Api.post('api/images', uploadData)
               .then(function(data){
                 if(data.error && data.error.length) {
@@ -67,6 +104,7 @@ var ImageActions = {
 	                });
                 }
               });
+              */
           }
           else{
             alert('Could not upload file.');
@@ -80,6 +118,19 @@ var ImageActions = {
 
   deleteImage: function(id) {
    var url = "api/images/" + id;
+          
+    axios.delete(url)
+      .then(function (response) {
+        console.log(response);
+        Dispatcher.dispatch({
+          actionType: ActionTypes.DELETE_IMAGE,
+          id: id
+		    });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+          /*
    Api.delete(url, id)
      .then(function(data){
        Dispatcher.dispatch({
@@ -87,6 +138,7 @@ var ImageActions = {
          id: id
 		   });
      });
+     */
   },
 
 

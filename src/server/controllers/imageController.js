@@ -82,10 +82,14 @@ var imageController = function() {
       query.author = req.query.author;
     }
 
+    if ('title' in req.query) {
+      query.title = req.query.title;
+    }
     
     mongodb.connect(dbUrl, function(err, db) {
       if(err) {
-        res.status(500).send(err);
+        //res.status(500).send(err);
+        return err;
       }
 
       var collection = db.collection('images');

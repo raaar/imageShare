@@ -11,7 +11,6 @@ var fileInput = React.createClass({
       <input
             type="file"
             name={this.props.name}
-            ref="file" 
             onChange={this.props.onChange}
       />  
     )

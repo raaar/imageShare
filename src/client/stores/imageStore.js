@@ -36,6 +36,8 @@ var ImageStore = assign({}, EventEmitter.prototype, {
 
   clearImages: function() {
     _images = [];
+    _imagesEnd = false;
+    _loading = true;
   },
 
   imagesEnd: function() {

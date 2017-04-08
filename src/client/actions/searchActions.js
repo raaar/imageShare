@@ -15,11 +15,15 @@ var SearchActions = {
     if(query.length >= 1) {
       Api.get('api/images/fetch?title=' + query ) 
         .then(function(data) {
+          console.info('q: ', query);
+          console.log(data);
+          /*      
           Dispatcher.dispatch({
 			      actionType: ActionTypes.SEARCH_QUERY,
 		      	results: data,
 		        query: query 
 	      	});
+          */
         });
     }
   }

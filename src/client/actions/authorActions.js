@@ -1,20 +1,23 @@
 "use strict";
 
 var Dispatcher = require('../dispatcher/appDispatcher');
-var Api = require('../api/imagesApi');
+var axios = require('axios');
 var ActionTypes = require('../constants/actionTypes');
 
 
 var AuthorActions = {
   
   getAll: function() {
-    Api.get('api/profile/all') 
-      .then(function(data) {
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.GET_ALL_AUTHORS,
-		  	  authors: data 
-	      });
-      });
+    axios.get('api/profile/all') 
+    .then(function(data) {
+      Dispatcher.dispatch({
+		   actionType: ActionTypes.GET_ALL_AUTHORS,
+			  authors: data.data 
+	    });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
 };

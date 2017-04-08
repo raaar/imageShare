@@ -16,6 +16,8 @@ var routes = (
     <Route name="my-profile" path="my-profile" handler={require('./components/profile/userPage')} />
     <Route name="upload" path="upload" handler={require('./components/image/manageImagePage')} />
     <Route name="network" path="network" handler={require('./components/network/network')} />
+    <Route name="folders" path="folders" handler={require('./components/folders/foldersContainer')} />
+    <Route name="folderSingle" path="folder" handler={require('./components/folders/folderSingle')} />
     <Route name="search" path="search" handler={require('./components/search/searchPage')} />
     <NotFoundRoute handler={require('./components/pageNotFound')} />
     <Redirect from="/" to="feed" />

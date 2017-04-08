@@ -7,8 +7,7 @@ var UserStore = require('../../stores/userStore');
 var UserActions = require('../../actions/userActions');
 var SearchForm = require('./searchForm');
 var ImageActions = require('../../actions/imageActions');
-var SearchActions = require('../../actions/searchActions');
-var SearchStore = require('../../stores/searchStore');
+var ImageStore = require('../../stores/imageStore');
 var _ = require('lodash');
 var config = require('../../../../config');
 
@@ -24,7 +23,6 @@ var Header = React.createClass({
       user: {
         avatar: "http://placehold.it/30x30"
       },
-      searchQuery: "",
       menuOpen: false
     };
   },
@@ -32,30 +30,22 @@ var Header = React.createClass({
   componentDidMount: function() {
     if(this.isMounted()) {
       this.setState({
-        user: UserStore.getUser(),
-        searchQuery: SearchStore.getQuery()
+        user: UserStore.getUser()
       })
     }
   },
 
 	componentWillMount: function() {
 		UserStore.addChangeListener(this._onChange);
-		SearchStore.addChangeListener(this._onChange);
 	},
 
 	componentWillUnmount: function() {
 		UserStore.removeChangeListener(this._onChange);
-		SearchStore.removeChangeListener(this._onChange);
 	},
 
 	_onChange: function() {
     this.setState({
-      user: UserStore.getUser(),
-      searchQuery: SearchStore.getQuery()
-    }, function(){
-      if(this.state.searchQuery && this.state.searchQuery.length > 0) {
-        this.transitionTo('search');
-      }
+      user: UserStore.getUser()
     });
 	},
 
@@ -65,9 +55,13 @@ var Header = React.createClass({
       title: e.target.value
     }
 
-    SearchActions.query(e.target.value);
-    //ImageActions.loadImages({query});
+    if(e.target.value.length > 1) {
+      ImageActions.setImageQuery(query);
+      ImageActions.loadImages(query);
+      this.transitionTo('search');
+    }
   },
+
 
   toggleMenu: function() {
     if(this.state.menuOpen) {
@@ -116,6 +110,7 @@ var Header = React.createClass({
             <Link to="feed" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Feed</Link>
             <Link to="upload" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Upload</Link>
             <Link to="network" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Network</Link>
+            <Link to="folders" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Folders</Link>
 
             <div className="nav__item--form"> 
               <SearchForm
