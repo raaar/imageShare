@@ -6,7 +6,6 @@ var s3Signature = require('../api/s3Sign');
 var ActionTypes = require('../constants/actionTypes');
 var toastr = require('toastr');
 var axios = require('axios');
-var querystring = require('querystring');
 
 
 var ImageActions = {

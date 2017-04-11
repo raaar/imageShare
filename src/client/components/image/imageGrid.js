@@ -13,14 +13,16 @@ var ImageGrid = React.createClass({
     var tileClass = "tile";
 
     if(this.props.gridSize === "large") {
-      tileClass = "tile--lg";
+      tileClass = "tile tile--lg";
     }
 
 
     return (
       <div key={image._id}>
         <a href="#" onClick={this.props.openImage.bind(null, i)}>
-          <img className={tileClass} src={src} />
+          <div className={tileClass}>
+            <img  src={src} />
+          </div>
         </a>
       </div>
     );

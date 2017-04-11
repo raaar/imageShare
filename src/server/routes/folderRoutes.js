@@ -1,28 +1,20 @@
 var express = require('express');
-var mongodb = require('mongodb').MongoClient;
-var objectId = require('mongodb').ObjectID;
 
 var routes = function() {
 
   var folderRouter = express.Router();
-  //var imageController = require('../controllers/imageController')();
+  var folderController = require('../controllers/folderController')();
 
 
   folderRouter.route('/')
-    .post(function(req, res) {
-       
-
-      var folderData = {
-        title: 'Folder name'
-      }
+    .post(folderController.createFolder)
+    .get(folderController.get);
 
 
-      mongodb.connect(dbUrl, function(err, db) {
-        var collection = db.collection('folders');
-        collection.insert(folderData);
-        res.send(folderData);
-      });
-    });
+  folderRouter.route('/:id')
+    .get(folderController.getFolder)
+    .patch(folderController.patchFolder)
+    .delete(folderController.deleteFolder);
 
 
   return folderRouter;

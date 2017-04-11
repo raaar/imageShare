@@ -38,6 +38,7 @@ var ImageStore = assign({}, EventEmitter.prototype, {
     _images = [];
     _imagesEnd = false;
     _loading = true;
+    _imagesQuery = "";
   },
 
   imagesEnd: function() {

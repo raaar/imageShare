@@ -38,6 +38,10 @@ var profileController = function() {
     var url = dbConfig.url;
 
     mongodb.connect(url, function(err, db) {
+      if(err) {
+        throw err;
+      };
+
       var collection = db.collection('users');
         
       collection.findOne({username : req.user.username}, function(err, result) {

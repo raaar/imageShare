@@ -37,6 +37,7 @@ app.use(session({secret: 'library'}));
 require('./src/server/config/passport')(app);
 
 var imageRouter = require('./src/server/routes/imageRoutes')();
+var folderRouter = require('./src/server/routes/folderRoutes')();
 var userRouter = require('./src/server/routes/userRoutes')();
 var authRouter = require('./src/server/routes/authRoutes')();
 var profileRouter = require('./src/server/routes/profileRoutes')();
@@ -48,7 +49,7 @@ app.use('/auth', authRouter);
 app.use('/', signInStatus);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
-
+app.use('/api/folders', folderRouter);
 
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');

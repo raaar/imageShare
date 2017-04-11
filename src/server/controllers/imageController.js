@@ -96,6 +96,10 @@ var imageController = function() {
 
       // "-1" fetches images back in time
       collection.find(query).sort({"_id":-1}).limit(parseInt(limit)).toArray(function(err, images) {
+        if(err) {
+          throw err;
+        };
+
         res.json(images);
       });
     });

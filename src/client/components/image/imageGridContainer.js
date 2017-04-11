@@ -1,11 +1,6 @@
 /*  Image gallery with lazy load
- *
- *  Todo: lazy load triggers a Ajax call on component on componentDidMount.
- *  A second ajax trigger happens with initializeImages(), the function keeps calling itself until
- *  the images cover the whole pages and/or until all images are loaded.
- *
- *  This causes the get function and the render function to be called twice each time the component is initialized. 
- *  Ideally only one Ajax call should happen on initialize.
+ *  
+ *  TODO: place 'this.end' in state
  */
 
 
@@ -31,7 +26,6 @@ var ImageGridContainer = React.createClass({
 
   getInitialState: function() {
     return {
-      end: false,
       loading: true
     }
   },
@@ -39,6 +33,7 @@ var ImageGridContainer = React.createClass({
 
   previousPosition: window.pageYOffset, // determine if scrolling up or down
   gridFillsPage: false,
+  end: false,
 
 
   queryDefaults: {
@@ -83,8 +78,8 @@ var ImageGridContainer = React.createClass({
   componentDidMount: function() {
     var query = this.mergeQuery();
 
-          console.log('component mount query:' , query);
-    // we pass the current query to the store, so that it can be used by the gallery modal
+    // We pass the current query to the store, so that it can be used by the gallery modal
+    // Don't pass the mergeQuery() result, as this will also include the 'lastItem' parameter
     ImageActions.setImageQuery(this.props.query);
 
 
@@ -109,19 +104,21 @@ var ImageGridContainer = React.createClass({
   componentDidUpdate: function() {
     // Check if the grid fills the whole page.
     // Items are initializes only if data has been received
-    if(this.isLoaded() && this.state.images.length > 0 && !this.gridFillsPage) {
-      this.initializeLazyLoad();
-    }
+          // 
+   // if(this.isLoaded() && this.state.images.length > 0 && !this.gridFillsPage) {
+      //this.initializeLazyLoad();
+    //}
 
-    if(this.state.end) {
+    if(this.end) {
       window.removeEventListener("scroll", this.handleScroll);
     }
   },
 
 
 	_onChange: function() {
+    this.end = ImageStore.imagesEnd();
+
     this.setState({
-      end: ImageStore.imagesEnd(),
       loading: ImageStore.loading(), 
       images: ImageStore.getImages()
     });
@@ -129,6 +126,7 @@ var ImageGridContainer = React.createClass({
 
 
 	componentWillUnmount: function() {
+    console.log('imagegrid unmount');
 		ImageStore.removeChangeListener(this._onChange);
     // clear old store data
     ImageStore.clearImages();
@@ -141,23 +139,27 @@ var ImageGridContainer = React.createClass({
     ModalActions.showModal(i);
   },
 
-
+/*
   initializeLazyLoad: function() {
     // Load just enough items to fill the whole page
     var grid = document.getElementById('js-grid');
     var gridHeight = grid.offsetHeight;
     var clientHeight = document.documentElement.clientHeight;
   
-    if(!this.state.end && gridHeight < clientHeight ) {
+    if(!this.end && gridHeight < clientHeight ) {
       this.loadItems();
     } else {
       this.gridFillsPage = true
     }
   },
+*/
 
+  loadItems: function(e) {
+    if(e) {
+      e.preventDefault();
+    }
 
-  loadItems: function() {
-    if(this.state.end) {
+    if(this.end) {
       return;  
     }
 
@@ -166,7 +168,7 @@ var ImageGridContainer = React.createClass({
 
 
   handleScroll: function(event) {
-    if(this.state.end) {
+    if(this.end) {
       return;
     }
 
@@ -176,7 +178,7 @@ var ImageGridContainer = React.createClass({
 
     if (this.previousPosition < this.currentPosition) {
       // scrolling down
-      if(!this.state.end && pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
+      if(!this.end && pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
         this.loadItems()
       }
     } else { /* scrolling up */ }
@@ -186,7 +188,7 @@ var ImageGridContainer = React.createClass({
   render: function() {
 
     // there are no items to load
-    var ifNoItems = this.state.end && this.state.images &&  this.state.images.length === 0;
+    var ifNoItems = this.end && this.state.images &&  this.state.images.length === 0;
     
     // there are items to load
     var ifItems = this.isLoaded() && !this.state.loading && this.state.images.length > 0;     
@@ -194,7 +196,6 @@ var ImageGridContainer = React.createClass({
     // items are loading
     var ifLoading = !ifNoItems  && !ifItems;
 
-    console.log('---------------------');
 
     return (
       <div>
@@ -216,6 +217,11 @@ var ImageGridContainer = React.createClass({
           <div className="grid">
             <Spinner />
           </div>
+        }
+
+           
+        { !this.end &&
+          <a href="#" onClick={this.loadItems}>Load More</a>
         }
       </div>
     );

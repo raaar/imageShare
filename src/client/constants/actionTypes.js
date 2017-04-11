@@ -16,5 +16,9 @@ module.exports = keyMirror({
   GET_IMAGES: null,
   GET_ALL_AUTHORS: null,
   MODAL_INDEX: null,
-  SET_IMAGES_QUERY: null
+  SET_IMAGES_QUERY: null,
+  FOLDER_CREATE: null,
+  FOLDER_GET: null,
+  FOLDER_GET_SINGLE: null,
+  FOLDER_DELETE: null
 });

@@ -186,6 +186,11 @@ a {
   float: left;
   width: 180px;
   height: 180px;
+  background: lightgrey;
+
+  img {
+    width: 100%;
+  }
 }
 
 .tile--lg {
