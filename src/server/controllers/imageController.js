@@ -40,6 +40,8 @@ var imageController = function() {
 
     var fileName = req.body.id;
     var imageTitle = req.body.formData.title;
+    var folderId = req.body.folderId;
+
 
     // if untitled
     if(!imageTitle) {
@@ -47,6 +49,7 @@ var imageController = function() {
     }
 
     var imageData = {
+      folderId: folderId,
       title: imageTitle,
       author: req.user.username,
       image: {
@@ -86,6 +89,10 @@ var imageController = function() {
       query.title = req.query.title;
     }
     
+    if ('folderId' in req.query) {
+      query.folderId = req.query.folderId;
+    }
+
     mongodb.connect(dbUrl, function(err, db) {
       if(err) {
         //res.status(500).send(err);

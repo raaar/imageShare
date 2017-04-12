@@ -45,26 +45,8 @@ var FoldersContainer = React.createClass({
 
 
   render: function() {
-
-    console.info('render folders:  ', this.state.folders);
-
     return (
-      <div className="container-fluid content">
-        <div className="row">
-
-          <Link to="addFolder">
-            <div className="col-md-3">
-              <div className="folder">
-                Create New 
-                <div> +</div>
-              </div>
-            </div>
-          </Link>
-
-          <Folders folders={this.state.folders} />
-
-        </div>
-      </div>
+      <Folders folders={this.state.folders} />
     )
   }
 

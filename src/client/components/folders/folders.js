@@ -20,11 +20,25 @@ var Folders = React.createClass({
     )
   },
 
+
   render: function() {
     return(
-      <div>
-        { this.props.folders &&
-          this.props.folders.map(this._getFolders, this)}
+      <div className="container-fluid content">
+        <div className="row">
+
+          <div className="col-md-3">
+            <Link to="addFolder">
+              <div className="folder">
+                Create New 
+                <div> +</div>
+              </div>
+            </Link>
+          </div>
+
+          { this.props.folders &&
+            this.props.folders.map(this._getFolders, this)}
+
+        </div>
       </div>
     )
   }

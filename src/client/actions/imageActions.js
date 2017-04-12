@@ -19,45 +19,18 @@ var ImageActions = {
       params: q
     })
     .then(function (data) {
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.GET_IMAGES,
-		      gallery: data.data 
-	      });
+      Dispatcher.dispatch({
+		   actionType: ActionTypes.GET_IMAGES,
+		    gallery: data.data 
+	    });
     })
     .catch(function (error) {
       console.log(error);
     });
-
-
-        /*
-    var query = "";
-   
-    if(q) {
-    
-      if(Object.keys(q).length > 0) {
-        query += "?"
-      }
- 
-      for(var key in q) {
-        query += key + "=" + q[key] + "&" ;
-      };
-    };
-*/
-          /*
-    console.info('load image q: ', q);
-
-    Api.get('api/images/fetch?' + query ) 
-      .then(function(data) {
-        Dispatcher.dispatch({
-			    actionType: ActionTypes.GET_IMAGES,
-		      gallery: data 
-	      });
-      });
-      */
   },
 
 
-	createImage: function(form, file, error, success) {
+	createImage: function(form, file, folderId) {
     s3Signature(file, function(file, signedRequest, url){
       toastr.warning('Uploading image');
       var xhr = new XMLHttpRequest();
@@ -67,6 +40,7 @@ var ImageActions = {
           if(xhr.status === 200){
 
             var uploadData = {
+              folderId: folderId,
               formData: form,
               id: file.id,
               lastModified: file.lastModified,
@@ -79,7 +53,6 @@ var ImageActions = {
 
             axios.post('api/images', uploadData, config)
               .then(function (data) {
-                success();  
                 Dispatcher.dispatch({
 			            actionType: ActionTypes.CREATE_IMAGE,
 		              image: data.data 
@@ -87,23 +60,7 @@ var ImageActions = {
               })
               .catch(function (error) {
                 console.log(error);
-                return error(error);
               });
-
-              /*
-            Api.post('api/images', uploadData)
-              .then(function(data){
-                if(data.error && data.error.length) {
-                  return error(data.error);
-                } else {
-                  success();  
-                  Dispatcher.dispatch({
-			              actionType: ActionTypes.CREATE_IMAGE,
-		                image: data 
-	                });
-                }
-              });
-              */
           }
           else{
             alert('Could not upload file.');
@@ -129,15 +86,6 @@ var ImageActions = {
       .catch(function (error) {
         console.log(error);
       });
-          /*
-   Api.delete(url, id)
-     .then(function(data){
-       Dispatcher.dispatch({
-         actionType: ActionTypes.DELETE_IMAGE,
-         id: id
-		   });
-     });
-     */
   },
 
 

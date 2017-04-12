@@ -163,7 +163,9 @@ var UserProfile = React.createClass({
 
           </div>
           <div className="l-split__main">
-            <ImageGridContainer query={{author: userData.userName}}  />
+            {userData.userName && 
+              <ImageGridContainer query={{author: userData.userName}}  />
+            }
           </div>
         </div>
       </div>

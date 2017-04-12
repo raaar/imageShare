@@ -3,13 +3,14 @@ var Router = require('react-router');
 var Link = Router.Link;
 var FolderActions = require('../../actions/folderActions');
 var FolderStore = require('../../stores/folderStore');
+var ImageStore = require('../../stores/imageStore');
 var ImageForm = require('../image/imageForm');
 
-var ImageSingle = React.createClass({
+var ImageUploader = require('../image/imageUploader');
+var ImageGridContainer = require('../image/imageGridContainer');
 
-  mixins: [
-    Router.Navigation
-  ],
+
+var ImageSingle = React.createClass({
 
 
   getInitialState: function() {
@@ -55,20 +56,17 @@ var ImageSingle = React.createClass({
   render: function() {
 
     return (
-      <div className="container-fluid">
-        <h1>{this.props.params.title}</h1>
-        <p>{this.props.params.id}</p>
-        <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
-        <a href="#" onClick={this.upload}>Upload</a>
+      <div>
+        <div className="container-fluid">
+          <h1>{this.props.params.title}</h1>
+          <p>{this.props.params.id}</p>
+          <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
+          <a href="#" onClick={this.upload}>Upload</a>
 
-            <ImageForm 
-              title={this.state.title}
-              onChange={this.setImageState}    
-              onFileChange={this.handleFile}
-              onSave={this.saveImage}
-              complete={this.state.complete}
-              processing={this.state.processing}
-            />        
+          <ImageUploader folderId={this.props.params.id} />
+        </div>
+
+        <ImageGridContainer query={{folderId: this.props.params.id}} gridSize="large" />
       </div>
     )
   }

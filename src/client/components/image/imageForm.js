@@ -5,7 +5,6 @@ var Input = require('../common/textInput');
 var ImageForm = React.createClass({
 
   propTypes: {
-    onChange: React.PropTypes.func.isRequired,
     onFileChange: React.PropTypes.func.isRequired,
     onSave: React.PropTypes.func.isRequired
   },
@@ -20,14 +19,6 @@ var ImageForm = React.createClass({
     return (
       <div className="uploader form">
         <form encType="multipart/form-data">
-          <Input
-            name="title"
-            label="Image Title"
-            value={this.props.title}
-            placeholder="Image title"
-            onChange={this.props.onChange}
-						//error={this.props.errors.title}
-          />
 
           <FileInput 
             name="image"
