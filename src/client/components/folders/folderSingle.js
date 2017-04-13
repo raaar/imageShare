@@ -59,14 +59,13 @@ var ImageSingle = React.createClass({
       <div>
         <div className="container-fluid">
           <h1>{this.props.params.title}</h1>
-          <p>{this.props.params.id}</p>
+
           <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
-          <a href="#" onClick={this.upload}>Upload</a>
 
           <ImageUploader folderId={this.props.params.id} />
         </div>
 
-        <ImageGridContainer query={{folderId: this.props.params.id}} gridSize="large" />
+        <ImageGridContainer query={{folderId: this.props.params.id}} gridSize="large" modifiers="grid--folder" />
       </div>
     )
   }

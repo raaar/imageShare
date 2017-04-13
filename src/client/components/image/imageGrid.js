@@ -30,8 +30,10 @@ var ImageGrid = React.createClass({
 
 
   render: function() {
+    var gridClass = this.props.modifiers ?  "grid " + this.props.modifiers : "grid";
+
     return (
-      <div id="js-grid" className="grid">
+      <div id="js-grid" className={gridClass}>
 			  {this.props.images.map(this.createImageTile, this)}
       </div>
     );

@@ -14,7 +14,6 @@ var routes = (
     <Route name="image" path="image/:id" handler={require('./components/image/imageSingle')} />
     <Route name="profile" path="profile/:author" handler={require('./components/profile/authorPage')} />
     <Route name="my-profile" path="my-profile" handler={require('./components/profile/userPage')} />
-    <Route name="upload" path="upload" handler={require('./components/image/manageImagePage')} />
     <Route name="network" path="network" handler={require('./components/network/network')} />
     <Route name="folders" path="folders" handler={require('./components/folders/foldersContainer')} />
     <Route name="addFolder" path="manage-folder" handler={require('./components/folders/manageFolderPage')} />

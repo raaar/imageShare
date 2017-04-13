@@ -5,7 +5,6 @@ var bcrypt = require('bcrypt');
 
 var authController = function() {
 
-
   var get = function(req, res){
     res.render('auth', {
       message: '',

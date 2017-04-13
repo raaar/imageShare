@@ -7,7 +7,7 @@ var InitializeActions = require('./actions/initializeActions');
 
 InitializeActions.initApp();
 
-Router.run(routes,/* Router.HistoryLocation,*/  function(Handler) {
+Router.run(routes, Router.HistoryLocation,  function(Handler) {
   React.render(<Handler />, document.getElementById('app'));
 });
 

@@ -10,7 +10,6 @@ var GalleryModal = React.createClass({
 
 
   _authorLink: function() {
-    console.log(this.props.data.author)
     var _self = this;
 
     return (

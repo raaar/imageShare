@@ -42,7 +42,6 @@ var FolderActions = {
     axios.get('api/folders/' + id )
       .then(function(data){
               
-        console.info('folder single action: ', data.data);
         Dispatcher.dispatch({
 			    actionType: ActionTypes.FOLDER_GET_SINGLE,
 		      folder: data.data 
@@ -55,7 +54,7 @@ var FolderActions = {
   updateFolder: function(item) {
     var config = {};
     // update 
-          
+
     axios.patch('api/folders/' + item._id, item, config)
       .then(function(data){
       })

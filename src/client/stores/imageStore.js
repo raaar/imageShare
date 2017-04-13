@@ -61,19 +61,30 @@ Dispatcher.register(function(action){
 
 		case ActionTypes.GET_IMAGES:
       if(typeof action.gallery !== undefined && action.gallery.length > 0) {
+
+        var isEqual = _.isEqual(_images, action.gallery); 
+        
         // add unique images to store
         _imagesEnd = false;
         _images = _.concat(_images, action.gallery);
         _images = _.uniqBy(_images, '_id');
+              
+
+        // no new images received from server, before lazy load
+        if(isEqual) {
+          _imagesEnd = true;
+        };
+
+
       } else {
-        // no new data received, no more images to load
+        // no new images received from server, after lazy load 
         console.log('Image store, end of images');
         _imagesEnd = true;
       }
 
+      // component has loaded first set of images
       _loading = false;
 
-//      console.info('image store: ', _images);
 			ImageStore.emitChange();
 			break;
 

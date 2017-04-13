@@ -6,12 +6,17 @@ var Folders = React.createClass({
 
 
   _getFolders: function(item){
+    console.log(item);
+
+    var permissionText = item.publicPermission ? "Public" : "Private";
+
     return(
       <div key={item._id}>          
         <Link to="folderSingle" params={{id: item._id, title: item.title}}>
           <div className="col-md-3">
             <div className="folder">
               <div className="folder__title">{item.title}</div> 
+              <small>{permissionText}</small>
             </div>
           </div>
         </Link>      
@@ -28,7 +33,7 @@ var Folders = React.createClass({
 
           <div className="col-md-3">
             <Link to="addFolder">
-              <div className="folder">
+              <div className="folder folder--new">
                 Create New 
                 <div> +</div>
               </div>

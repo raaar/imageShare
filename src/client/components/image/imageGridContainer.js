@@ -1,6 +1,6 @@
 /*  Image gallery with lazy load
  *  
- *  Parameters:
+ *  Optional parameters via props:
  *  'query': pass the query parameters to filter images (folder, title, user)
  *  'gridSize': optional parameter for the tile size (large)
  */
@@ -34,7 +34,7 @@ var ImageGridContainer = React.createClass({
 
 
   previousPosition: window.pageYOffset, // determine if scrolling up or down
-
+  query: {},
 
   queryDefaults: {
     limit: 20
@@ -49,34 +49,12 @@ var ImageGridContainer = React.createClass({
 
 	componentWillMount: function() {
 		ImageStore.addChangeListener(this._onChange);
-    window.addEventListener("scroll", _.debounce(this.handleScroll, 250 ) );
 	},
 
 
-  mergeQuery: function() {
-
-    // assign query defaults
-    var query = {};
-    Object.assign(query, this.queryDefaults);
-
-    // assign any queries passed by props
-    if(typeof this.props.query !== 'undefined') {
-      Object.assign(query, this.props.query);
-    }
-
-    // If not loading for the first time, setup query for next batch of images 
-    if(!this.state.loading && this.state.images) {
-      var lastItem = this.state.images[this.state.images.length -1];
-      query.after = lastItem._id;
-    }
-
-    return query;
-
-  },
-
-
   componentDidMount: function() {
-    var query = this.mergeQuery();
+
+    this.query = this.mergeQuery();
 
     // We pass the current query to the store, so that it can be used by the gallery modal
     // Don't pass the mergeQuery() result, as this will also include the 'lastItem' parameter
@@ -84,8 +62,10 @@ var ImageGridContainer = React.createClass({
 
 
     if(this.isMounted()) {
+      window.addEventListener("scroll", this.handleScroll);
+
       this.setState({
-        images: ImageActions.loadImages(this.mergeQuery())
+        images: ImageActions.loadImages(this.query)
       }); 
     }
   },
@@ -101,16 +81,7 @@ var ImageGridContainer = React.createClass({
   },
 
 
-  componentDidUpdate: function() {
-    if(this.state.end) {
-      window.removeEventListener("scroll", this.handleScroll);
-    }
-  },
-
-
 	_onChange: function() {
-    this.state.end = ImageStore.imagesEnd();
-
     this.setState({
       loading: ImageStore.loading(), 
       images: ImageStore.getImages(),
@@ -120,7 +91,6 @@ var ImageGridContainer = React.createClass({
 
 
 	componentWillUnmount: function() {
-    console.log('imagegrid unmount');
 		ImageStore.removeChangeListener(this._onChange);
     // clear old store data
     ImageStore.clearImages();
@@ -139,32 +109,56 @@ var ImageGridContainer = React.createClass({
       e.preventDefault();
     }
 
-    if(this.state.end) {
-      return;  
-    }
+    this.query = this.mergeQuery();
 
-    ImageActions.loadImages(this.mergeQuery())
+    ImageActions.loadImages(this.query)
   },
 
 
-  handleScroll: function(event) {
-    console.info('handleScroll -  loading: ', this.state.loading);
-    console.info('handleScroll -  end: ', this.state.end);
-    // if images are finished, or if we are already loading, stop immediately
-    if(this.state.end || this.state.loading) {
-      return;
-    }
+  handleScroll: _.debounce(function(e) {
 
     var pageHeight = document.documentElement.scrollHeight;
     var clientHeight = document.documentElement.clientHeight;
     this.currentPosition = window.pageYOffset;
+    var triggerPoint = pageHeight - (this.currentPosition + clientHeight);
 
     if (this.previousPosition < this.currentPosition) {
-      // scrolling down
-      if(!this.state.end && pageHeight - (this.currentPosition + clientHeight) < clientHeight) {
+      // do not trigger scroll until: component has finished loading, there are images to load, before the end of page
+      if(!this.state.loading && !this.state.end && triggerPoint < clientHeight) {
         this.loadItems();
       }
-    } else { /* scrolling up */ }
+    } else {
+      //  scrolling up  
+    } 
+	
+  }, 500),
+
+
+  mergeQuery: function() {
+    /* The function creates a 'query' object that is then
+     * passed to the backend to query for the correct set of images.
+     * Data passed: 
+     * {
+     *   length: 'max images that will be loaded',
+     *   after: 'the last image in the images array',
+     *   folder: 'ID of the folder that contains the image'
+     * }
+     */
+
+    // assign query defaults
+    var query = {};
+    Object.assign(query, this.queryDefaults);
+
+    // assign any queries passed by props
+    Object.assign(query, this.props.query);
+
+    // If not loading for the first time, setup lazt-load of next set of images 
+    if(!this.state.loading && this.state.images) {
+      var lastItem = this.state.images[this.state.images.length -1];
+      query.after = lastItem._id;
+    }
+
+    return query;
   },
 
 
@@ -179,6 +173,8 @@ var ImageGridContainer = React.createClass({
     // items are loading
     var ifLoading = !ifNoItems  && !ifItems;
 
+    // show 'load more' if there are more than N of images
+    var showMore = !this.state.end && this.state.images && this.state.images.length >= this.queryDefaults.limit;
 
     return (
       <div>
@@ -193,7 +189,9 @@ var ImageGridContainer = React.createClass({
             images={this.state.images} 
             gridSize={this.props.gridSize} 
             openImage={this.openImage} 
-            loading={this.state.loading} />
+            loading={this.state.loading}
+            modifiers={this.props.modifiers}
+          />
         }
 
         { ifLoading && 
@@ -203,9 +201,11 @@ var ImageGridContainer = React.createClass({
         }
 
            
-        { !this.state.end &&
-          <a href="#" onClick={this.loadItems}>Load More</a>
+        <div className="grid__more">
+        { showMore &&
+          <a href="#" ref="loadMore" onClick={this.loadItems}>Load More</a>
         }
+        </div>
       </div>
     );
 

@@ -108,7 +108,6 @@ var Header = React.createClass({
             </Link>
           
             <Link to="feed" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Feed</Link>
-            <Link to="upload" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Upload</Link>
             <Link to="network" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Network</Link>
             <Link to="folders" className="nav__item" onClick={this.closeMenu} activeClassName="is-active">Folders</Link>
 

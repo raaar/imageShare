@@ -12,6 +12,7 @@ toastr.options = {
 };
 
 var ManageImage = React.createClass({
+
   mixins: [
     Router.Navigation
   ],
@@ -74,10 +75,8 @@ var ManageImage = React.createClass({
 
 
   saveImage: function(e) {
-    var _self = this;
 
     if(this.state.complete) {
-      var _self = this;
 
       e.preventDefault();
 
@@ -85,25 +84,19 @@ var ManageImage = React.createClass({
         processing: true
       });
 
-
       ImageActions.createImage(this.state.formData, this.state.file, this.props.folderId);
     }
   },
         
+
   render: function() {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="l-center">
-            <ImageForm 
-              onFileChange={this.handleFile}
-              onSave={this.saveImage}
-              complete={this.state.complete}
-              processing={this.state.processing}
-            />        
-          </div>
-        </div>
-      </div>
+      <ImageForm 
+        onFileChange={this.handleFile}
+        onSave={this.saveImage}
+        complete={this.state.complete}
+        processing={this.state.processing}
+      />        
     )
   }
 });

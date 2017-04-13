@@ -1,0 +1,66 @@
+@import "../tools/_vars";
+
+$checkbox-size: 30px;
+
+.label--checkbox {
+  position: relative;
+  line-height: 135%;
+  cursor: pointer;
+  min-height: $checkbox-size;
+  margin-top: 7px;
+}
+
+input[type="checkbox"].checkbox {
+  position: relative;
+  
+  margin: -7px 10px 0 0 ;
+  
+  width: $checkbox-size;
+  min-height: $checkbox-size;
+  cursor: pointer;
+  float: left;
+  
+  &:before {
+		@include transition(all .3s ease-in-out);
+    
+		content: "";
+    
+		position: absolute;
+		left: 0;
+		z-index: 1;
+  
+		width: $checkbox-size;
+		height: $checkbox-size;
+    
+		border: 2px solid lightgrey; 
+  }
+  
+  &:checked {
+    &:before {
+       @include transform(rotate(-45deg));
+  
+  		height: 15px;
+  
+  		border-color: $link-color;
+  		border-top-style: none;
+  		border-right-style: none;
+      border-width: 3px;
+    } 
+  }
+  
+  &:after {
+    content: "";
+    
+    position: absolute;
+    top: rem(-2);
+    left: 0;
+    
+    width: 33px;
+    height: 33px;
+    
+    background: #fff;
+    
+    cursor: pointer;
+  }
+}
+

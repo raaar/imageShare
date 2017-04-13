@@ -15,14 +15,18 @@ var ImageActions = {
 
     console.info('load image query: ', q);
 
-    axios.get('api/images/fetch', {
+    axios.get('/api/images/fetch', {
       params: q
     })
     .then(function (data) {
+            
       Dispatcher.dispatch({
 		   actionType: ActionTypes.GET_IMAGES,
 		    gallery: data.data 
 	    });
+      
+      console.info('loadImages q: ', q);
+      console.info('loadImages: ', data);
     })
     .catch(function (error) {
       console.log(error);

@@ -315,6 +315,18 @@ a {
   }
 }
 
+.grid--folder {
+  margin-top: 50px;
+  min-height: 200px;
+}
+
+
+.grid__more {
+  margin-top: 20px;
+  padding: 10px 20px;
+  height: 50px;
+}
+
 
 
 .content {
@@ -329,4 +341,10 @@ a {
   border-radius: 5px;
   font-weight: 700;
   font-size: 18px
+
 }
+
+.folder--new {
+  background: lightgrey;
+}
+

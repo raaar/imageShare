@@ -18,7 +18,8 @@ var manageFolderPage = React.createClass({
   getInitialState: function() {
     return {
       folder: {
-        title: ""
+        title: "",
+        publicPermission: true
       },
       dirty: false
     }
@@ -48,8 +49,6 @@ var manageFolderPage = React.createClass({
     // component will not re-render when setting state
     var folderId = this.props.params.id;
     
-    console.info('folder id: ', folderId);
-    // if we are editing an existing author, populate with data
     if(folderId) { 
 
       // if no data is loaded after page refresh, load data from server     
@@ -83,18 +82,18 @@ var manageFolderPage = React.createClass({
 
   setFolderState: function(e) {
     this.setState({dirty: true}); // the form has been modified
-    console.log(e);
     var field = e.target.name;
     var value = e.target.value;
     this.state.folder[field] = value;
 
-    console.info('title state: ', this.state.folder);
+
+    var perm = !this.state.folder.publicPermission;
+    this.state.folder['publicPermission'] = perm;
 
     return this.setState({
       folder: this.state.folder 
     });
   },
-
 
 
   deleteFolder: function(e) {
@@ -114,6 +113,7 @@ var manageFolderPage = React.createClass({
       // update folder action
       FolderActions.updateFolder(this.state.folder);
     }
+
     this.transitionTo('folders');
   },
 
@@ -135,7 +135,7 @@ var manageFolderPage = React.createClass({
     return(
       <div className="container-fluid">
         <h1>{pageTitle}</h1>      
-            
+
         <TextInput 
           name="title"
           label="title"
@@ -145,15 +145,12 @@ var manageFolderPage = React.createClass({
           value={this.state.folder && this.state.folder.title}
         />        
 
-        <TextInput 
-          name="password"
-          label="password"
-          //onChange={this.setFolderState}
-          type="text"
-          value=""
-          placeholder="Type folder password"
-        />        
 
+        <label className="label--checkbox">
+          <input type="checkbox" className="checkbox" checked={this.state.folder.publicPermission} onChange={this.setFolderState} />Make folder public 
+        </label>
+            
+        <br />
         <div className="row">
           <div className="col-sm-4">
             <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>

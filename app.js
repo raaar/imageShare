@@ -54,10 +54,15 @@ app.use('/api/folders', folderRouter);
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(req , res) {
+app.get('*', function(req , res) {
   res.render('index');
 });
 
+
+app.get('/preview', function(req , res) {
+  res.redirect('/#/network');
+  //res.json('hello preview');
+});
 /*
 app.get('/*', function(req , res) {
   res.redirect('/');

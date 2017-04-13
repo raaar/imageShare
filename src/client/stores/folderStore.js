@@ -55,7 +55,6 @@ Dispatcher.register(function(action) {
 
     case ActionTypes.FOLDER_GET_SINGLE: 
 			_singleFolder = action.folder;
-      console.info('folder single store: ', _singleFolder);
 			FolderStore.emitChange();
 			break;
 
