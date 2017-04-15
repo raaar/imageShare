@@ -46,7 +46,7 @@ var signInStatus = require('./src/server/middleware/middleware');
 
 app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
-app.use('/', signInStatus);
+app.use(/^((?!\/preview).)*$/, signInStatus);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/folders', folderRouter);
@@ -54,15 +54,20 @@ app.use('/api/folders', folderRouter);
 app.set('views', './src/server/views');
 app.set('view engine', 'ejs');
 
+
 app.get('*', function(req , res) {
+  console.log('app render index');
   res.render('index');
 });
 
 
+/*
 app.get('/preview', function(req , res) {
-  res.redirect('/#/network');
+  console.log('app.get /preview');
+  res.redirect('/network');
   //res.json('hello preview');
 });
+*/
 /*
 app.get('/*', function(req , res) {
   res.redirect('/');

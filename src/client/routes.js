@@ -7,9 +7,15 @@ var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute;
 var Redirect = Router.Redirect;
 
+
+function requireAuth(nextState, replaceState) {
+  console.log('auth');
+}
+
 var routes = (
-  <Route name="app" path="/" handler={require('./components/app')} >
+  <Route name="app" path="/" handler={require('./components/app')} onEnter={requireAuth}>
     <DefaultRoute handler={require('./components/homePage')} />
+    <Route name="login" path="login" handler={require('./components/auth/login')} />
     <Route name="feed" path="feed" handler={require('./components/homePage')} />
     <Route name="image" path="image/:id" handler={require('./components/image/imageSingle')} />
     <Route name="profile" path="profile/:author" handler={require('./components/profile/authorPage')} />
@@ -21,7 +27,7 @@ var routes = (
     <Route name="folderSingle" path="folder/:id/:title" handler={require('./components/folders/folderSingle')} />
     <Route name="search" path="search" handler={require('./components/search/searchPage')} />
     <NotFoundRoute handler={require('./components/pageNotFound')} />
-    <Redirect from="/" to="feed" />
+    <Redirect from="/" to="feed"  />
   </Route>
 );
 
