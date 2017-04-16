@@ -1,9 +1,4 @@
-"use strict";
-
-var keyMirror = require('react/lib/keyMirror');
-
-// KeyMirror copys the value on the left, and places it on the right, so that we don't have to type the INITIALIZE property twice 
-module.exports = keyMirror({
+module.exports = {
   INITIALIZE_USER: null,
   USER_ERROR: null,
   CREATE_IMAGE: null,
@@ -21,4 +16,4 @@ module.exports = keyMirror({
   FOLDER_GET: null,
   FOLDER_GET_SINGLE: null,
   FOLDER_DELETE: null
-});
+};

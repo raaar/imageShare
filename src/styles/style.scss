@@ -1,0 +1,350 @@
+@import "../../node_modules/compass-mixins/lib/_compass";
+@import "./tools/_vars";
+@import "./tools/_media-queries";
+
+/*!
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+
+// Core variables and mixins
+@import "./tools/_vars-bootstrap";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+// Reset and dependencies
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+//@import "bootstrap/glyphicons";
+
+// Core CSS
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/code";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+//@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+
+/*
+// Components
+@import "bootstrap/component-animations";
+@import "bootstrap/dropdowns";
+@import "bootstrap/button-groups";
+@import "bootstrap/input-groups";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
+@import "bootstrap/labels";
+@import "bootstrap/badges";
+@import "bootstrap/jumbotron";
+@import "bootstrap/thumbnails";
+@import "bootstrap/alerts";
+@import "bootstrap/progress-bars";
+@import "bootstrap/media";
+@import "bootstrap/list-group";
+@import "bootstrap/panels";
+@import "bootstrap/responsive-embed";
+@import "bootstrap/wells";
+@import "bootstrap/close";
+
+// Components w/ JavaScript
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
+@import "bootstrap/carousel";
+
+*/
+// Utility classes
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+
+
+
+// Custom components 
+@import "./components/_all";
+
+// http://codepen.io/ehermanson/pen/KwKWEv
+
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+
+.truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+a {
+  color: $link-color;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+
+
+.container-fluid {
+  padding: 0 20px;
+}
+
+.l-center {
+  @include make-sm-column(6);
+  @include make-md-column(6);
+  margin: 0 auto;
+  float: none !important;
+}
+
+.l-split {
+
+}
+
+.l-split__sidebar {
+  height: 100%;
+  background: $light;
+  padding: 30px 20px;
+
+  @include mq(sm) {
+    position: fixed;
+    float: left;
+    width: 340px;
+  }
+}
+
+.l-split__main {
+  @include mq(sm) {
+    padding-left: 340px;
+  }
+}
+
+
+.uploader {
+  margin-top: 50px;
+}
+
+
+.form-control {
+  height: 40px;
+}
+
+.form__submit {
+  margin-top: 20px;
+}
+
+.sparrow {
+  text-align: center;
+
+  p {
+    margin-top: 30px;
+  }
+}
+
+.sparrow__img {
+  margin: 0 auto;
+}
+
+.sparrow__title {
+  margin-top: 20px;
+  font-size: $font-size-h3;
+}
+
+.sparrow__item {
+  margin-top: 15px;
+}
+
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  
+  button {
+    min-width: 110px;
+
+    @include mq(sm) {
+      display: none;
+    }
+  }
+
+  .form-control {
+    height: 40px;
+  }
+}
+
+
+.tile {
+  display: inline-block;
+  float: left;
+  width: 180px;
+  height: 180px;
+  background: lightgrey;
+
+  img {
+    width: 100%;
+  }
+}
+
+.tile--lg {
+  display: inline-block;
+  float: left;
+  height: auto;  
+  max-width: 280px;
+  max-height: 280px;
+
+  @include mq(xs) {
+    width: 50%;
+  }
+
+  @include mq(sm) {
+    width: 100%;
+  }
+}
+
+
+
+.avatar-sm {
+  width: 40px;
+  height: auto;
+  border-radius: 100%;
+}
+
+.avatar-lg {
+  width: 120px;
+  height: auto;
+  border-radius: 100%;
+}
+
+
+.dark-page {
+  background: rgba(19, 35, 47, 1);
+}
+
+.start-form {
+  margin-top: 50px;
+  color: white;
+  
+  h1 {
+    text-align: center;
+    margin: 35px 0;
+  }
+
+  .btn {
+    margin-top: 15px;
+    width: 100% !important;
+  }
+
+  label {
+    color: rgba(255,255,255,0.3);
+  }
+}
+
+
+.form-control--dark {
+  background: transparent;
+  color: white;
+}
+
+
+.mast {
+  height: 180px;
+  background: $light;
+  
+  p {
+    color: $dark;
+  }
+}
+
+
+.media-grid {
+  @include clearfix;
+  max-width: 2000px;
+  margin-top: 30px;
+
+  .media {
+    margin-bottom: 50px;
+  }
+
+  @include mq(xl) {
+    > div {
+      max-width: 400px !important;
+    }
+  }
+}
+
+.media {
+  @include display-flex;
+  @include align-items(center);
+}
+
+.media__img {
+  border-radius: 100%;
+  width: 120px;
+  height: 120px;
+  margin-right: 15px;
+}
+
+
+.load-more {
+  width: 100%;
+  clear: both;
+
+  button.btn {
+    margin-top: 40px;
+  }
+}
+
+
+.grid {
+  position: relative;
+  display: block;
+  overflow: hidden;
+
+  min-height: calc(100vh - 60px );
+
+  @include mq(sm) {
+    min-height: calc(100vh - 70px );
+  }
+}
+
+.grid--folder {
+  margin-top: 50px;
+  min-height: 200px;
+}
+
+
+.grid__more {
+  margin-top: 20px;
+  padding: 10px 20px;
+  height: 50px;
+}
+
+
+
+.content {
+  margin-top: 50px;
+}
+
+.folder {
+  width: 100%;
+  height: 300px;
+  border: 1px solid lightgrey;
+  padding: 20px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 18px
+
+}
+
+.folder--new {
+  background: lightgrey;
+}
+

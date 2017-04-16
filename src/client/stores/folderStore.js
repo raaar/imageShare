@@ -60,7 +60,7 @@ Dispatcher.register(function(action) {
 
 
     case ActionTypes.FOLDER_DELETE: 
-			_.remove(_folder, function(folder){
+			_.remove(_folders, function(folder){
         return folder._id === action.id;
 			});
 			FolderStore.emitChange();

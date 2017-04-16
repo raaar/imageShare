@@ -5,7 +5,6 @@ var Dispatcher = require('../dispatcher/appDispatcher');
 var axios = require('axios');
 var ActionTypes = require('../constants/actionTypes');
 var ImageStore = require('../stores/imageStore');
-var $ = require('jquery');
 var _ = require('lodash');
 
 

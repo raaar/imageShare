@@ -1,22 +1,13 @@
-'use strict';
+import React from 'react';
 
-var React = require('react');
-var Link = require('react-router').Link;
 
-var NotFoundPage = React.createClass({
-  render: function() {
-    return (
-        <div className="container-fluid">
-          <h1>404</h1>
-          
-          <p>
-            Sorry, page not found
-          </p>
-          
-          <Link to="app" className="btn btn-primary">Back to home</Link>
-        </div>
-      );
-  }
-});
+const NotFoundPage = () => {
+  return (
+    <div className="container-fluid">
+      <h1>404</h1>
+      <p>Sorry, page not found</p>
+    </div>
+  )
+}
 
-module.exports = NotFoundPage;
+export default NotFoundPage;

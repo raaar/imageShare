@@ -8,6 +8,7 @@ var dotenv = require('dotenv');
 dotenv.load();
 var express = require('express'),
     bodyParser = require('body-parser');
+var path = require('path');
 
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
@@ -27,7 +28,16 @@ var db;
 // S3 setup
 var s3Sign = require('./src/server/routes/s3Routes');
 
-app.use(express.static('public')); // define where all static (CSS, JS) files come from
+var morgan = require('morgan');
+// Setup logger
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
+
+
+
+//app.use(express.static('public')); // define where all static (CSS, JS) files come from
+app.use(express.static(path.resolve(__dirname,  'build')));
+
+
 app.use(bodyParser.urlencoded({encoded: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -46,18 +56,19 @@ var signInStatus = require('./src/server/middleware/middleware');
 
 app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
-app.use(/^((?!\/preview).)*$/, signInStatus);
+//app.use(/^((?!\/preview).)*$/, signInStatus);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/folders', folderRouter);
 
-app.set('views', './src/server/views');
-app.set('view engine', 'ejs');
+//app.set('views', './src/server/views');
+//app.set('view engine', 'ejs');
 
 
-app.get('*', function(req , res) {
-  console.log('app render index');
-  res.render('index');
+
+
+app.get('/*', function(req , res) {
+  res.sendFile(path.resolve(__dirname,  'build', 'index.html'));
 });
 
 
