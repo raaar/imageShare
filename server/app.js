@@ -15,7 +15,7 @@ var passport = require('passport');
 var session = require('express-session');
 
 var mongodb = require("mongodb");
-var dbUrl = require('./src/server/config/db');
+var dbUrl = process.env.MONGODB_URI;
 
 var app = express();
 
@@ -26,7 +26,7 @@ var db;
 
 
 // S3 setup
-var s3Sign = require('./src/server/routes/s3Routes');
+var s3Sign = require('./routes/s3Routes');
 
 var morgan = require('morgan');
 // Setup logger
@@ -44,14 +44,14 @@ app.use(cookieParser());
 app.use(session({secret: 'library'}));
 
 // by passing 'app', we can use 'app.use' in our passport config file
-require('./src/server/config/passport')(app);
+require('./config/passport')(app);
 
-var imageRouter = require('./src/server/routes/imageRoutes')();
-var folderRouter = require('./src/server/routes/folderRoutes')();
-var userRouter = require('./src/server/routes/userRoutes')();
-var authRouter = require('./src/server/routes/authRoutes')();
-var profileRouter = require('./src/server/routes/profileRoutes')();
-var signInStatus = require('./src/server/middleware/middleware');
+var imageRouter = require('./routes/imageRoutes')();
+var folderRouter = require('./routes/folderRoutes')();
+var userRouter = require('./routes/userRoutes')();
+var authRouter = require('./routes/authRoutes')();
+var profileRouter = require('./routes/profileRoutes')();
+var signInStatus = require('./middleware/middleware');
 
 
 app.use('/api/images', imageRouter);
@@ -61,14 +61,14 @@ app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/folders', folderRouter);
 
-//app.set('views', './src/server/views');
+//app.set('views', './views');
 //app.set('view engine', 'ejs');
 
 
 
 
 app.get('/*', function(req , res) {
-  res.sendFile(path.resolve(__dirname,  'build', 'index.html'));
+  res.sendFile(path.resolve('..', __dirname,  'build', 'index.html'));
 });
 
 

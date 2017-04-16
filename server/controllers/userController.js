@@ -1,6 +1,6 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
-var dbUrl = require('../config/db');
+var dbUrl = process.env.MONGODB_URI;
 
 var userController = function() {
  

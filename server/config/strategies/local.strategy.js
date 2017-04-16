@@ -1,7 +1,7 @@
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongodb = require('mongodb').MongoClient,
-    dbUrl = require('../db'),
+    dbUrl = process.env.MONGODB_URI,
     bcrypt = require('bcrypt');
 
 var strategyFunction = function() {

@@ -1,6 +1,6 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
-var dbUrl = require('../config/db');
+var dbUrl = process.env.MONGODB_URI;
 var bcrypt = require('bcrypt');
 
 var authController = function() {

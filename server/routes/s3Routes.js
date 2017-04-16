@@ -1,6 +1,6 @@
 var express = require('express');
 var aws = require('aws-sdk');
-var S3_BUCKET = process.env.S3_BUCKET ||  'imageshareuploads';
+var S3_BUCKET = process.env.S3_BUCKET;
 
 var awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,

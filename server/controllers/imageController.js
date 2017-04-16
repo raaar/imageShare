@@ -3,7 +3,7 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-var dbUrl = require('../config/db');
+var dbUrl = process.env.MONGODB_URI;
 
 
 var imageController = function() {

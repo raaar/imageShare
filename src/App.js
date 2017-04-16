@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import AuthForm from './components/auth/login';
 
 /*
  * Queries to API work:
@@ -14,11 +15,18 @@ var axios = require('axios');
 */
 
 class App extends Component {
+
+  componentWillMount() {
+    // initialize authentication
+  }
+
+
   render() {
     return(
     <div>
       <Link to="/">Home</Link>
       <Link to="/main">Main</Link>
+      <AuthForm />
     </div>
     )
   }

@@ -3,7 +3,7 @@
  * */
 
 var mongodb = require('mongodb').MongoClient;
-var dbUrl = require('../config/db');
+var dbUrl = process.env.MONGODB_URI;
 var _ = require('lodash');
 
 var profileController = function() {
