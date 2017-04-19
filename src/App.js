@@ -1,6 +1,61 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import AuthForm from './components/auth/login';
+import Header from './components/common/header';
+import AuthStore from './stores/authStore';
+
+
+
+class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      authenticated: AuthStore.isAuthenticated() 
+    }
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+
+  componentWillMount() {
+    AuthStore.addChangeListener(this.onChange);
+  }
+
+
+  componentDidMount() {
+  }
+
+
+  componentWillUnmount() {
+    AuthStore.removeChangeListener(this.onChange);
+  }
+
+
+  onChange() {
+    this.setState({
+      authenticated: AuthStore.isAuthenticated()
+    });
+  }
+
+
+  render() {
+    return(
+    <div>
+      {this.state.authenticated ? (
+        <div>
+          <Header />
+          {this.props.children}
+        </div>
+      ) : (
+        <AuthForm />
+      )}
+    </div>
+    )
+  }
+}
+
+export default App;
+
 
 /*
  * Queries to API work:
@@ -14,36 +69,6 @@ var axios = require('axios');
     });
 */
 
-class App extends Component {
-
-  componentWillMount() {
-    // initialize authentication
-  }
-
-
-  render() {
-    return(
-    <div>
-      <Link to="/">Home</Link>
-      <Link to="/main">Main</Link>
-      <AuthForm />
-    </div>
-    )
-  }
-}
-
-export default App;
-
-
-/*
-var React = require('react');
-var Router = require('react-router');
-var routes = require('./client/routes');
-var InitializeActions = require('./client/actions/initializeActions');
-
-InitializeActions.initApp();
-
-Router.run(routes, Router.HistoryLocation,  function(Handler) {
-  React.render(<Handler />, document.getElementById('app'));
-});
-*/
+// https://github.com/mars/heroku-cra-node
+//
+// https://scotch.io/tutorials/build-a-react-flux-app-with-user-authentication

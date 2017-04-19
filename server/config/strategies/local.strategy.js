@@ -6,8 +6,8 @@ var passport = require('passport'),
 
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
-      usernameField: 'signInUserName', // corresponds to the name on our index.ejs template
-      passwordField: 'signInPassword'
+      usernameField: 'username', // second field correspons to the object passed by React from authActions 
+      passwordField: 'password'
     },
     function(username, password, done) {
 

@@ -1,4 +1,8 @@
-module.exports = {
+import keyMirror from 'keymirror';
+
+export default keyMirror({ 
+  AUTH_LOGIN: null,
+  AUTH_LOGOUT: null,
   INITIALIZE_USER: null,
   USER_ERROR: null,
   CREATE_IMAGE: null,
@@ -16,4 +20,4 @@ module.exports = {
   FOLDER_GET: null,
   FOLDER_GET_SINGLE: null,
   FOLDER_DELETE: null
-};
+});

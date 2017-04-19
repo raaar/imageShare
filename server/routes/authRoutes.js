@@ -18,8 +18,8 @@ var router = function() {
 
 
   authRouter.route('/signIn')
-    // We specify to pasport to use the loal strategy we have defiend in config/strategies/local.strategy.js
-    // This could alternatively say 'google', or 'Facebook' auth
+    // We specify to pasport to use the local strategy we have defiend in config/strategies/local.strategy.js
+    // This could alternatively say 'Google', or 'Facebook' auth
     .post(passport.authenticate('local',
       {
         failureRedirect: '/'

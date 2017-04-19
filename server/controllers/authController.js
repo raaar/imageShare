@@ -23,7 +23,15 @@ var authController = function() {
     // Success
     // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
     res.cookie('user', req.user._id, {httpOnly: true});
-    res.redirect('/');
+
+    var userObj = req.user;
+    delete userObj['password'];
+
+    // on succesfull login, send user info with response
+    res.json({
+      message:'logged in!',
+      user: userObj
+    });
   };
   
   var register = function(req, res) {

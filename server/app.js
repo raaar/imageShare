@@ -35,7 +35,7 @@ app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:htt
 
 
 //app.use(express.static('public')); // define where all static (CSS, JS) files come from
-app.use(express.static(path.resolve(__dirname,  'build')));
+app.use(express.static(path.resolve(__dirname,  '../build')));
 
 
 app.use(bodyParser.urlencoded({encoded: true}));
@@ -68,7 +68,7 @@ app.use('/api/folders', folderRouter);
 
 
 app.get('/*', function(req , res) {
-  res.sendFile(path.resolve('..', __dirname,  'build', 'index.html'));
+  res.sendFile(path.resolve( __dirname,  '../build', 'index.html'));
 });
 
 

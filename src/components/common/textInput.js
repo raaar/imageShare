@@ -7,6 +7,11 @@ class Input extends Component {
        
   render() {
     var wrapperClass = "form-group";
+    let inputClass = "form-control";
+
+    if(this.props.dark) {
+      inputClass += ' form-control--dark';
+    }
     
     /* // TODO: add error handling
     if(this.props.error && this.props.error.length > 0) {
@@ -20,9 +25,10 @@ class Input extends Component {
             <div className="field">
               <label htmlFor={this.props.name}>{this.props.label}</label>
             </div>
-            <input type="text"
+            <input 
+                type={this.props.type}
                 name={this.props.name}
-                className="form-control"
+                className={inputClass}
                 placeholder={this.props.placeholder}
                 ref={this.props.name}
                 onChange={this.props.onChange}
@@ -39,6 +45,7 @@ Input.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
     error: PropTypes.string
