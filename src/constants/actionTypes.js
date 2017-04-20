@@ -3,6 +3,7 @@ import keyMirror from 'keymirror';
 export default keyMirror({ 
   AUTH_LOGIN: null,
   AUTH_LOGOUT: null,
+  AVATAR_UPDATE: null,
   INITIALIZE_USER: null,
   USER_ERROR: null,
   CREATE_IMAGE: null,

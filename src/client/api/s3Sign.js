@@ -12,13 +12,15 @@ module.exports = function(file, cb) {
   });
   */
 
+    console.info('signed: ',  file);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', `/sign-s3?file-name=${file.id}&file-type=${file.type}`);
   xhr.onreadystatechange = () => {
     if(xhr.readyState === 4){
       if(xhr.status === 200){
+        console.log(xhr);
         var response = JSON.parse(xhr.responseText);
-        cb(file, response.signedRequest, response.url);
+        //cb(file, response.signedRequest, response.url);
       }
       else{
         alert('Could not get signed URL.');

@@ -1,20 +1,22 @@
-var React = require('react');
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
-var fileInput = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired,
-    name: React.PropTypes.string.isRequired
-  },
-  render: function() {
+class FileInput extends Component {
+  render() {
     return (
       <input
-            type="file"
-            name={this.props.name}
-            onChange={this.props.onChange}
-      />  
+        type="file"
+        name={this.props.name}
+        onChange={this.props.onChange}
+      />
     )
   }
-});
+};
 
-module.exports = fileInput
+FileInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired
+}
+
+export default FileInput;

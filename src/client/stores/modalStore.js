@@ -38,7 +38,7 @@ var ModalStore = assign({}, EventEmitter.prototype, {
 
 
   getModalSidebar: function() {
-    return _sidebarVisible;  
+    return _sidebarVisible;
   },
 
   getNextPrev: function() {
@@ -56,6 +56,7 @@ Dispatcher.register(function(action) {
 	switch(action.actionType) {
 
 		case ActionTypes.SHOW_MODAL:
+		  console.info('modal sroe show modal' );
       _visible = true;
       _modalTitle = action.modalTitle;
       _modalImageIndex = action.index;

@@ -7,11 +7,15 @@ const CHANGE_EVENT = 'change';
 
 
 // add user data to session storage
-function setUser(user, token) {
+function setUser(user) {
   if (!sessionStorage.getItem('user')) {
     sessionStorage.setItem('user', JSON.stringify(user));
     //sessionStorage.setItem('id_token', token);
   }
+}
+
+function updateUser(user) {
+  sessionStorage.setItem('user', JSON.stringify(user));
 }
 
 
@@ -62,7 +66,7 @@ AuthStore.dispatchToken = AppDispatcher.register(action => {
 
 
     case ActionTypes.AUTH_LOGIN:
-      setUser(action.user, 'token');
+      setUser(action.user);
       AuthStore.emitChange();
       break
 
@@ -72,7 +76,16 @@ AuthStore.dispatchToken = AppDispatcher.register(action => {
       AuthStore.emitChange();
       break;
 
+
+    case ActionTypes.AVATAR_UPDATE:
+      let userObj = AuthStore.getUser();
+      userObj.avatar = action.image.id;
+      updateUser(userObj);
+      AuthStore.emitChange();
+
+    // eslint-disable-next-line
     default:
+      /* falls through */
   }
 });
 

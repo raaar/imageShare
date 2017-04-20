@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 
 class Input extends Component {
-  
-       
+
+
   render() {
     var wrapperClass = "form-group";
     let inputClass = "form-control";
@@ -18,21 +18,21 @@ class Input extends Component {
       wrapperClass += " " + "hasError";
     }
     */
-    
-    
+
+
     return (
         <div className={wrapperClass}>
             <div className="field">
               <label htmlFor={this.props.name}>{this.props.label}</label>
             </div>
             <input 
-                type={this.props.type}
-                name={this.props.name}
-                className={inputClass}
-                placeholder={this.props.placeholder}
-                ref={this.props.name}
-                onChange={this.props.onChange}
-                value={this.props.value}
+              type={this.props.type}
+              name={this.props.name}
+              className={inputClass}
+              placeholder={this.props.placeholder}
+              ref={this.props.name}
+              onChange={this.props.onChange}
+              value={this.props.value}
             />
             <div className="input">{this.props.error}</div>
         </div>

@@ -50,6 +50,7 @@ AuthorStore.dispatchToken = AppDispatcher.register((action) => {
     break;
 
     default:
+      //
   }
 });
 

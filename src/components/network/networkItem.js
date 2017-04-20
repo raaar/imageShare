@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import {Link} from 'react-router';
-import config from '../../../config';
-import placeholderAvatar from '../../img/placeholder-avatar.png';
+import {
+  Link
+} from 'react-router-dom';
+import Avatar from '../common/avatar';
 
 
 class NetworkItem extends Component {
@@ -10,25 +11,17 @@ class NetworkItem extends Component {
 
     const { item } = this.props;
 
-    let avatar;
-
-    if(item.avatar === undefined) {
-      avatar = placeholderAvatar;
-    } else {
-      avatar = config.thumbMedium + item.avatar;
-    };
-
     return (
 
       <div className="col-sm-6 col-md-4 col-lg-4">
-        <div className="media" >
-          <a href='#'>
-            <img className="media__img" src={avatar} alt={item.username} /> 
-          </a>
+        <div className="media">
+          <Link to={{pathname:'/profile', search:`author=${item.username}`}} className="media__img">
+            <Avatar src={item.avatar} size='large' />
+          </Link>
           <div className="truncate">
-            <a href="#">
+            <Link to={{pathname:'/profile', search:`author=${item.username}`}}>
               {item.username}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

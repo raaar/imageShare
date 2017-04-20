@@ -1,50 +1,40 @@
 
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import AuthStore from '../../stores/authStore';
-//var FileInput = require('../common/fileInput');
+import FileInput from '../common/fileInput';
 import AuthActions from '../../actions/authActions';
-//var ImageGridContainer = require('../image/imageGridContainer');
+import Avatar from '../common/avatar';
+import ImageGridContainer from '../image/imageGridContainer';
 var toastr = require('toastr');
-var config = require('../../../config');
 
 
 class UserProfile extends Component {
 
   constructor(props, context) {
     super(props, context);
+
     this.state = {
-      user: {
-        avatar: "http://placehold.it/30x30",
-        id: "",
-        userName: ""
-      },
-      images: [
-      ],
-      own: false,
-      error: ""
+      user: AuthStore.getUser()
     };
 
+    this.avatarUpload= this.avatarUpload.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.handleFile = this.handleFile.bind(this);
     this.logOut = this.logOut.bind(this);
-  }
-
-
-  componentDidMount() {
-
-    toastr.options = {
-      "positionClass": "toast-bottom-right" 
-    };
-
-
-      this.setState({
-        user: AuthStore.getUser()
-      });
   }
 
 
   componentWillMount() {
     AuthStore.addChangeListener(this.onChange);
+  }
+
+
+  componentDidMount() {
+    toastr.options = {
+      "positionClass": "toast-bottom-right"
+    };
   }
 
 
@@ -55,7 +45,7 @@ class UserProfile extends Component {
 
   onChange() {
     this.setState({
-      user: AuthStore.getUser(),
+      user: AuthStore.getUser()
     });
   }
 
@@ -63,7 +53,6 @@ class UserProfile extends Component {
   handleFile(e) {
     e.preventDefault();
 
-    var _self = this;
     var file = e.target.files[0];
     var reader = new FileReader();
     var fileExt;
@@ -71,8 +60,8 @@ class UserProfile extends Component {
     if(file.type === 'image/jpeg') {
       fileExt = '.jpeg';
     } else if (file.type === 'image/png' ) {
-      fileExt = '.png'; 
-    } 
+      fileExt = '.png';
+    }
 
     var fileNameStamp = Math.round(+new Date()/1000);
     var fileN = 'avatar-' + fileNameStamp + fileExt;
@@ -83,13 +72,14 @@ class UserProfile extends Component {
       user: this.state.user
     };
 
-    reader.onloadend = function(e) {
-      _self.setState({
+    reader.onloadend = (e) => {
+      this.setState({
         formData: newFormData,
-        file: file 
+        file: file
       });
-      
-      _self.saveAvatar();
+
+      AuthActions.saveAvatar(this.state.formData, this.state.file);
+      toastr.warning('Uploading avatar');
     }
 
     if(file) {
@@ -100,39 +90,16 @@ class UserProfile extends Component {
 
   avatarUpload(e) {
     e.preventDefault();
-    this.refs.submitAvatar.getDOMNode(this).click();
-  }
-
-
-  saveAvatar(e) {
-    if(e) {
-      e.preventDefault();
-    };
-
-    //UserActions.saveAvatar(this.state.formData, this.state.file, function(err){
-    //  toastr.error(err);
-    //});
-
-    toastr.warning('Uploading avatar');
+    ReactDOM.findDOMNode(this.submitAvatar).click();
   }
 
 
   logOut(data, e) {
-    //e.preventDefault();
     AuthActions.logout();
   }
 
 
   render() {
-    var userData = AuthStore.getUser();
-
-/*
-    if(this.state.user.avatar === undefined) {
-      var avatarLg = "images/placeholder-avatar.png";
-    } else {
-      var avatarLg = config.thumbMedium + this.state.user.avatar;
-    }
-*/
 
     return (
       <div>
@@ -141,20 +108,27 @@ class UserProfile extends Component {
 
             <div className="sparrow">
               <div className="sparrow__img">
-                <img className="avatar-lg" src="" />
-                <div className="sparrow__title">{this.state.user && this.state.user.userName}</div>
+                <Avatar src={this.state.user.avatar} size="large" />
+                <div className="sparrow__title">{this.state.user.username}</div>
                 <div className="sparrow__item">
-                  <a href="#" className="js-edit-avatar" onClick={this.state.user && this.avatarUpload}>Edit avatar</a>
-                  fileInput
-                    <input type="submit" className="btn btn-default visually-hidden" value="Submit" onClick={this.saveAvatar} />
+                  <a href="#" onClick={this.avatarUpload}>Edit avatar</a>
+                  <form className="visually-hidden" encType="multipart/form-data">
+                    <FileInput
+                      onChange={this.handleFile}
+                      name="image"
+                      ref={ component => this.submitAvatar = component }
+                    />
+                  </form>
                 </div>
-                <div className="sparrow__item"><a href="#" onClick={this.logOut}>Logout</a></div>
+                <div className="sparrow__item">
+                  <a href="#" onClick={this.logOut}>Logout</a>
+                </div>
               </div>
             </div>
 
           </div>
           <div className="l-split__main">
-            Image Gallery
+            <ImageGridContainer query={{author: this.state.user.username}}  />
           </div>
         </div>
       </div>
@@ -164,18 +138,3 @@ class UserProfile extends Component {
 
 
 export default UserProfile;
-
-/*
- *
-
-
-                  <form className="visually-hidden" encType="multipart/form-data">
-                    <FileInput
-                      onChange={this.handleFile}
-                      name="image"
-                      ref="submitAvatar"
-                    />
-
- * */
-
-              //<ImageGridContainer query={{author: userData.userName}}  />

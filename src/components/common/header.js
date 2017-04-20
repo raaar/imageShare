@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
-import { 
+import {
   NavLink
 } from 'react-router-dom';
 import AuthStore from '../../stores/authStore';
-//var UserStore = require('../../stores/userStore');
-//var UserActions = require('../../actions/userActions');
-//var SearchForm = require('./searchForm');
-//var ImageActions = require('../../actions/imageActions');
-
-
-import placeholderAvatar from '../../img/placeholder-avatar.png';
-
 
 import _ from 'lodash';
-var config = require('../../../config');
-import AuthActions from '../../actions/authActions';
+import Avatar from '../common/avatar';
+
+
+//var SearchForm = require('./searchForm');
 
 
 class Header extends Component{
@@ -22,52 +16,45 @@ class Header extends Component{
   constructor(props, context) {
     super(props, context);
 
-    var usrObj = {};
-    usrObj['avatar'] = placeholderAvatar;
-
     this.state = {
-      user: usrObj,
+      user:  AuthStore.getUser(),
       menuOpen: false
     }
 
-    this.logout = this.logout.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
   }
 
-  componentDidMount() {
-    let usrObj = AuthStore.getUser();
-    usrObj['avatar'] = config.thumbXSmall + usrObj['avatar'];
-
-    this.setState({
-      user: usrObj
-    });
-  }
 
   componentWillMount() {
-    //UserStore.addChangeListener(this._onChange);
+    AuthStore.addChangeListener(this.onChange);
   }
-
-  componentWillUnmount() {
-    //UserStore.removeChangeListener(this._onChange);
-  }
-
   
-  _onChange() {
+  
+  componentWillUnmount() {
+    AuthStore.removeChangeListener(this.onChange);
+  }
+
+
+  onChange() {
     this.setState({
-      //user: UserStore.getUser()
+      user: AuthStore.getUser()
     });
   }
 
-  
+
   setSearchState(e) {
+  /*
     var query = {
       title: e.target.value
     }
+    */
 
     if(e.target.value.length > 1) {
       //ImageActions.setImageQuery(query);
       //ImageActions.loadImages(query);
-      this.transitionTo('search');
+      //this.transitionTo('search');
     }
   }
 
@@ -75,55 +62,46 @@ class Header extends Component{
   toggleMenu() {
     if(this.state.menuOpen) {
       this.setState({
-        menuOpen:false 
+        menuOpen:false
       });
     } else {
       this.setState({
-        menuOpen:true 
+        menuOpen:true
       });
     }
   }
 
 
   closeMenu(e) {
-    e.preventDefault();
-
     this.setState({
       menuOpen: false
     })
   }
 
 
-  logout() {
-    AuthActions.logout();
-  }
-
-
   render() {
 
-    var hamburgerClass = this.state.menuOpen ? 'hamburger is-active' : 'hamburger';  
-    var navClass = this.state.menuOpen ? 'nav is-active' : 'nav';  
+    let hamburgerClass = this.state.menuOpen ? 'hamburger is-active' : 'hamburger';
+    let navClass = this.state.menuOpen ? 'nav is-active' : 'nav';
 
     return (
-      <div className="nav-clear"> 
+      <div className='nav-clear'>
         <nav className={navClass}>
-          <div className="nav__item--menu" onClick={this.toggleMenu} >
+          <div className='nav__item--menu' onClick={this.toggleMenu} >
             <div className={hamburgerClass}>
-              <div className="hamburger__bar"></div>
-              </div>
-          </div>
-          <div className="nav__group">
-            <NavLink to="/profile" className="nav__item nav__item--avatar" activeClassName="is-active">
-              <img className="avatar-sm" alt={this.state.user.username} src={this.state.user.avatar}  />
-            </NavLink>
-
-            <NavLink to="/" className="nav__item" activeClassName="is-active">Feed</NavLink>
-            <NavLink to="/network" className="nav__item" activeClassName="is-active">Network</NavLink>
-            <NavLink to="folders" className="nav__item" onClick={this.closeMenu} >Folders</NavLink>
-            <a href="#" onClick={this.logout}>Logout</a>
-
-            <div className="nav__item--form"> 
+              <div className='hamburger__bar'></div>
             </div>
+          </div>
+
+          <div className='nav__group'>
+            <NavLink to='/my-profile' className='nav__item nav__item--avatar' activeClassName='is-active' onClick={this.closeMenu}>
+              <Avatar src={this.state.user.avatar} size="small" />
+            </NavLink>
+            <NavLink to='/feed' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Feed</NavLink>
+            <NavLink to='/network' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Network</NavLink>
+            <NavLink to='/upload' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Upload</NavLink>
+            <NavLink to='/folders' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Folders</NavLink>
+            <div className='nav__item--form'></div>
           </div>
        </nav>
      </div>
@@ -132,11 +110,10 @@ class Header extends Component{
 };
 
 export default Header;
-//module.exports = Header;
 /*
               <SearchForm
                 query={this.state.query}
-                onChange={this.setSearchState}    
-                onSearch={this.closeMenu}    
+                onChange={this.setSearchState}
+                onSearch={this.closeMenu}
               />
 */

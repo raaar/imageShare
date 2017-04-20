@@ -66,6 +66,7 @@ app.use('/api/folders', folderRouter);
 
 
 
+app.get('/api/sign-s3', s3Sign);
 
 app.get('/*', function(req , res) {
   res.sendFile(path.resolve( __dirname,  '../build', 'index.html'));
@@ -85,7 +86,6 @@ app.get('/*', function(req , res) {
 });
 */
 
-app.get('/sign-s3', s3Sign);
 
 
 

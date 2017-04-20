@@ -7,9 +7,11 @@ var awsConfig = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 };
 
-  aws.config.update(awsConfig);
+aws.config.update(awsConfig);
+
 
 module.exports = (req, res) => {
+
   const s3 = new aws.S3();
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
@@ -20,6 +22,7 @@ module.exports = (req, res) => {
     ContentType: fileType,
     ACL: 'public-read'
   };
+
 
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
