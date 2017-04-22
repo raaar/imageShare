@@ -12,7 +12,6 @@ var strategyFunction = function() {
     function(username, password, done) {
 
         console.info('username: ',username);
-
         var pw = password;
 
         mongodb.connect(dbUrl, function (err, db) {

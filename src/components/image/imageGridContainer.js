@@ -83,6 +83,7 @@ class ImageGridContainer extends Component {
 
   componentWillUnmount() {
     ImageStore.removeChangeListener(this.onChange);
+    
     // clear old store data
     ImageStore.clearCache();
     window.removeEventListener("scroll", this.handleScroll);
@@ -94,6 +95,7 @@ class ImageGridContainer extends Component {
     // to retrive the correct images on lazy-load.
     // Don't pass the mergeQuery() result, as this will also include the 'lastItem' parameter
     ImageActions.setImageQuery(this.props.query);
+    
     ModalActions.showModal(i);
   }
 
@@ -118,7 +120,12 @@ class ImageGridContainer extends Component {
     let triggerPoint = pageHeight - (this.currentPosition + clientHeight);
 
     if (this.previousPosition < this.currentPosition) {
-      // do not trigger scroll until: component has finished loading, there are images to load, before the end of page
+      
+      /* trigger scroll if (lazy load more images if):
+         - component is not loading
+         - there are images left to load,
+         - we are about to reach the end of the page
+       */
       if(!this.state.loading && !this.state.end && triggerPoint < clientHeight) {
         this.loadItems();
       }
@@ -130,26 +137,35 @@ class ImageGridContainer extends Component {
 
 
   mergeQuery() {
-    /* The function creates the 'query' object that is to
-     * the backend to retrive the correct set of images.
-     * Data passed:
-     * {
-     *   length: 'max images that will be loaded',
-     *   after: 'the last image in the images array',
-     *   folder: 'ID of the folder that contains the image'
-     * }
+    
+    /* Returns a 'query' object that is passed to
+       the backend to query the correct / next set of images.
+       
+       The object is composed by:
+        - the 'defaults' set in this component
+        - any 'query' parameter sent when <ImageGridContainer> is invoked
+        - an Optional 'last image loaded' parameter.
+     
+       Data passed:
+       {
+         length: 'max images that will be loaded',
+         after: 'the last image in the images array',
+         folder: 'ID of the folder that contains the image'
+       }
      */
 
-    // assign query defaults
+    var lastItem;
     var query = {};
+    
+    // assign query defaults
     Object.assign(query, this.queryDefaults);
 
     // assign any queries passed by props
     Object.assign(query, this.props.query);
 
-    // If not loading for the first time, setup lazt-load of next set of images
+    // If not 'loading' for the first time, setup lazy-load of next set of images
     if(!this.state.loading && this.state.images) {
-      var lastItem = this.state.images[this.state.images.length -1];
+      lastItem = this.state.images[this.state.images.length -1];
       query.after = lastItem._id;
     }
 

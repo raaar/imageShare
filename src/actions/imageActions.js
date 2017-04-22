@@ -28,7 +28,7 @@ export default {
   },
 
 
-	createImage: function(form, file, folderId) {
+	createImage: function(form, file) {
 	  
     s3Signature(file, function(file, signedRequest, url){
       
@@ -40,7 +40,6 @@ export default {
           if(xhr.status === 200){
 
             var uploadData = {
-              folderId: folderId,
               formData: form,
               id: file.id,
               lastModified: file.lastModified,
@@ -49,9 +48,8 @@ export default {
               size: file.size
             };
 
-            var config = {};
 
-            axios.post('api/images', uploadData, config)
+            axios.post('/api/images', uploadData, {/* config */} )
               .then(function (data) {
                 AppDispatcher.dispatch({
 			            actionType: ActionTypes.CREATE_IMAGE,
@@ -74,7 +72,7 @@ export default {
 
   deleteImage: function(id) {
     
-    var url = "api/images/" + id;
+    var url = "/api/images/" + id;
  
     axios.delete(url)
       .then(function (response) {

@@ -3,7 +3,7 @@
 var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
-var dbUrl = process.env.MONGODB_URI; 
+var dbUrl = process.env.MONGODB_URI;
 
 
 var folderController = function() {
@@ -81,7 +81,7 @@ var folderController = function() {
 
       delete updatedData['_id'];
 
-      collection.update( 
+      collection.update(
         {"_id": id},
         updatedData,
         {upsert: true}

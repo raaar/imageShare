@@ -19,6 +19,7 @@ var authController = function() {
     res.send('Logged out');
   };
   
+  
   var signIn =  function(req, res) {
     // Success
     // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript

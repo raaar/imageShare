@@ -12,7 +12,7 @@ module.exports = function(file, cb) {
   */
 
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', `api/sign-s3?file-name=${file.id}&file-type=${file.type}`);
+  xhr.open('GET', `/api/sign-s3?file-name=${file.id}&file-type=${file.type}`);
   xhr.onreadystatechange = () => {
     if(xhr.readyState === 4){
       if(xhr.status === 200){

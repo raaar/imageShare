@@ -8,7 +8,7 @@ export default {
 
   login: (credentials) => {
 
-    axios.post('auth/signIn', credentials, {}) 
+    axios.post('auth/signIn', credentials, {})
     .then((data) => {
       AppDispatcher.dispatch({
         actionType: ActionTypes.AUTH_LOGIN,
@@ -24,22 +24,19 @@ export default {
 
   logout: () => {
 
-    axios.post('auth/logout') 
+    axios.post('auth/logout')
       .then((data) => {
         AppDispatcher.dispatch({
           actionType: ActionTypes.AUTH_LOGOUT
         });
       })
       .catch(function(error) {
-        console.log(error); 
+        console.log(error);
       });
   },
 
 
   saveAvatar: function(data, file) {
-    //console.info(data);
-    //console.info(file);
-
 
     s3Signature(file, function(file, signedRequest, url){
 
@@ -53,9 +50,6 @@ export default {
               id: data.fileName
             };
 
-            //data.user.avatar = data.fileName;
-            //var userData = data.user; 
-
             axios.post('api/user/avatar', uploadData, {})
               .then(function (data) {
                 AppDispatcher.dispatch({
@@ -67,19 +61,6 @@ export default {
                 console.log(error);
               });
 
-
-/*
-            Api.post('api/user/avatar', uploadData)
-              .then(function(data){
-                if(data.error &&  data.error.length)
-                  return cb(data.error);
-
-                Dispatcher.dispatch({
-                  actionType: ActionTypes.INITIALIZE_USER,
-                  userData: userData
-                });
-              });
-*/
           } else{
             alert('Could not upload file.');
           }
@@ -88,6 +69,4 @@ export default {
       xhr.send(file);
     });
   },
-}
-
-
+};

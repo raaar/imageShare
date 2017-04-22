@@ -1,32 +1,35 @@
-'use strict';
+import React, { Component } from 'react';
 
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var FolderActions = require('../../actions/folderActions');
-var FolderStore = require('../../stores/folderStore');
-var TextInput = require('../common/textInput');
+import FolderActions from '../../actions/folderActions';
+import FolderStore from '../../stores/folderStore';
+import TextInput from '../common/textInput';
+
+import queryString from 'query-string';
 
 
-var manageFolderPage = React.createClass({
+class ManageFolderPage extends Component {
   
-  mixins: [
-    Router.Navigation
-  ],
-
-
-  getInitialState: function() {
-    return {
+  constructor(props, context) {
+    super(props, context);
+    
+    this.state = {
       folder: {
         title: "",
-        publicPermission: true
+        publicPermission: false
       },
       dirty: false
-    }
-  },
+    };
+    
+    // define if we are on the 'create' or 'manage' page
+    this.create = this.props.location.pathname === '/folders/folder/create' ? true : false;
+    this.deleteFolder = this.deleteFolder.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.saveFolder = this.saveFolder.bind(this);
+    this.setFolderState = this.setFolderState.bind(this);
+    this.setPermissionState = this.setPermissionState.bind(this);
+  }
   
-  create: true,
-
+  /*
   statics: {
     willTransitionFrom: function(transition, component) {
       console.log(component);
@@ -34,121 +37,157 @@ var manageFolderPage = React.createClass({
         transition.abort();
       }
     }
-  },
+  }*/
 
 
-  componentWillMount: function() {
+  componentWillMount() {
+    const query = queryString.parse(location.search);
 
-    if(this.props.params.id) {
-      // lets the UI know if we are are creating a folder, or modifying one
-      this.create = false;
-    }
-
-	 	FolderStore.addChangeListener(this._onChange);
-
+	 	FolderStore.addChangeListener(this.onChange);
+	 	
+	 	if(query.id) {
+      if(!this.state.folder.title) {
+        FolderActions.getSingle(query.id);
+      } else {
+        this.setstate({
+          folder: FolderStore.getFolderById()
+        });
+      }
+      
+	 	}
+	 	
+/*
     // component will not re-render when setting state
     var folderId = this.props.params.id;
     
-    if(folderId) { 
+    if(folderId) {
 
-      // if no data is loaded after page refresh, load data from server     
+      // if no data is loaded after page refresh, load data from server
       if(!this.state.folder.title) {
         FolderActions.getSingle(this.props.params.id);
       };
 
-      this.setState({
-        folder: FolderStore.getFolderById()
-      }); 
+      this.setstate({
+        folder: folderstore.getfolderbyid()
+      });
     }
-  },
+    */
+  }
 
 
-  componentDidMount: function() {
-  },
+  componentDidMount() {
+  }
 
 
-	_onChange: function() {
+	onChange() {
     this.setState({
       folder: FolderStore.getFolderById()
     });
-	},
+	}
 
 
 
-	componentWillUnmount: function() {
-		FolderStore.removeChangeListener(this._onChange);
-  },
+	componentWillUnmount() {
+		FolderStore.removeChangeListener(this.onChange);
+  }
 
 
-  setFolderState: function(e) {
-    this.setState({dirty: true}); // the form has been modified
+  setFolderState(e) {
+    //var folderPerm = !this.state.folder.publicPermission;
+    let folderState = this.state.folder;
     var field = e.target.name;
     var value = e.target.value;
-    this.state.folder[field] = value;
+    
+    folderState[field] = value;
+    folderState['dirty'] = true;
+    //folderState['publicPermission'] =  folderPerm;
 
-
-    var perm = !this.state.folder.publicPermission;
-    this.state.folder['publicPermission'] = perm;
-
-    return this.setState({
-      folder: this.state.folder 
+    this.setState({
+      folder: folderState
     });
-  },
+  }
+  
+  
+  setPermissionState(e) {
+    let folderState = this.state.folder;
+    folderState['publicPermission'] = !folderState.publicPermission;
+    
+    this.setState({
+      folder: folderState
+    })
+  }
 
 
-  deleteFolder: function(e) {
+  deleteFolder(e) {
     e.preventDefault();
-    FolderActions.delete(this.props.params.id);
-    this.transitionTo('folders');
-  },
+    FolderActions.delete(this.state.folder.id);
+    //this.transitionTo('folders');
+  }
 
 
-  saveFolder: function(e) {
+  saveFolder(e) {
     e.preventDefault();
 
     // create / update logic
     if(this.create) {
       FolderActions.createFolder(this.state.folder);
+      
     } else {
       // update folder action
       FolderActions.updateFolder(this.state.folder);
     }
 
-    this.transitionTo('folders');
-  },
+    //this.transitionTo('folders');
+  }
 
 
-  _deleteBtn: function() { 
+  _deleteBtn() {
     return (
       <div>
         <a href="#" onClick={this.deleteFolder}>Delete folder</a>
       </div>
     );
-  },
+  }
 
 
-  render: function() {
+  render() {
 
-    var pageTitle = this.create ? 'Create folder' : 'Manage folder'
-    var postBtnName = this.create ? 'Create folder' : 'Update' 
+    let pageTitle = this.create ? 'Create folder' : 'Manage folder'
+    let postBtnName = this.create ? 'Create folder' : 'Update'
 
     return(
       <div className="container-fluid">
-        <h1>{pageTitle}</h1>      
+      
+        <h1>{pageTitle}</h1>
 
-        <TextInput 
+        <TextInput
           name="title"
           label="title"
           onChange={this.setFolderState}
           placeholder="Type folder name"
           type="text"
           value={this.state.folder && this.state.folder.title}
-        />        
-
-
+        />
+        
         <label className="label--checkbox">
-          <input type="checkbox" className="checkbox" checked={this.state.folder.publicPermission} onChange={this.setFolderState} />Make folder public 
+          <input type="checkbox" className="checkbox" checked={this.state.folder.publicPermission} onChange={this.setPermissionState} />Make folder public
         </label>
+        
+        <div className="row">
+          <div className="col-sm-4">
+            <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>
+          </div>
+          <div className="col-sm-4">
+            { this._deleteBtn() }
+          </div>
+        </div>
+        
+      </div>
+    )
+  }
+
+};
+/*
             
         <br />
         <div className="row">
@@ -159,11 +198,7 @@ var manageFolderPage = React.createClass({
             {this.props.params.id && this._deleteBtn() }
           </div>
         </div>
-      </div>
-    )
-  }
 
-});
+*/
 
-
-module.exports = manageFolderPage;
+export default ManageFolderPage;

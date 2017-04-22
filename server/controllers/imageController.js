@@ -35,23 +35,24 @@ var imageController = function() {
   };
 
 
-  // post new image
+  // upload new image
   var post = function(req, res) {
 
     var fileName = req.body.id;
+    var folderId = req.body.formData.folderId;
     var imageTitle = req.body.formData.title;
-    var folderId = req.body.folderId;
-
+    var imageData;
 
     // if untitled
     if(!imageTitle) {
       imageTitle = fileName;
     }
 
-    var imageData = {
-      folderId: folderId,
+    
+    imageData = {
       title: imageTitle,
       author: req.user.username,
+      folderId: folderId,
       image: {
         id: req.body.id,
         file: fileName,
@@ -128,7 +129,7 @@ var imageController = function() {
         }
 
         // user can only delete his own images
-        if(image.author === req.user.username ) { 
+        if(image.author === req.user.username ) {
           collection.deleteOne(
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {

@@ -1,54 +1,55 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React, { Component } from 'react';
+import {
+  Link
+} from 'react-router-dom';
 
-var Folders = React.createClass({
 
+function getFolders(item){
 
-  _getFolders: function(item){
-    console.log(item);
-
-    var permissionText = item.publicPermission ? "Public" : "Private";
-
-    return(
-      <div key={item._id}>          
-        <Link to="folderSingle" params={{id: item._id, title: item.title}}>
-          <div className="col-md-3">
-            <div className="folder">
-              <div className="folder__title">{item.title}</div> 
-              <small>{permissionText}</small>
-            </div>
+  var permissionText = item.publicPermission ? "Public" : "Private";
+ 
+  return(
+    <div key={item._id}>
+      <Link to={{pathname:"folders/folder", search:`id=${item._id}`}} >
+        <div className="col-md-3">
+          <div className="folder">
+            <div className="folder__title">{item.title}</div>
+            <small>{permissionText}</small>
           </div>
-        </Link>      
-      </div>
+        </div>
+      </Link>
+    </div>
+  )
+}
 
-    )
-  },
 
+class Folders extends Component {
 
-  render: function() {
+  render() {
+    
+    const isLoaded = this.props.folders && this.props.folders.length > 0;
+    
     return(
       <div className="container-fluid content">
         <div className="row">
 
           <div className="col-md-3">
-            <Link to="addFolder">
+            <Link to={'/folders/folder/create'}>
               <div className="folder folder--new">
-                Create New 
-                <div> +</div>
+                Create New
+                <div>+</div>
               </div>
             </Link>
           </div>
 
-          { this.props.folders &&
-            this.props.folders.map(this._getFolders, this)}
+          { isLoaded && this.props.folders.map(getFolders, this)}
 
         </div>
       </div>
     )
   }
 
-});
+};
 
 
-module.exports = Folders;
+export default Folders;

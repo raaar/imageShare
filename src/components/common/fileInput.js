@@ -14,9 +14,11 @@ class FileInput extends Component {
   }
 };
 
+
 FileInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired
 }
+
 
 export default FileInput;

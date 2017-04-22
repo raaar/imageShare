@@ -11,7 +11,7 @@ export default {
     console.info('actions: ', form);
     var config = {};
 
-    axios.post('api/folders', form, config)
+    axios.post('/api/folders', form, config)
       .then(function(data) {
         console.log('dispatch folder');
         AppDispatcher.dispatch({
@@ -37,7 +37,8 @@ export default {
 
   getSingle: function(id) {
 
-    axios.get('api/folders/' + id )
+    console.log(id);
+    axios.get('/api/folders/' + id )
       .then(function(data){
               
         AppDispatcher.dispatch({
@@ -53,7 +54,7 @@ export default {
     var config = {};
     // update
 
-    axios.patch('api/folders/' + item._id, item, config)
+    axios.patch('/api/folders/' + item._id, item, config)
       .then(function(data){
       })
       .catch(function(error) {
@@ -64,7 +65,7 @@ export default {
 
 
   delete: function(id) {
-    axios.delete('api/folders/'+ id )
+    axios.delete('/api/folders/'+ id )
       .then(function (response) {
         console.log(response);
         AppDispatcher.dispatch({

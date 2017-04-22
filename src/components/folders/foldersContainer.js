@@ -1,27 +1,21 @@
 import React, { Component } from 'react';
-//var Router = require('react-router');
-//var Link = Router.Link;
 import FolderActions from '../../actions/folderActions';
 import FolderStore from '../../stores/folderStore';
-//var Folders = require('./folders');
+import Folders from './folders';
 
 class FoldersContainer extends Component {
+
 
   constructor(props, context) {
     super(props, context);
     this.state = {
-      folders: []
+      folders: FolderStore.getFolders()
     }
 
+    FolderActions.loadFolders();
+    
     this.onChange = this.onChange.bind(this);
   }
-
-  /*getInitialState: function() {
-    return {
-      folders: []
-    }
-  },
-  */
 
 
   componentWillMount() {
@@ -30,16 +24,8 @@ class FoldersContainer extends Component {
 
 
   componentDidMount() {
-    FolderActions.loadFolders();
-
-    //if(this.isMounted()) {
-      this.setState({
-        folders: FolderStore.getFolders()
-      });
-    //}
   }
   
-
 
 	onChange() {
     this.setState({
@@ -53,20 +39,15 @@ class FoldersContainer extends Component {
   }
 
 
-
   render() {
     return (
       <div>
-        Folders
+        <Folders folders={this.state.folders} />
       </div>
     )
   }
 
 };
 
-
-/*
-<Folders folders={this.state.folders} />
-*/
 
 export default FoldersContainer;

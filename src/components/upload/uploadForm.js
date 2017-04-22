@@ -8,7 +8,7 @@ class UploadPage extends Component {
   render() {
 
     var isDisabled = '';
-    if( !this.props.complete || this.props.processing) {
+    if( !this.props.isComplete || this.props.isProcessing) {
       isDisabled = 'disabled';
     }
 

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import GridWrapper from '../common/gridWrapper';
 import UploadForm from './uploadForm';
 
-//var ImageForm = require('./imageForm');
-//var ImageActions = require('../../actions/imageActions');
-//var Router = require('react-router');
-//var toastr = require('toastr');
+import ImageActions from '../../actions/imageActions';
+var toastr = require('toastr');
+
 
 class UploadPage extends Component {
   
@@ -29,13 +28,85 @@ class UploadPage extends Component {
   }
   
   
-  handleFile() {
-    console.log('handleFile');
+  handleFile(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let fileExt;
+    let fileNameStamp;
+    let newFormData;
+    
+    // check file type
+    switch(file.type) {
+      
+      case 'image/png':
+        fileExt = '.png';
+        break;
+        
+      case 'image/jpeg':
+        
+        fileExt = '.jpeg';
+        break;
+        
+      default:
+      
+        toastr.error('File is not an image');
+        this.setState({
+          complete: false
+        });
+        return;
+    }
+    
+    
+    // TODO: generate a better file name
+    fileNameStamp = Math.round(+new Date()/1000);
+    file.id = fileNameStamp + fileExt;
+          
+    newFormData = {
+      title: this.state.image.title,
+      folderId: this.props.folder
+    }
+
+    reader.onloadend = (e) => {
+      this.setState({
+        formData: newFormData,
+        complete: true,
+        file: file
+      });
+    }
+
+    reader.readAsDataURL(file);
   }
   
   
-  uploadImage() {
-    console.log('upload');
+  uploadImage(e) {
+
+    console.log('upload image');
+    
+    if(this.state.complete) {
+      var _self = this;
+
+      this.setState({
+        processing: true
+      });
+
+      ImageActions.createImage(this.state.formData, this.state.file);
+      
+      /*
+      ImageActions.createImage(this.state.formData, this.state.file,
+        function(err){
+          toastr.error(err);
+        },
+        function() {
+          _self.transitionTo('app');
+          _self.setState({
+            processing: false
+          });
+        }
+      );
+      */
+    }
   }
   
   
@@ -43,8 +114,10 @@ class UploadPage extends Component {
     
     return (
       <GridWrapper>
-        <div className='l-center'>
+        <div className='col-sm-12'>
           <UploadForm
+            isComplete={this.state.complete}
+            isProcessing={this.state.processing}
             onChange={this.handleFile}
             onSave={this.uploadImage}
           />

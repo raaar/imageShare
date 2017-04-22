@@ -126,7 +126,7 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
   heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
 
   HEROKU
-  Pushing: 
+  Pushing:
   git push -f heroku react:master
 
   Logs:

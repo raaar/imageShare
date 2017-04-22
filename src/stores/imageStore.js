@@ -64,19 +64,18 @@ ImageStore.dispatchToken = AppDispatcher.register(action => {
 		case ActionTypes.GET_IMAGES:
       if(typeof action.gallery !== undefined && action.gallery.length > 0) {
 
+        // old images are equal to new images / ture / false
         var isEqual = _.isEqual(_images, action.gallery);
         
         // add unique images to store
         _imagesEnd = false;
         _images = _.concat(_images, action.gallery);
         _images = _.uniqBy(_images, '_id');
-              
 
         // no new images received from server, before lazy load
         if(isEqual) {
           _imagesEnd = true;
         }
-
 
       } else {
         // no new images received from server, after lazy load

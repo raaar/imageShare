@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import NetworkItem from './networkItem';
 import AuthorStore from '../../stores/authorStore';
 import AuthorActions from '../../actions/authorActions';

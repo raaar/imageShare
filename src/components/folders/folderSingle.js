@@ -1,75 +1,80 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var FolderActions = require('../../actions/folderActions');
-var FolderStore = require('../../stores/folderStore');
-var ImageStore = require('../../stores/imageStore');
-var ImageForm = require('../image/imageForm');
+import React, { Component } from 'react';
+import {
+  Link
+} from 'react-router-dom';
+import FolderActions from '../../actions/folderActions';
+import FolderStore from '../../stores/folderStore';
+import queryString from 'query-string';
+//import ImageStore from '../../stores/imageStore';
+//import ImageForm from '../image/imageForm';
 
-var ImageUploader = require('../image/imageUploader');
-var ImageGridContainer = require('../image/imageGridContainer');
+import Uploader from '../upload/uploadContainer';
+import ImageGridContainer from '../image/imageGridContainer';
 
 
-var ImageSingle = React.createClass({
-
-
-  getInitialState: function() {
-    return {
+class ImageSingle extends Component {
+  
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
       folder: {
-        title: ""
+        title: ''
       }
     }
-  },
+
+    const query = queryString.parse(this.props.location.search);
+    FolderActions.getSingle(query.id);
+    
+    this.onChange = this.onChange.bind(this);
+  }
 
 
-  componentWillMount: function() {
-		FolderStore.addChangeListener(this._onChange);
-  },
+  componentWillMount() {
+		FolderStore.addChangeListener(this.onChange);
+  }
 
 
-  componentDidMount: function() {
-    if(this.isMounted()) {
-      this.setState({
-        folder: FolderActions.getSingle(this.props.params.id)
-      }); 
-    }
-  },
+  componentDidMount() {
+  }
 
 
-	componentWillUnmount: function() {
-		FolderStore.removeChangeListener(this._onChange);
-	},
+	componentWillUnmount() {
+		FolderStore.removeChangeListener(this.onChange);
+	}
 
 
-  upload: function(e) {
+  upload(e) {
     e.preventDefault();
-  },
+  }
 
 
-	_onChange: function() {
+	onChange() {
     this.setState({
       folder: FolderStore.getFolderById()
-    }); 
-	},
+    });
+	}
 
 
-  render: function() {
+  render() {
 
     return (
       <div>
         <div className="container-fluid">
-          <h1>{this.props.params.title}</h1>
-
-          <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
-
-          <ImageUploader folderId={this.props.params.id} />
+          <h1>{this.state.folder.title}</h1>
+          <Link to={{pathname:'/folders/folder/manage', search:`id=${this.state.folder._id}`}}>Manage folder</Link>
         </div>
-
-        <ImageGridContainer query={{folderId: this.props.params.id}} gridSize="large" modifiers="grid--folder" />
+        
+        {this.state.folder._id &&
+          <Uploader folder={this.state.folder._id} />
+        }
+        
+        {this.state.folder._id &&
+          <ImageGridContainer query={{folderId: this.state.folder._id}} modifiers="grid--folder" />
+        }
       </div>
     )
   }
-});
+};
 
-
-module.exports = ImageSingle;
+//         <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
+export default ImageSingle;

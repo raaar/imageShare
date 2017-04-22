@@ -12,12 +12,13 @@ import AuthForm from './components/auth/login';
 import AuthorProfile from './components/profile/authorProfile';
 import Feed from './components/feed/feedContainer';
 import Folders from './components/folders/foldersContainer';
+import Folder from './components/folders/folderSingle';
 import Header from './components/common/header';
+import ManageFolderPage from './components/folders/manageFolderPage';
 import Modal from './components/modal/modalGalleryContainer';
 import Network from './components/network/networkContainer';
 import NotFound from './components/pageNotFound';
 import Profile from './components/profile/userProfile';
-import Upload from './components/upload/uploadContainer';
 
 
 class App extends Component {
@@ -54,6 +55,7 @@ class App extends Component {
 
 
   render() {
+    
     return (
       <Router>
         <div>
@@ -66,14 +68,20 @@ class App extends Component {
                   <Route exact path='/' render={() => ( <Redirect to="/feed" /> )} />
                   <Route path='/profile' component={AuthorProfile} />
                   <Route path='/feed' component={Feed} />
-                  <Route path='/upload' component={Upload} />
-                  <Route path='/folders' component={Folders} />
+                  <Route exact path='/folders' component={Folders} />
+                  <Route exact path='/folders/folder' component={Folder} />
+                  <Route exact path='/folders/folder/create' component={ManageFolderPage} />
+                  <Route exact path='/folders/folder/manage' component={ManageFolderPage} />
                   <Route path='/my-profile' component={Profile} />
                   <Route path='/network' component={Network} />
                   <Route component={NotFound}/>
                 </Switch>
                 <Modal />
               </div>
+              
+                  
+                //  <RouteWithSubRoutes key={i} {...route}/>
+                 
             ) : (
               <div>
                 <AuthForm />

@@ -99,7 +99,6 @@ class Header extends Component{
             </NavLink>
             <NavLink to='/feed' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Feed</NavLink>
             <NavLink to='/network' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Network</NavLink>
-            <NavLink to='/upload' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Upload</NavLink>
             <NavLink to='/folders' className='nav__item' activeClassName='is-active' onClick={this.closeMenu}>Folders</NavLink>
             <div className='nav__item--form'></div>
           </div>
