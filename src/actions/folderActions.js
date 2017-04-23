@@ -24,9 +24,9 @@ export default {
 
 
   loadFolders: function() {
+    
     axios.get('api/folders')
       .then(function(data){
-        console.log(data);
         AppDispatcher.dispatch({
 			    actionType: ActionTypes.FOLDER_GET,
 		      folders: data.data
@@ -37,7 +37,6 @@ export default {
 
   getSingle: function(id) {
 
-    console.log(id);
     axios.get('/api/folders/' + id )
       .then(function(data){
               
@@ -51,10 +50,8 @@ export default {
 
 
   updateFolder: function(item) {
-    var config = {};
-    // update
 
-    axios.patch('/api/folders/' + item._id, item, config)
+    axios.patch('/api/folders/' + item._id, item, {} )
       .then(function(data){
       })
       .catch(function(error) {

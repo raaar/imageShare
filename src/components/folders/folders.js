@@ -27,7 +27,8 @@ class Folders extends Component {
 
   render() {
     
-    const isLoaded = this.props.folders && this.props.folders.length > 0;
+    const folders = this.props.folders;
+    const isLoaded = folders && folders.length > 0;
     
     return(
       <div className="container-fluid content">
@@ -42,7 +43,7 @@ class Folders extends Component {
             </Link>
           </div>
 
-          { isLoaded && this.props.folders.map(getFolders, this)}
+          { isLoaded && folders.map(getFolders, this)}
 
         </div>
       </div>

@@ -3,6 +3,7 @@ var middleware = function(req, res, next) {
   // TODO: make the regex stronger
   var previewUrlRegExp = new RegExp("/preview");
 
+  /*
   if(req.user) {
     // user is logged in
     next();
@@ -10,6 +11,11 @@ var middleware = function(req, res, next) {
     // user is logged out
     res.redirect('/auth');
   }
+  */
+  console.info('user: ', req.user);
+  console.info('url: ', req.url);
+  
+  next();
 }
 
 /*

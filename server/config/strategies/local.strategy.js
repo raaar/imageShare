@@ -6,7 +6,7 @@ var passport = require('passport'),
 
 var strategyFunction = function() {
     passport.use(new LocalStrategy({
-      usernameField: 'username', // second field correspons to the object passed by React from authActions 
+      usernameField: 'username', // second field correspons to the object passed by React from authActions
       passwordField: 'password'
     },
     function(username, password, done) {
@@ -23,6 +23,7 @@ var strategyFunction = function() {
                 function (err, results) {
                   if(err) { return done(err); }
 
+                  
                   if (null !== results) {
 
                     // TODO: some users don't have encrypted passwords
@@ -39,6 +40,7 @@ var strategyFunction = function() {
                       done(null, false, {message: 'Bad password'});
                     }
                   } else {
+                    console.log('user not exist');
                     done(null, false, {message: 'User does not exist'});
                   }
                 }

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 
 import FolderActions from '../../actions/folderActions';
 import FolderStore from '../../stores/folderStore';
 import TextInput from '../common/textInput';
-
-import queryString from 'query-string';
 
 
 class ManageFolderPage extends Component {
@@ -29,53 +28,24 @@ class ManageFolderPage extends Component {
     this.setPermissionState = this.setPermissionState.bind(this);
   }
   
-  /*
-  statics: {
-    willTransitionFrom: function(transition, component) {
-      console.log(component);
-      if(component.state.dirty && !confirm('Are you sure you want to leave the page? Your data will be lost')) {
-        transition.abort();
-      }
-    }
-  }*/
-
 
   componentWillMount() {
+	 	const cachedFolder = FolderStore.getFolderById();
     const query = queryString.parse(location.search);
 
 	 	FolderStore.addChangeListener(this.onChange);
-	 	
-	 	if(query.id) {
-      if(!this.state.folder.title) {
-        FolderActions.getSingle(query.id);
-      } else {
-        this.setstate({
-          folder: FolderStore.getFolderById()
-        });
-      }
-      
-	 	}
-	 	
-/*
-    // component will not re-render when setting state
-    var folderId = this.props.params.id;
     
-    if(folderId) {
-
-      // if no data is loaded after page refresh, load data from server
-      if(!this.state.folder.title) {
-        FolderActions.getSingle(this.props.params.id);
-      };
-
-      this.setstate({
-        folder: folderstore.getfolderbyid()
-      });
+    if(this.create) {
+      return
     }
-    */
-  }
-
-
-  componentDidMount() {
+    
+	 	if(!cachedFolder) {
+      FolderActions.getSingle(query.id);
+	 	} else {
+      this.setState({
+        folder: FolderStore.getFolderById()
+      });
+	 	}
   }
 
 
@@ -86,21 +56,18 @@ class ManageFolderPage extends Component {
 	}
 
 
-
 	componentWillUnmount() {
 		FolderStore.removeChangeListener(this.onChange);
   }
 
 
   setFolderState(e) {
-    //var folderPerm = !this.state.folder.publicPermission;
     let folderState = this.state.folder;
-    var field = e.target.name;
-    var value = e.target.value;
+    let field = e.target.name;
+    let value = e.target.value;
     
     folderState[field] = value;
     folderState['dirty'] = true;
-    //folderState['publicPermission'] =  folderPerm;
 
     this.setState({
       folder: folderState
@@ -120,8 +87,9 @@ class ManageFolderPage extends Component {
 
   deleteFolder(e) {
     e.preventDefault();
-    FolderActions.delete(this.state.folder.id);
-    //this.transitionTo('folders');
+    FolderActions.delete(this.state.folder._id);
+    
+    this.props.history.push("/folders");
   }
 
 
@@ -137,19 +105,10 @@ class ManageFolderPage extends Component {
       FolderActions.updateFolder(this.state.folder);
     }
 
-    //this.transitionTo('folders');
+    this.props.history.push(`/folders/folder?id=${this.state.folder._id}`);
   }
 
-
-  _deleteBtn() {
-    return (
-      <div>
-        <a href="#" onClick={this.deleteFolder}>Delete folder</a>
-      </div>
-    );
-  }
-
-
+  
   render() {
 
     let pageTitle = this.create ? 'Create folder' : 'Manage folder'
@@ -178,7 +137,7 @@ class ManageFolderPage extends Component {
             <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>
           </div>
           <div className="col-sm-4">
-            { this._deleteBtn() }
+            <a href="#" onClick={this.deleteFolder}>Delete folder</a>
           </div>
         </div>
         
@@ -187,18 +146,5 @@ class ManageFolderPage extends Component {
   }
 
 };
-/*
-            
-        <br />
-        <div className="row">
-          <div className="col-sm-4">
-            <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>
-          </div>
-          <div className="col-sm-4">
-            {this.props.params.id && this._deleteBtn() }
-          </div>
-        </div>
-
-*/
 
 export default ManageFolderPage;

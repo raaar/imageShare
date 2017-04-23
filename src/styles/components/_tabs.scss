@@ -30,13 +30,13 @@
     }
 
     &:hover,
-    &.active:hover {
+    &.is-active:hover {
       background: #179b77;
       color: #ffffff;
     }
 
-    &.active {
-      background: $link-color; 
+    &.is-active {
+      background: $link-color;
       background: #1ab188;
     }
 }

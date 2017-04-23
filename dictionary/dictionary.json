@@ -1,0 +1,10 @@
+{
+  "client": {
+    "authLoginInvalid": "Invalid username or password",
+    "authRegisterInvalid": "Username is taken",
+    "uploadError": "Could not upload file"
+  },
+  "server": {
+    
+  }
+}

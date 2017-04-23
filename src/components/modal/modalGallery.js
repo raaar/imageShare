@@ -28,30 +28,30 @@ class GalleryModal extends Component{
     
     return (
       <div className={this.props.modalClass}>
-          <div className="modal__nav">
-            <div className={this.props.navInfoClass} onClick={this.props.toggleSidebar} >
-              Info
-            </div>
-            <div className="nav__item" onClick={this.props.closeModal}>
-              <span className="modal__close">Close</span>
-            </div>
+        <div className="modal__nav">
+          <div className={this.props.navInfoClass} onClick={this.props.toggleSidebar} >
+            Info
           </div>
-          <div className="modal__content">
-            <img className="modal__img" src={url} alt={this.props.data.image.file} />
+          <div className="nav__item" onClick={this.props.closeModal}>
+            <span className="modal__close">Close</span>
           </div>
-          <div className="modal__aside">
-            <h3>{this.props.data.title}</h3>
-            <p>Size: {this.props.data.image.size}kb</p>
-            <p>By: <Link to={{pathname:'/profile', search:`author=${this.props.data.author}`}} onClick={this.props.closeModal}>
-                {this.props.data.author}
-              </Link>
-            </p>
-            {this._getDate()}
-            
-            { isByUser &&
-    			    <a href="#" onClick={this.props.deleteImage}>Delete</a>
-            }
-          </div>
+        </div>
+        <div className="modal__content">
+          <img className="modal__img" src={url} alt={this.props.data.image.file} />
+        </div>
+        <div className="modal__aside">
+          <h3>{this.props.data.title}</h3>
+          <p>Size: {this.props.data.image.size}kb</p>
+          <p>By: <Link to={{pathname:'/profile', search:`author=${this.props.data.author}`}} onClick={this.props.closeModal}>
+              {this.props.data.author}
+            </Link>
+          </p>
+          {this._getDate()}
+          
+          { isByUser &&
+  			    <a href="#" onClick={this.props.deleteImage}>Delete</a>
+          }
+        </div>
       </div>
     )
   }

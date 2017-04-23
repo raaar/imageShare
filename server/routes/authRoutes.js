@@ -9,23 +9,19 @@ var router = function() {
   var authController = require('../controllers/authController')();
 
 
-  authRouter.route('/')
-    .get(authController.get);
-
-
   authRouter.route('/register')
     .post(authController.register);
 
 
-  authRouter.route('/signIn')
+  authRouter.route('/login')
     // We specify to pasport to use the local strategy we have defiend in config/strategies/local.strategy.js
     // This could alternatively say 'Google', or 'Facebook' auth
     .post(passport.authenticate('local',
-      {
-        failureRedirect: '/'
-      }),
+      false
+      ),
       authController.signIn
     );
+
 
   authRouter.route('/logout')
     .post(authController.logOut);

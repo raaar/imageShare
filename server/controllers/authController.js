@@ -5,14 +5,6 @@ var bcrypt = require('bcrypt');
 
 var authController = function() {
 
-  var get = function(req, res){
-    res.render('auth', {
-      message: '',
-      registerUsernameMessage: ''
-    });
-  };
-
-
   var logOut = function(req, res) {
     req.session.destroy();
     req.logout();
@@ -21,11 +13,14 @@ var authController = function() {
   
   
   var signIn =  function(req, res) {
+    console.log('user authController');
+    var userObj;
+    
     // Success
     // httpOnly set to true, means that the cookie can only be read by the server and not client side Javascript
     res.cookie('user', req.user._id, {httpOnly: true});
 
-    var userObj = req.user;
+    userObj = req.user;
     delete userObj['password'];
 
     // on succesfull login, send user info with response
@@ -35,55 +30,75 @@ var authController = function() {
     });
   };
   
+  
   var register = function(req, res) {
     mongodb.connect(dbUrl, function(err, db) {
 
-      var salt = bcrypt.genSaltSync(10);
-      var passwordToSave = bcrypt.hashSync(req.body.password, salt);
-      
       var collection = db.collection('users');
+      var salt = bcrypt.genSaltSync(10);
+      var encryptedPassword = bcrypt.hashSync(req.body.password, salt);
 
       var user = {
-        username: req.body.userName,
-        password: passwordToSave,
+        username: req.body.username,
+        password: encryptedPassword,
         salt: salt
       };
       
-      // Check if user already exists in DB ...
-      collection.findOne({
-          username: req.body.userName
-        },
-        function (err, results) {
-          if(err) { return err; }
-          if (null !== results) {
-            res.render('auth', {
-              message: '',
-              registerUsernameMessage: 'Invalid username!'
-            });
-          } else {
-            addUser();
+
+      let findUser = new Promise((resolve, reject) => {
+        
+        collection.findOne({
+            username: req.body.username
+          },
+          function (err, results) {
+            
+            if(err) { return err; }
+            
+            if (null !== results) {
+              res.json({
+                status: 'error',
+                message: 'Invalid username!'
+              });
+            } else {
+              resolve("Success!"); // Yay! Everything went well!
+            }
           }
-        }
-      );
+        );
+      });
 
-      // ... if unique, add user to DB
-      var addUser = function() {
 
+      findUser.then((successMessage) => {
+        
         collection.insert(user, function(err, results) {
+          
+          if(err) {
+            return err;
+          }
+          
           req.login(results.ops[0], function(){
-            res.redirect('/');
+            
+            var userObj = user;
+            delete userObj['password'];
+            delete userObj['salt'];
+            
+            res.json({
+              status: 'success',
+              message: 'User added',
+              user: userObj
+            });
           });
         });
-      }
+      });
+
     });
-  }
+  };
+  
   
   return {
-    get: get,
     register: register,
     logOut: logOut,
     signIn: signIn
-  }
+  };
 };
 
 module.exports = authController;

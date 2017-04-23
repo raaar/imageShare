@@ -68,7 +68,7 @@
 
 
 
-// Custom components 
+// Custom components
 @import "./components/_all";
 
 // http://codepen.io/ehermanson/pen/KwKWEv
@@ -202,7 +202,7 @@ a {
 .tile--lg {
   display: inline-block;
   float: left;
-  height: auto;  
+  height: auto;
   max-width: 280px;
   max-height: 280px;
 
@@ -212,6 +212,10 @@ a {
 
   @include mq(sm) {
     width: 100%;
+  }
+  
+  @include mq(md) {
+    height: 280px;
   }
 }
 
@@ -234,24 +238,6 @@ a {
   background: rgba(19, 35, 47, 1);
 }
 
-.start-form {
-  margin-top: 50px;
-  color: white;
-  
-  h1 {
-    text-align: center;
-    margin: 35px 0;
-  }
-
-  .btn {
-    margin-top: 15px;
-    width: 100% !important;
-  }
-
-  label {
-    color: rgba(255,255,255,0.3);
-  }
-}
 
 
 .form-control--dark {
@@ -354,3 +340,38 @@ a {
   background: lightgrey;
 }
 
+
+.auth {
+  //@include transition(background, .3s);
+  @include background-image(linear-gradient(to bottom right, #13232F , #184754));
+  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.auth--login {
+  //@include background-image(linear-gradient(to bottom right, #184754 , #13232F));
+}
+
+.auth--register {
+}
+
+.auth-form {
+  max-width: 550px;
+  margin: 80px auto 50px;
+  color: white;
+  
+  h1 {
+    text-align: center;
+    margin: 35px 0;
+  }
+
+  .btn {
+    margin-top: 15px;
+    width: 100% !important;
+  }
+
+  label {
+    color: rgba(255,255,255,0.3);
+  }
+}

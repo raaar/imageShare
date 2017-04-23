@@ -48,7 +48,6 @@ var imageController = function() {
       imageTitle = fileName;
     }
 
-    
     imageData = {
       title: imageTitle,
       author: req.user.username,
@@ -73,13 +72,16 @@ var imageController = function() {
   // get all images
   var get = function(req, res){
     var id = new objectId(req.params.id);
+    var query;
+    var limit;
 
-    if(req.query.after)
+    if(req.query.after) {
       id = new objectId(req.query.after);
+    }
                   
 
-    var query = {_id: {$lt: id}};
-    var limit = req.query.limit ? req.query.limit : 10;
+    query = {_id: {$lt: id}};
+    limit = req.query.limit ? req.query.limit : 10;
 
 
     if ('author' in req.query) {

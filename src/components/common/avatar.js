@@ -28,7 +28,6 @@ class Avatar extends Component {
 
 
     if(this.props.src === undefined) {
-       avatarClass = 'avatar-lg';
        avatarSrc = avatarPlaceholder;
     }
 

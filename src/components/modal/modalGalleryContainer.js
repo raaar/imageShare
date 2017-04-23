@@ -32,12 +32,14 @@ class GalleryModal extends Component {
 
     this.closeModal = this.closeModal.bind(this);
     this.deleteImage = this.deleteImage.bind(this);
-    this.user = AuthStore.getUser();
     this.onChange = this.onChange.bind(this);
     this.toggleSidebar = this.toggleSidebar.bind(this);
     
+    // we load the user data if we are logged in, otherwise we return 'false' so that the 'Preview' component
+    // can render without errors
+    this.user = AuthStore.getUser() ? AuthStore.getUser : false;
     
-    document.onkeydown = function(evt) {
+    document.onkeydown = (evt) => {
       evt = evt || window.event;
       var isEscape = false;
       if ("key" in evt) {
@@ -55,7 +57,7 @@ class GalleryModal extends Component {
       if(evt.keyCode === 37 ) {
         this.getPrev();
       }
-    }.bind(this);
+    };
   }
  
  

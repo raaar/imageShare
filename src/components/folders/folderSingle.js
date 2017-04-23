@@ -5,8 +5,6 @@ import {
 import FolderActions from '../../actions/folderActions';
 import FolderStore from '../../stores/folderStore';
 import queryString from 'query-string';
-//import ImageStore from '../../stores/imageStore';
-//import ImageForm from '../image/imageForm';
 
 import Uploader from '../upload/uploadContainer';
 import ImageGridContainer from '../image/imageGridContainer';
@@ -20,21 +18,31 @@ class ImageSingle extends Component {
       folder: {
         title: ''
       }
-    }
+    };
 
-    const query = queryString.parse(this.props.location.search);
-    FolderActions.getSingle(query.id);
-    
     this.onChange = this.onChange.bind(this);
   }
 
 
   componentWillMount() {
+	 	const cachedFolder = FolderStore.getFolderById();
+    const query = queryString.parse(this.props.location.search);
+    
 		FolderStore.addChangeListener(this.onChange);
-  }
-
-
-  componentDidMount() {
+    
+    if(this.create) {
+      return;
+    }
+    
+    // If we are on 'manage folder' page, load data from the store.
+    // If no data is available, call the server
+	 	if(!cachedFolder) {
+      FolderActions.getSingle(query.id);
+	 	} else {
+      this.setState({
+        folder: FolderStore.getFolderById()
+      });
+	 	}
   }
 
 
@@ -56,12 +64,13 @@ class ImageSingle extends Component {
 
 
   render() {
-
+    
     return (
       <div>
         <div className="container-fluid">
           <h1>{this.state.folder.title}</h1>
           <Link to={{pathname:'/folders/folder/manage', search:`id=${this.state.folder._id}`}}>Manage folder</Link>
+          {this.state.folder.publicPermission && <div>Public folder</div> }
         </div>
         
         {this.state.folder._id &&
@@ -76,5 +85,5 @@ class ImageSingle extends Component {
   }
 };
 
-//         <Link className="btn" to="manage-folder" params={this.props.params}>Manage</Link>
+
 export default ImageSingle;

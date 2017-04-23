@@ -1,7 +1,7 @@
 /*
  Start project:
- 1: sudo mongod
- 2: gulp
+ 1: heroku local
+ 2: npm run serve
 */
 
 var dotenv = require('dotenv');
@@ -29,9 +29,9 @@ var db;
 var s3Sign = require('./routes/s3Routes');
 
 var morgan = require('morgan');
+
 // Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
-
 
 
 //app.use(express.static('public')); // define where all static (CSS, JS) files come from
@@ -50,6 +50,7 @@ var imageRouter = require('./routes/imageRoutes')();
 var folderRouter = require('./routes/folderRoutes')();
 var userRouter = require('./routes/userRoutes')();
 var authRouter = require('./routes/authRoutes')();
+var previewRouter = require('./routes/previewRoutes')();
 var profileRouter = require('./routes/profileRoutes')();
 var signInStatus = require('./middleware/middleware');
 
@@ -57,13 +58,11 @@ var signInStatus = require('./middleware/middleware');
 app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
 //app.use(/^((?!\/preview).)*$/, signInStatus);
+//app.use('/', signInStatus);
+app.use('/api/preview', previewRouter);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/folders', folderRouter);
-
-//app.set('views', './views');
-//app.set('view engine', 'ejs');
-
 
 
 app.get('/api/sign-s3', s3Sign);
@@ -80,13 +79,6 @@ app.get('/preview', function(req , res) {
   //res.json('hello preview');
 });
 */
-/*
-app.get('/*', function(req , res) {
-  res.redirect('/');
-});
-*/
-
-
 
 
 mongodb.MongoClient.connect( dbUrl , function (err, database) {

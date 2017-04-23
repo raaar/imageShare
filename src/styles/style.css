@@ -2010,10 +2010,10 @@ input[type="checkbox"].checkbox {
   transition: .5s ease; }
   .tab__btn:focus {
     color: white; }
-  .tab__btn:hover, .tab__btn.active:hover {
+  .tab__btn:hover, .tab__btn.is-active:hover {
     background: #179b77;
     color: #ffffff; }
-  .tab__btn.active {
+  .tab__btn.is-active {
     background: #1ab188;
     background: #1ab188; }
 
@@ -2327,6 +2327,9 @@ a {
   @media (min-width: 768px) {
     .tile--lg {
       width: 100%; } }
+  @media (min-width: 992px) {
+    .tile--lg {
+      height: 280px; } }
 
 .avatar-sm {
   width: 40px;
@@ -2340,18 +2343,6 @@ a {
 
 .dark-page {
   background: #13232f; }
-
-.start-form {
-  margin-top: 50px;
-  color: white; }
-  .start-form h1 {
-    text-align: center;
-    margin: 35px 0; }
-  .start-form .btn {
-    margin-top: 15px;
-    width: 100% !important; }
-  .start-form label {
-    color: rgba(255, 255, 255, 0.3); }
 
 .form-control--dark {
   background: transparent;
@@ -2427,3 +2418,26 @@ a {
 
 .folder--new {
   background: lightgrey; }
+
+.auth {
+  background-image: -owg-linear-gradient(to bottom right, #13232F, #184754);
+  background-image: -webkit-linear-gradient(to bottom right, #13232F, #184754);
+  background-image: -moz-linear-gradient(to bottom right, #13232F, #184754);
+  background-image: -o-linear-gradient(to bottom right, #13232F, #184754);
+  background-image: linear-gradient(to bottom right, #13232F, #184754);
+  height: 100vh;
+  height: 100%;
+  min-height: 100vh; }
+
+.auth-form {
+  max-width: 550px;
+  margin: 80px auto 50px;
+  color: white; }
+  .auth-form h1 {
+    text-align: center;
+    margin: 35px 0; }
+  .auth-form .btn {
+    margin-top: 15px;
+    width: 100% !important; }
+  .auth-form label {
+    color: rgba(255, 255, 255, 0.3); }
