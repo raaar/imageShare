@@ -50,8 +50,10 @@ class PreviewContainer extends Component {
     return (
       <div>
         <GridWrapper>
-          <div className='container-fluid'>
-            <h1>{this.state.folder.title}</h1>
+          <div className='mast'>
+            <div className='container-fluid'>
+              <h1>{this.state.folder.title}</h1>
+            </div>
           </div>
         </GridWrapper>
         { this.state.folder._id &&

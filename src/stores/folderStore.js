@@ -5,16 +5,11 @@ import { EventEmitter } from 'events';
 const CHANGE_EVENT = 'change';
 
 import _ from 'lodash';
-//var Dispatcher = require('../dispatcher/appDispatcher');
-//var ActionTypes = require('../constants/actionTypes');
-//var EventEmitter = require('events').EventEmitter;
-//var assign = require('object-assign');
-//var CHANGE_EVENT = 'change';
-
 
 
 var _folders = [];
 var _singleFolder;
+
 
 class FolderStoreClass extends EventEmitter {
 

@@ -8,7 +8,6 @@ import queryString from 'query-string';
 
 import Uploader from '../upload/uploadContainer';
 import ImageGridContainer from '../image/imageGridContainer';
-import ModalDialog from '../modal/modalDialog';
 
 
 class ImageSingle extends Component {
@@ -22,7 +21,7 @@ class ImageSingle extends Component {
       uploadVisible: false
     };
 
-    this.imageUploadDialog = this.imageUploadDialog.bind(this);
+    this.toggleUploadDialog = this.toggleUploadDialog.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -54,7 +53,10 @@ class ImageSingle extends Component {
 	}
 
 
-  imageUploadDialog(e) {
+  toggleUploadDialog(e) {
+    
+    e.preventDefault();
+    
     this.setState({
       uploadVisible: true
     });
@@ -107,7 +109,7 @@ class ImageSingle extends Component {
                   </Link>
                 </li>
                 <li className='submenu__item'>
-                  <a href='#'>
+                  <a href='#' onClick={this.toggleUploadDialog}>
                     <i className="fa fa-upload" aria-hidden="true"></i>
                     <span className='submenu__txt'>
                       Upload
@@ -120,7 +122,7 @@ class ImageSingle extends Component {
           </div>
         </div>
         
-        <Uploader folder={this.state.folder._id} />
+        
             
         {this.state.folder._id &&
           <ImageGridContainer query={{folderId: this.state.folder._id}} modifiers="grid--folder" />
@@ -128,8 +130,7 @@ class ImageSingle extends Component {
         
         
         {this.state.folder._id &&
-          <ModalDialog visible={this.state.uploadVisible}>
-          </ModalDialog>
+          <Uploader visible={this.state.uploadVisible} folder={this.state.folder._id} />
         }
         
       </div>

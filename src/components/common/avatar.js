@@ -4,12 +4,13 @@ import config from '../../../config';
 import avatarPlaceholder from '../../img/placeholder-avatar.png';
 
 class Avatar extends Component {
-
+  
+  
   render() {
 
     let avatarClass;
     let avatarSrc = this.props.src;
-
+    
 
     switch(this.props.size) {
       case 'small':
@@ -32,7 +33,9 @@ class Avatar extends Component {
     }
 
     return (
-      <img src={avatarSrc} className={avatarClass} alt="avatar" />
+      <div>
+        <img src={avatarSrc} className={avatarClass} alt="avatar" />
+      </div>
     )
   }
 }

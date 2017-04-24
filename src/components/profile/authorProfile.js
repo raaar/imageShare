@@ -9,16 +9,15 @@ class AuthorProfile extends Component {
   
   constructor(props, context) {
     super(props, context);
-
+    
     this.q = queryString.parse(this.props.location.search);
     this.user = AuthStore.getUser();
   }
   
   
-  componentDidMount() {
-    if(this.user.userame === this.q.author) {
-      console.log('my profile')
-      //  this.transitionTo('my-profile')
+  componentWillMount() {
+    if(this.user.username === this.q.author) {
+      this.props.history.push('/my-profile');
     }
   }
 

@@ -2,14 +2,42 @@ import React, { Component } from 'react';
 
 class ModalDialog extends Component {
   
-  render() {
+  constructor(props, context) {
+    super(props, context);
     
-    const dialogVisible = this.props.visible ? 'is-visible' : '';
+    this.state = {
+      visible: this.props.visible
+    };
+    
+    
+    this.closeDialog = this.closeDialog.bind(this);
+  }
+  
+  
+  closeDialog() {
+    this.setState({
+      visible: false
+    });
+  }
+  
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible
+    });
+  }
+  
+  
+  render() {
+    const dialogVisible = this.state.visible ? 'is-visible' : '';
     const dialogClass = `dialog ${dialogVisible}`;
     
     return (
       <div className={dialogClass}>
-        {this.props.chieldren}
+        <div className='dialog__inner'>
+          {this.props.children}
+        </div>
+        <div className='dialog__overlay' onClick={this.closeDialog}></div>
       </div>
     )
   }

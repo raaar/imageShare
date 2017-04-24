@@ -1,0 +1,47 @@
+.dialog {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  display: none;
+  
+  &__inner {
+    position: relative;
+    z-index: 2;
+    margin: 70px auto;
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    
+  }
+  
+  &__overlay {
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0,0,0,.8);
+  }
+  
+  /*
+  &:after {
+    content: '';
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.8);
+  }
+  */
+  
+  &.is-visible {
+    display: block;
+  }
+}

@@ -5,7 +5,8 @@
     "folderDelete": "Folder deleted",
     "folderUpdate": "Folder updated",
     "uploadAvatarInProgress": "Uploading avatar",
-    "uploadError": "Could not upload file"
+    "uploadError": "Could not upload file",
+    "uploadProgress": "Uploading file"
   },
   "server": {
     "authWelcome": "Hi ",
