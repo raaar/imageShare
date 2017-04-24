@@ -13,16 +13,16 @@ var ImageForm = React.createClass({
 
     var isDisabled = '';
     if( !this.props.complete || this.props.processing) {
-      isDisabled = 'disabled'; 
+      isDisabled = 'disabled';
     }
 
     return (
       <div className="uploader form">
         <form encType="multipart/form-data">
 
-          <FileInput 
-            name="image"
-            type="file"
+          <FileInput
+            name='image'
+            type='file'
             onChange={this.props.onFileChange}
           />
         

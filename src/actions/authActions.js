@@ -1,7 +1,7 @@
 import AppDispatcher from '../dispatcher/appDispatcher';
 import axios from 'axios';
 import ActionTypes from '../constants/actionTypes';
-import toastr from 'toastr';
+import Notify from '../components/common/notify';
 import dictionary from '../../dictionary/dictionary';
 
 var s3Signature = require('../api/s3Sign');
@@ -13,7 +13,8 @@ export default {
 
     axios.post('/auth/login', credentials, {})
     .then((data) => {
-      console.info('login action: ', data);
+      
+      Notify.success(data.data.message);
       
       AppDispatcher.dispatch({
         actionType: ActionTypes.AUTH_LOGIN,
@@ -22,7 +23,7 @@ export default {
       });
     })
     .catch(function (error) {
-      toastr.error(dictionary.client.authLoginInvalid);
+      Notify.error(dictionary.client.authLoginInvalid);
       console.error(error);
     });
   },
@@ -48,14 +49,15 @@ export default {
       .then((data) => {
         
         if(data.data.status === 'success') {
+          Notify.success(data.data.message);
+          
           AppDispatcher.dispatch({
             actionType: ActionTypes.AUTH_LOGIN,
             user: data.data.user
           });
         } else {
           // handle errors (user already exists, password too weak)
-          console.error(data.data.message);
-          toastr.error(dictionary.client.authRegisterInvalid);
+          Notify.error(data.data.message);
         }
       })
       .catch((error) => {

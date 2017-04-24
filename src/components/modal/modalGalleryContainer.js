@@ -37,7 +37,7 @@ class GalleryModal extends Component {
     
     // we load the user data if we are logged in, otherwise we return 'false' so that the 'Preview' component
     // can render without errors
-    this.user = AuthStore.getUser() ? AuthStore.getUser : false;
+    this.user = AuthStore.getUser() ? AuthStore.getUser() : false;
     
     document.onkeydown = (evt) => {
       evt = evt || window.event;
@@ -62,17 +62,12 @@ class GalleryModal extends Component {
  
  
   componentDidMount() {
-   
-    // TODO: refactor key events
 
-
-    //if(this.isMounted()) {
     this.setState({
       imageQuery: ImageStore.getImageQuery(),
       images: ImageStore.getImages(),
       index: ModalStore.getModalImageIndex()
     })
-    //}
   }
 
 
@@ -171,13 +166,13 @@ class GalleryModal extends Component {
       <div>
         {this.state.visible &&
           <Gallery
-          modalClass={modalClass}
-          navInfoClass={navInfoClass}
-          toggleSidebar={this.toggleSidebar}
-          closeModal={this.closeModal}
-          deleteImage={this.deleteImage}
-          data={this.state.data}
-          user={this.user}
+            modalClass={modalClass}
+            navInfoClass={navInfoClass}
+            toggleSidebar={this.toggleSidebar}
+            closeModal={this.closeModal}
+            deleteImage={this.deleteImage}
+            data={this.state.data}
+            user={this.user}
           />
         }
       </div>

@@ -74,6 +74,7 @@ class App extends Component {
                   <Route exact path='/folders/folder/manage' component={ManageFolderPage} />
                   <Route path='/my-profile' component={Profile} />
                   <Route path='/network' component={Network} />
+                  <Route exact path='/preview' component={Preview} />
                   <Route component={NotFound}/>
                 </Switch>
                 <Modal />

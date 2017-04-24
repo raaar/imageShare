@@ -34,7 +34,7 @@ var previewController = function() {
         }
       });
     });
-  }
+  };
   
   
   return {

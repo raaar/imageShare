@@ -99,13 +99,13 @@ class ManageFolderPage extends Component {
     // create / update logic
     if(this.create) {
       FolderActions.createFolder(this.state.folder);
-      
+      this.props.history.push(`/folders`);
     } else {
       // update folder action
       FolderActions.updateFolder(this.state.folder);
+      this.props.history.push(`/folders/folder?id=${this.state.folder._id}`);
     }
 
-    this.props.history.push(`/folders/folder?id=${this.state.folder._id}`);
   }
 
   
@@ -117,28 +117,31 @@ class ManageFolderPage extends Component {
     return(
       <div className="container-fluid">
       
-        <h1>{pageTitle}</h1>
-
-        <TextInput
-          name="title"
-          label="title"
-          onChange={this.setFolderState}
-          placeholder="Type folder name"
-          type="text"
-          value={this.state.folder && this.state.folder.title}
-        />
-        
-        <label className="label--checkbox">
-          <input type="checkbox" className="checkbox" checked={this.state.folder.publicPermission} onChange={this.setPermissionState} />Make folder public
-        </label>
-        
-        <div className="row">
-          <div className="col-sm-4">
-            <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>
+        <div className='l-center'>
+          <h1>{pageTitle}</h1>
+  
+          <TextInput
+            name="title"
+            label="title"
+            onChange={this.setFolderState}
+            placeholder="Type folder name"
+            type="text"
+            value={this.state.folder && this.state.folder.title}
+          />
+          
+          <label className="label--checkbox">
+            <input type="checkbox" className="checkbox" checked={this.state.folder.publicPermission} onChange={this.setPermissionState} />Make folder public
+          </label>
+          
+          <div className="row">
+            <div className="col-sm-4">
+              <button className="btn" onClick={this.saveFolder}>{postBtnName}</button>
+            </div>
+            <div className="col-sm-4">
+              <a href="#" onClick={this.deleteFolder}>Delete folder</a>
+            </div>
           </div>
-          <div className="col-sm-4">
-            <a href="#" onClick={this.deleteFolder}>Delete folder</a>
-          </div>
+        
         </div>
         
       </div>

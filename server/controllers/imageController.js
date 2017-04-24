@@ -4,7 +4,7 @@ var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
 var dbUrl = process.env.MONGODB_URI;
-
+var dictionary = require('../../dictionary/dictionary');
 
 var imageController = function() {
 
@@ -28,7 +28,7 @@ var imageController = function() {
           req.image = image;
           next();
         } else {
-          res.status(404).send('no book found');
+          res.status(404).send('not found');
         }
       });
     });
@@ -104,7 +104,7 @@ var imageController = function() {
 
       var collection = db.collection('images');
 
-      // "-1" fetches images back in time
+      // "-1" fetches images back reverse order
       collection.find(query).sort({"_id":-1}).limit(parseInt(limit)).toArray(function(err, images) {
         if(err) {
           throw err;
@@ -139,7 +139,10 @@ var imageController = function() {
               throw err
             }
 
-            res.json('Item deleted');
+            res.json({
+              message:'Image deleted'
+            });
+            
             console.log('Item deleted');
           });
         } else {

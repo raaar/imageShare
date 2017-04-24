@@ -1,8 +1,42 @@
 /*
- Start project:
- 1: heroku local
- 2: npm run serve
+  
+  START PROJECT COMMANDS:
+  heroku local (conncets to Mlab and AWS: http://localhost:5000)
+  npm start serve (starts Webpack SCSS and JS watcher: http://localhost:3000)
+  npm start build (bulds project for production)
+  
+  
+  ENVIROMENT VARIABLES:
+  Copy and remname to '.env' the '.env-sample'. Fill the AWS and MLAB enviroment vars
+  
+  
+  DEPLOIMENT AND MLAB SETUP:
+  https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
+
+
+  HEROKU:
+  Pushing:
+  git push -f heroku react:master
+
+
+  LOGS:
+  heroku logs --tail:
+
+
+  URL:
+  https://frozen-caverns-72254.herokuapp.com/
+
+  
+  AS3 LAMBDA IMAGE RESIZE TUTORIAL:
+  https://aws.amazon.com/blogs/compute/resize-images-on-the-fly-with-amazon-s3-aws-lambda-and-amazon-api-gateway/
+ 
+
+  ERRORS:
+  If Heroku local wont start:
+  try 'killall node'
+
 */
+
 
 var dotenv = require('dotenv');
 dotenv.load();
@@ -34,7 +68,7 @@ var morgan = require('morgan');
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 
 
-//app.use(express.static('public')); // define where all static (CSS, JS) files come from
+// static files folder
 app.use(express.static(path.resolve(__dirname,  '../build')));
 
 
@@ -52,13 +86,10 @@ var userRouter = require('./routes/userRoutes')();
 var authRouter = require('./routes/authRoutes')();
 var previewRouter = require('./routes/previewRoutes')();
 var profileRouter = require('./routes/profileRoutes')();
-var signInStatus = require('./middleware/middleware');
 
 
 app.use('/api/images', imageRouter);
 app.use('/auth', authRouter);
-//app.use(/^((?!\/preview).)*$/, signInStatus);
-//app.use('/', signInStatus);
 app.use('/api/preview', previewRouter);
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
@@ -72,15 +103,7 @@ app.get('/*', function(req , res) {
 });
 
 
-/*
-app.get('/preview', function(req , res) {
-  console.log('app.get /preview');
-  res.redirect('/network');
-  //res.json('hello preview');
-});
-*/
-
-
+// enstablish connection with mongodb
 mongodb.MongoClient.connect( dbUrl , function (err, database) {
   if (err) {
     console.log(err);
@@ -96,44 +119,3 @@ mongodb.MongoClient.connect( dbUrl , function (err, database) {
     console.log('server running on port ' + port);
   });
 });
-
-
-/*
-  TODO:
-  remember me
-  comments on images
-*/
-
-/*
-  
-  START PROJECT:
-  heroku local, navigate to http://localhot:5000
-  
-
-  
-  Deployment and Mlab setup:
-  https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
-
-  MONGODB_URI_IMAGESHARE (mlab url variable:
-  heroku config:set MONGODB_URI=mongodb://raf:IMAGEshare@ds119220.mlab.com:19220/imageshare
-
-  HEROKU
-  Pushing:
-  git push -f heroku react:master
-
-  Logs:
-  heroku logs --tail:
-
-  URL: https://frozen-caverns-72254.herokuapp.com/#/
-
-  Heroku local not tarting:
-  try run 'killall node'
-
-*/
-
-
-
-/* AS3 Lambda image resize tutorial:
- * https://aws.amazon.com/blogs/compute/resize-images-on-the-fly-with-amazon-s3-aws-lambda-and-amazon-api-gateway/
- */
-

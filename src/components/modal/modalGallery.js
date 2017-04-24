@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Link
 } from 'react-router-dom';
-//import Avatar from '../common/avatar';
 var config = require('../../../config');
 
 
@@ -59,8 +58,3 @@ class GalleryModal extends Component{
 
 
 export default GalleryModal;
-
-
-/*
-
-*/

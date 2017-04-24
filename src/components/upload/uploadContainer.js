@@ -93,19 +93,6 @@ class UploadPage extends Component {
 
       ImageActions.createImage(this.state.formData, this.state.file);
       
-      /*
-      ImageActions.createImage(this.state.formData, this.state.file,
-        function(err){
-          toastr.error(err);
-        },
-        function() {
-          _self.transitionTo('app');
-          _self.setState({
-            processing: false
-          });
-        }
-      );
-      */
     }
   }
   

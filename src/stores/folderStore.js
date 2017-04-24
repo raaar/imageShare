@@ -39,7 +39,12 @@ class FolderStoreClass extends EventEmitter {
   getFolderById() {
     return _singleFolder;
   }
-};
+  
+  
+  clearCache() {
+    _singleFolder = {};
+  }
+}
 
 
 const FolderStore = new FolderStoreClass();

@@ -4,6 +4,7 @@ var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var objectId = require('mongodb').ObjectID;
 var dbUrl = process.env.MONGODB_URI;
+var dictionary = require('../../dictionary/dictionary');
 
 
 var folderController = function() {
@@ -34,11 +35,11 @@ var folderController = function() {
 
       var collection = db.collection('folders');
 
-      // "-1" fetches images back in time
+      // "-1" returns images in backword order
       collection.find(query).sort({ "title": -1 }).toArray(function(err, results) {
         if(err) {
           throw err;
-        };
+        }
 
         res.json(results);
       });
@@ -85,7 +86,7 @@ var folderController = function() {
         {"_id": id},
         updatedData,
         {upsert: true}
-      )
+      );
     });
   };
 
@@ -109,11 +110,13 @@ var folderController = function() {
           {_id: objectId.createFromHexString(req.params.id)},
           function(err, result) {
             if (err) {
-              throw err
+              throw err;
             }
 
-            res.json('Item deleted');
-            console.log('Item deleted');
+            res.json({
+              message: dictionary.client.folderDelete
+            });
+            
         });
       });
 

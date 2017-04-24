@@ -1,6 +1,6 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
-var dbConfig = require('../config/db');
+var dbUrl = process.env.MONGODB_URI;
 var passport = require('passport');
 
 var router = function() {

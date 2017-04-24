@@ -2,12 +2,12 @@ var fs = require('fs');
 var mongodb = require('mongodb').MongoClient;
 var dbUrl = process.env.MONGODB_URI;
 
+
 var userController = function() {
- 
 
   var post = function(req, res) {
-    // Update avatar
 
+    // Update avatar
     mongodb.connect(dbUrl, function(err, db){
       var collection = db.collection('users');
 
@@ -22,10 +22,10 @@ var userController = function() {
           }
         },
         { upsert: true }
-      )
+      );
                 
-      res.send(req.body); 
-    }); 
+      res.send(req.body);
+    });
   };
 
 
@@ -33,7 +33,7 @@ var userController = function() {
     res.json({
       userName: req.user.username,
       id: req.user._id,
-      avatar: req.user.avatar 
+      avatar: req.user.avatar
     });
   };
 

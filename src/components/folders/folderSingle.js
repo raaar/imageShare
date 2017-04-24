@@ -8,6 +8,7 @@ import queryString from 'query-string';
 
 import Uploader from '../upload/uploadContainer';
 import ImageGridContainer from '../image/imageGridContainer';
+import ModalDialog from '../modal/modalDialog';
 
 
 class ImageSingle extends Component {
@@ -17,9 +18,11 @@ class ImageSingle extends Component {
     this.state = {
       folder: {
         title: ''
-      }
+      },
+      uploadVisible: false
     };
 
+    this.imageUploadDialog = this.imageUploadDialog.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -51,8 +54,10 @@ class ImageSingle extends Component {
 	}
 
 
-  upload(e) {
-    e.preventDefault();
+  imageUploadDialog(e) {
+    this.setState({
+      uploadVisible: true
+    });
   }
 
 
@@ -63,23 +68,70 @@ class ImageSingle extends Component {
 	}
 
 
+  _publicLink() {
+    
+    if(this.state.folder.publicPermission) {
+      
+      let pubLink = `/preview/?folderId=${this.state.folder._id}`;
+      
+      return (
+        <p>
+          This is a public folder. <a href={pubLink} target='_blank'>Share the link</a>.
+        </p>
+      )
+    }
+  }
+  
+  
   render() {
+    
+    
     
     return (
       <div>
-        <div className="container-fluid">
-          <h1>{this.state.folder.title}</h1>
-          <Link to={{pathname:'/folders/folder/manage', search:`id=${this.state.folder._id}`}}>Manage folder</Link>
-          {this.state.folder.publicPermission && <div>Public folder</div> }
+        <div className='mast'>
+          <div className='container-fluid'>
+          
+            <h1>{this.state.folder.title && this.state.folder.title}</h1>
+            
+            {this._publicLink()}
+            
+            <div className='mast__menu'>
+              <ul className='submenu'>
+                <li className='submenu__item'>
+                  <Link to={{pathname:'/folders/folder/manage', search:`id=${this.state.folder._id}`}}>
+                    <i className="fa fa-cog" aria-hidden="true"></i>
+                    <span className='submenu__txt'>
+                      Manage folder
+                    </span>
+                  </Link>
+                </li>
+                <li className='submenu__item'>
+                  <a href='#'>
+                    <i className="fa fa-upload" aria-hidden="true"></i>
+                    <span className='submenu__txt'>
+                      Upload
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            
+          </div>
         </div>
         
-        {this.state.folder._id &&
-          <Uploader folder={this.state.folder._id} />
-        }
-        
+        <Uploader folder={this.state.folder._id} />
+            
         {this.state.folder._id &&
           <ImageGridContainer query={{folderId: this.state.folder._id}} modifiers="grid--folder" />
         }
+        
+        
+        {this.state.folder._id &&
+          <ModalDialog visible={this.state.uploadVisible}>
+          </ModalDialog>
+        }
+        
       </div>
     )
   }

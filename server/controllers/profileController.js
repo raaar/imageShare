@@ -60,14 +60,14 @@ var profileController = function() {
         }
       });
     });
-  }
+  };
 
 
   return {
     getAll: getAll,
     getAuthor: getAuthor
-  }
-}
+  };
+};
 
 
 module.exports = profileController;

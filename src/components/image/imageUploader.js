@@ -8,7 +8,7 @@ var toastr = require('toastr');
 
 
 toastr.options = {
-  "positionClass": "toast-bottom-right" 
+  "positionClass": "toast-bottom-right"
 };
 
 var ManageImage = React.createClass({
@@ -23,7 +23,7 @@ var ManageImage = React.createClass({
       image: {
         title: "",
         file: {
-        } 
+        }
       },
       errors: {},
       dirty: false,
@@ -52,7 +52,7 @@ var ManageImage = React.createClass({
     if(file.type === 'image/jpeg') {
       fileExt = '.jpeg';
     } else if (file.type === 'image/png' ) {
-      fileExt = '.png'; 
+      fileExt = '.png';
     }
 
     var fileNameStamp = Math.round(+new Date()/1000);
@@ -91,14 +91,17 @@ var ManageImage = React.createClass({
 
   render: function() {
     return (
-      <ImageForm 
-        onFileChange={this.handleFile}
-        onSave={this.saveImage}
-        complete={this.state.complete}
-        processing={this.state.processing}
-      />        
+      <div>
+        
+        <ImageForm
+          onFileChange={this.handleFile}
+          onSave={this.saveImage}
+          complete={this.state.complete}
+          processing={this.state.processing}
+        />
+      </div>
     )
   }
 });
 
-module.exports = ManageImage; 
+module.exports = ManageImage;

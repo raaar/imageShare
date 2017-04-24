@@ -11,12 +11,14 @@ var routes = function() {
   imageRouter.route('/')
     .post(imageController.post);
 
+
   imageRouter.route('/fetch')
     .get(imageController.get);
 
 
-  // Middleware making the request to mongodb
+  // Middleware gets image by id
   imageRouter.use('/:id', imageController.middlewareFetchSingle);
+
 
   imageRouter.route('/:id')
     .get(function(req, res){

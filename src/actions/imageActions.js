@@ -49,6 +49,7 @@ export default {
             };
 
 
+            console.log('sign success');
             axios.post('/api/images', uploadData, {/* config */} )
               .then(function (data) {
                 AppDispatcher.dispatch({
@@ -57,6 +58,7 @@ export default {
 	              });
               })
               .catch(function (error) {
+                console.log('api/images upload ');
                 console.log(error);
               });
           }
@@ -75,8 +77,8 @@ export default {
     var url = "/api/images/" + id;
  
     axios.delete(url)
-      .then(function (response) {
-        console.log(response);
+      .then(function (res) {
+        console.log(res.data.message);
         AppDispatcher.dispatch({
           actionType: ActionTypes.DELETE_IMAGE,
           id: id

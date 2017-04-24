@@ -1,7 +1,5 @@
 var express = require('express');
 var mongodb = require('mongodb').MongoClient;
-var dbConfig = require('../config/db');
-var dbUrl = require('../config/db');
 
 var routes = function() {
   var profileRouter = express.Router();

@@ -1,10 +1,17 @@
 {
   "client": {
     "authLoginInvalid": "Invalid username or password",
-    "authRegisterInvalid": "Username is taken",
+    "folderCreated": "Folder created",
+    "folderDelete": "Folder deleted",
+    "folderUpdate": "Folder updated",
+    "uploadAvatarInProgress": "Uploading avatar",
     "uploadError": "Could not upload file"
   },
   "server": {
-    
+    "authWelcome": "Hi ",
+    "passwordShort": "Password is too weak",
+    "registerWelcome": "Welcome ",
+    "usernameTaken": "Username is taken",
+    "usernameShort": "Username is too short"
   }
 }

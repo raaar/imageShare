@@ -1,26 +1,25 @@
 import AppDispatcher from '../dispatcher/appDispatcher';
 import ActionTypes from '../constants/actionTypes';
-//var toastr = require('toastr');
-var axios = require('axios');
+import Notify from '../components/common/notify';
+import dictionary from '../../dictionary/dictionary';
+import axios from 'axios';
 
 
 export default {
 
-
   createFolder: function(form) {
-    console.info('actions: ', form);
     var config = {};
-
+    
     axios.post('/api/folders', form, config)
       .then(function(data) {
-        console.log('dispatch folder');
+        Notify.success(dictionary.client.folderCreated);
+        
         AppDispatcher.dispatch({
 			    actionType: ActionTypes.FOLDER_CREATE,
 		      folder: data.data
 	      });
       });
   },
-
 
 
   loadFolders: function() {
@@ -63,8 +62,9 @@ export default {
 
   delete: function(id) {
     axios.delete('/api/folders/'+ id )
-      .then(function (response) {
-        console.log(response);
+      .then(function (res) {
+        Notify.success(res.data.message);
+        
         AppDispatcher.dispatch({
 			    actionType: ActionTypes.FOLDER_DELETE,
 		      id: id

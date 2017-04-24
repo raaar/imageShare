@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -7,7 +6,8 @@ import FileInput from '../common/fileInput';
 import AuthActions from '../../actions/authActions';
 import Avatar from '../common/avatar';
 import ImageGridContainer from '../image/imageGridContainer';
-var toastr = require('toastr');
+import Notify from '../common/notify';
+import dictionary from '../../../dictionary/dictionary';
 
 
 class UserProfile extends Component {
@@ -28,13 +28,6 @@ class UserProfile extends Component {
 
   componentWillMount() {
     AuthStore.addChangeListener(this.onChange);
-  }
-
-
-  componentDidMount() {
-    toastr.options = {
-      "positionClass": "toast-bottom-right"
-    };
   }
 
 
@@ -79,7 +72,7 @@ class UserProfile extends Component {
       });
 
       AuthActions.saveAvatar(this.state.formData, this.state.file);
-      toastr.warning('Uploading avatar');
+      Notify.warning(dictionary.client.uploadAvatarInProgress);
     }
 
     if(file) {
